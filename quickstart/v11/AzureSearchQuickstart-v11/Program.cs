@@ -11,9 +11,12 @@ using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
 ///Install-Package itext7
  // Для .doc
-using Aspose.Words;
+
 using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Wordprocessing;
+
+using Spire.Doc;
+using System.Text;
+
 namespace AzureSearch.Quickstart
 
 
@@ -73,9 +76,9 @@ namespace AzureSearch.Quickstart
 
         public class Data
         {
-            public string key { get; set; }
-            public string value { get; set; }
-            public string text { get; set; }
+            public string FileName { get; set; }
+            public string FilePath { get; set; }
+            public string FileText { get; set; }
         }
 
         private static void CreateIndex(string indexName, SearchIndexClient adminClient)
@@ -107,9 +110,9 @@ namespace AzureSearch.Quickstart
                         IndexDocumentsAction.Upload(new Files
                         {
                             FileID = $"{it}", // Assuming Files has a property ID
-                            FileName = $"{file.value}",
-                            FileText = $"{file.text}",
-                            FilePath = $"{file.key}"
+                            FileName = $"{file.FileName}",
+                            FileText = $"{file.FileText}",
+                            FilePath = $"{file.FilePath}"
                         })
                     );
 
@@ -161,17 +164,18 @@ namespace AzureSearch.Quickstart
                             if (Path.GetExtension(file) == ".pdf" || Path.GetExtension(file) == ".docx" || Path.GetExtension(file) == ".doc" || Path.GetExtension(file) == ".txt")
                             {
                                 string pageText = "";
-                                if (Path.GetExtension(file) == ".docx")
-                                {
-                                    using (WordprocessingDocument doc = WordprocessingDocument.Open(file, false))
-                                    {
-                                        var body = doc.MainDocumentPart.Document.Body;
-                                        pageText = body.InnerText;
-                                        //continue;
-                                    }
-                                }
-                                
-                                switch (Path.GetExtension(file))
+                                string ExtensionFile = Path.GetExtension(file);
+                                //if (ExtensionFile == ".docx")
+                                //{
+                                //    using (WordprocessingDocument doc = WordprocessingDocument.Open(file, false))
+                                //    {
+                                //        var body = doc.MainDocumentPart.Document.Body;
+                                //        pageText = body.InnerText;
+                                //        //continue;
+                                //    }
+                                //}
+
+                                switch (ExtensionFile)
                                 {
                                     case ".txt":
                                         pageText = System.IO.File.ReadAllText(file).Replace("\n", "");
@@ -194,17 +198,28 @@ namespace AzureSearch.Quickstart
                                             }
                                         }
                                         break;
+                                    case ".docx":
+                                        WordprocessingDocument docx = WordprocessingDocument.Open(file, false);
+                                        var bodyX = docx.MainDocumentPart.Document.Body;
+                                        pageText = bodyX.InnerText;
+                                        break;
+                                    case ".doc":
+                                        Document doc = new Document();
+                                        doc.LoadFromFile(file.ToString());
+                                        Console.WriteLine(doc.GetText());
+                                        pageText = doc.GetText().Remove(0, 69).Replace("\r", "");
+                                        break;
                                 }
                                 datainfo = new Data[]
                                 {
-                                    new Data { key = file, value = Path.GetFileName(file), text = pageText.Replace("\n", "") }
+                                    new Data { FilePath = file, FileName = Path.GetFileName(file), FileText = pageText.Replace("\n", "") }
                                 };
                                 myDictor.Add(file, datainfo);
                                 
                             }
                             var data = new Data[]
                             {
-                                new Data { key = file, value = Path.GetFileName(file), text = "" }
+                                new Data {FilePath = file, FileName = Path.GetFileName(file), FileText = ""}
                             };
                             myDictor.Add(file, data);
                         }
@@ -232,7 +247,7 @@ namespace AzureSearch.Quickstart
                 {
                     var data = new Data[]
                     {
-                        new Data { key = file, value = Path.GetFileName(file), text = "" }
+                        new Data { FilePath = file, FileName = Path.GetFileName(file), FileText = "" }
                     };
                     myDictor.Add(file, data);
 
