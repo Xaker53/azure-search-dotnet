@@ -16,6 +16,7 @@ using DocumentFormat.OpenXml.Packaging;
 
 using Spire.Doc;
 using System.Text;
+using System.Linq;
 
 namespace AzureSearch.Quickstart
 
@@ -100,6 +101,39 @@ namespace AzureSearch.Quickstart
         // Upload documents in a single Upload request.
         private static void UploadDocuments(SearchClient searchClient)
         {
+            //DriveInfo[] driveInfos = DriveInfo.GetDrives();
+            //foreach (DriveInfo driveInfo in driveInfos)
+            //{
+            //    var myDictor = Files(driveInfo.ToString());
+            //    int it = 0;
+            //    foreach (var info in myDictor)
+            //    {
+            //        foreach (var file in info.Value)
+            //        {
+            //            var batch = IndexDocumentsBatch.Create(
+            //                IndexDocumentsAction.Upload(new Files
+            //                {
+            //                    FileID = $"{it}", // Assuming Files has a property ID
+            //                    FileName = $"{file.FileName}",
+            //                    FileText = $"{file.FileText}",
+            //                    FilePath = $"{file.FilePath}"
+            //                })
+            //            );
+
+            //            // Upload the batch to the index
+            //            try
+            //            {
+            //                searchClient.IndexDocuments(batch);
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                // Handle exceptions if necessary
+            //                Console.WriteLine($"Error uploading document: {ex.Message}");
+            //            }
+            //            it++;
+            //        }
+            //    }
+            //}
             var myDictor = Files(@"J:\\Ai");
             int it = 0;
             foreach (var info in myDictor)
@@ -146,119 +180,116 @@ namespace AzureSearch.Quickstart
         }
 
 
-        static Dictionary<string, Data[]> Files(String filesd)
+        static Dictionary<string, Data[]> Files(string filesDirectory)
         {
-            Dictionary<string, Data[]> myDictor = new Dictionary<string, Data[]>();
+            Dictionary<string, Data[]> myDictionary = new Dictionary<string, Data[]>();
 
-            Data[] datainfo;
-
-            String[] files = Directory.GetFileSystemEntries(filesd);
-            if (files.Length > 0)
+            foreach (string filePath in Directory.GetFileSystemEntries(filesDirectory))
             {
-                foreach (String file in files)
+                try
                 {
-                    try
+                    if (File.Exists(filePath))
                     {
-                        if (System.IO.File.Exists(file))
+                        string extension = Path.GetExtension(filePath);
+
+                        if (IsSupportedExtension(extension))
                         {
-                            if (Path.GetExtension(file) == ".pdf" || Path.GetExtension(file) == ".docx" || Path.GetExtension(file) == ".doc" || Path.GetExtension(file) == ".txt")
-                            {
-                                string pageText = "";
-                                string ExtensionFile = Path.GetExtension(file);
-                                //if (ExtensionFile == ".docx")
-                                //{
-                                //    using (WordprocessingDocument doc = WordprocessingDocument.Open(file, false))
-                                //    {
-                                //        var body = doc.MainDocumentPart.Document.Body;
-                                //        pageText = body.InnerText;
-                                //        //continue;
-                                //    }
-                                //}
+                            string pageText = GetFileText(filePath, extension);
 
-                                switch (ExtensionFile)
-                                {
-                                    case ".txt":
-                                        pageText = System.IO.File.ReadAllText(file).Replace("\n", "");
-                                        Console.WriteLine(pageText);
-                                        break;
-                                    case ".pdf":
-                                        using (PdfReader pdfReader = new PdfReader(file))
-                                        {
-                                            using (PdfDocument pdfDocument = new PdfDocument(pdfReader))
-                                            {
-                                                int numPages = pdfDocument.GetNumberOfPages();
-                                                for (int pageNum = 1; pageNum <= numPages; pageNum++)
-                                                {
-                                                    SimpleTextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
-                                                    pageText += PdfTextExtractor.GetTextFromPage(pdfDocument.GetPage(pageNum), strategy);
-
-                                                }
-                                                Console.WriteLine($":{pageText}");
-                                               
-                                            }
-                                        }
-                                        break;
-                                    case ".docx":
-                                        WordprocessingDocument docx = WordprocessingDocument.Open(file, false);
-                                        var bodyX = docx.MainDocumentPart.Document.Body;
-                                        pageText = bodyX.InnerText;
-                                        break;
-                                    case ".doc":
-                                        Document doc = new Document();
-                                        doc.LoadFromFile(file.ToString());
-                                        Console.WriteLine(doc.GetText());
-                                        pageText = doc.GetText().Remove(0, 69).Replace("\r", "");
-                                        break;
-                                }
-                                datainfo = new Data[]
-                                {
-                                    new Data { FilePath = file, FileName = Path.GetFileName(file), FileText = pageText.Replace("\n", "") }
-                                };
-                                myDictor.Add(file, datainfo);
-                                
-                            }
-                            var data = new Data[]
+                            Data[] dataInfo = new Data[]
                             {
-                                new Data {FilePath = file, FileName = Path.GetFileName(file), FileText = ""}
+                                new Data { FilePath = filePath, FileName = Path.GetFileName(filePath), FileText = pageText.Replace("\n", "") }
                             };
-                            myDictor.Add(file, data);
+
+                            myDictionary.Add(filePath, dataInfo);
                         }
                         else
                         {
-                            Dictionary<string, Data[]> subFile = Files(file);
-                            foreach (var info in subFile)
+                            var data = new Data[]
                             {
-                                myDictor.Add(info.Key, info.Value);
-                            }
+                                new Data { FilePath = filePath, FileName = Path.GetFileName(filePath), FileText = "" }
+                            };
+
+                            myDictionary.Add(filePath, data);
                         }
                     }
-                    catch
+                    else
                     {
-
+                        Dictionary<string, Data[]> subFile = Files(filePath);
+                        foreach (var info in subFile)
+                        {
+                            myDictionary.Add(info.Key, info.Value);
+                        }
                     }
-
                 }
-                return myDictor;
-            }
-            else
-            {
-                String[] fileOne = Directory.GetFiles(filesd);
-                foreach (String file in fileOne)
+                catch
                 {
-                    var data = new Data[]
-                    {
-                        new Data { FilePath = file, FileName = Path.GetFileName(file), FileText = "" }
-                    };
-                    myDictor.Add(file, data);
-
-                    Console.WriteLine(Path.GetFileName(file));
-                    Console.WriteLine(Path.GetExtension(file));
+                    // Handle exceptions if needed
                 }
-
-                return myDictor;
             }
 
+            return myDictionary;
         }
+
+        static bool IsSupportedExtension(string extension)
+        {
+            string[] supportedExtensions = { ".pdf", ".docx", ".doc", ".txt" };
+         
+            return supportedExtensions.Contains(extension);
+        }
+
+        static string GetFileText(string filePath, string extension)
+        {
+            string pageText = "";
+
+            switch (extension)
+            {
+                case ".txt":
+                    pageText = File.ReadAllText(filePath).Replace("\n", "");
+                    Console.WriteLine(pageText);
+                    break;
+                case ".pdf":
+                    pageText = ExtractTextFromPdf(filePath);
+                    Console.WriteLine($":{pageText}");
+                    break;
+                case ".docx":
+                    using (WordprocessingDocument docx = WordprocessingDocument.Open(filePath, false))
+                    {
+                        var bodyX = docx.MainDocumentPart.Document.Body;
+                        pageText = bodyX.InnerText;
+                    }
+                    break;
+                case ".doc":
+                    Document doc = new Document();
+                    doc.LoadFromFile(filePath);
+                    Console.WriteLine(doc.GetText());
+                    pageText = doc.GetText().Remove(0, 69).Replace("\r", "");
+                    break;
+            }
+
+            return pageText;
+        }
+
+        static string ExtractTextFromPdf(string filePath)
+        {
+            string pageText = "";
+
+            using (PdfReader pdfReader = new PdfReader(filePath))
+            {
+                using (PdfDocument pdfDocument = new PdfDocument(pdfReader))
+                {
+                    int numPages = pdfDocument.GetNumberOfPages();
+                    for (int pageNum = 1; pageNum <= numPages; pageNum++)
+                    {
+                        SimpleTextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
+                        pageText += PdfTextExtractor.GetTextFromPage(pdfDocument.GetPage(pageNum), strategy);
+                    }
+                }
+            }
+
+            return pageText;
+        }
+
 
 
         //static string ReadPdfFile(string filePath)
