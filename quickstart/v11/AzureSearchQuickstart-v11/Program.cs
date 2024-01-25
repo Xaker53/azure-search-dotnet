@@ -17,6 +17,8 @@ using DocumentFormat.OpenXml.Packaging;
 using Spire.Doc;
 using System.Text;
 using System.Linq;
+using AzureSearchQuickstart_v11;
+
 
 namespace AzureSearch.Quickstart
 
@@ -245,7 +247,7 @@ namespace AzureSearch.Quickstart
             switch (extension)
             {
                 case ".txt":
-                    pageText = File.ReadAllText(filePath).Replace("\n", "");
+                    pageText = File.ReadAllText(filePath).Replace("\n", "").Replace("\r", " ");
                     Console.WriteLine(pageText);
                     break;
                 case ".pdf":
@@ -253,19 +255,28 @@ namespace AzureSearch.Quickstart
                     Console.WriteLine($":{pageText}");
                     break;
                 case ".docx":
-                    using (WordprocessingDocument docx = WordprocessingDocument.Open(filePath, false))
-                    {
-                        var bodyX = docx.MainDocumentPart.Document.Body;
-                        pageText = bodyX.InnerText;
-                    }
+                    //using (WordprocessingDocument docx = WordprocessingDocument.Open(filePath, true))
+                    //{
+                    //    var bodyX = docx.MainDocumentPart.Document.Body;
+                    //    pageText = bodyX.InnerText;
+                    //}
+
+                    Document document = new Document();
+                    document.LoadText(filePath);
+                    pageText = document.GetText().Remove(0, 69).Replace("\r", "");
                     break;
                 case ".doc":
                     Document doc = new Document();
                     doc.LoadFromFile(filePath);
-                    Console.WriteLine(doc.GetText());
                     pageText = doc.GetText().Remove(0, 69).Replace("\r", "");
                     break;
             }
+            //Console.WriteLine(pageText.Length);
+            //pageText= PopularWords.Result(pageText);
+            //Console.WriteLine(pageText.Length);                ///////////need delete
+            var rake = new Rake.Rake();
+            var result = rake.Run(pageText.ToLower());
+            pageText = string.Join(" ",result.Keys);
 
             return pageText;
         }
