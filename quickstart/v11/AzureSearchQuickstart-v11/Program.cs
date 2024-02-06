@@ -18,6 +18,13 @@ using Spire.Doc;
 using System.Text;
 using System.Linq;
 using AzureSearchQuickstart_v11;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Collections;
+using System.Threading;
+using Microsoft.Extensions.Azure;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 
 namespace AzureSearch.Quickstart
@@ -26,6 +33,10 @@ namespace AzureSearch.Quickstart
 {
     class Program
     {
+
+        static private AutoResetEvent uploadedToAzureSearch = new AutoResetEvent(false);
+        static private CancellationTokenSource tokenSource = new CancellationTokenSource();
+        static CancellationToken token = tokenSource.Token;
         static void Main(string[] args)
         {
             string serviceName = "search53";
@@ -100,75 +111,111 @@ namespace AzureSearch.Quickstart
             adminClient.CreateOrUpdateIndex(definition);
         }
 
-        // Upload documents in a single Upload request.
-        private static void UploadDocuments(SearchClient searchClient)
-        {
-            //DriveInfo[] driveInfos = DriveInfo.GetDrives();
-            //foreach (DriveInfo driveInfo in driveInfos)
-            //{
-            //    var myDictor = Files(driveInfo.ToString());
-            //    int it = 0;
-            //    foreach (var info in myDictor)
-            //    {
-            //        foreach (var file in info.Value)
-            //        {
-            //            var batch = IndexDocumentsBatch.Create(
-            //                IndexDocumentsAction.Upload(new Files
-            //                {
-            //                    FileID = $"{it}", // Assuming Files has a property ID
-            //                    FileName = $"{file.FileName}",
-            //                    FileText = $"{file.FileText}",
-            //                    FilePath = $"{file.FilePath}"
-            //                })
-            //            );
 
-            //            // Upload the batch to the index
-            //            try
-            //            {
-            //                searchClient.IndexDocuments(batch);
-            //            }
-            //            catch (Exception ex)
-            //            {
-            //                // Handle exceptions if necessary
-            //                Console.WriteLine($"Error uploading document: {ex.Message}");
-            //            }
-            //            it++;
-            //        }
-            //    }
-            //}
-            var myDictor = Files(@"J:\\Ai");
-            int it = 0;
-            foreach (var info in myDictor)
+
+        
+        // Upload documents in a single Upload request.
+        private static async void UploadDocuments(SearchClient searchClient)
+        {
+            DriveInfo[] driveInfos = DriveInfo.GetDrives();
+            //ConcurrentQueue<IndexDocumentsAction<Files>> batch = new ConcurrentQueue<IndexDocumentsAction<Files>>();
+            var waitHandle = new AutoResetEvent(false);
+            var buffer = new ThreadServer(searchClient, waitHandle, 32000);
+
+            var TaskServer = Task.Run(
+                 async () =>
+                 {
+                     var waitHandle = new AutoResetEvent(false);
+                     buffer.StartFlushSignals(TimeSpan.FromMinutes(1));
+                     while (waitHandle.WaitOne())
+                     {
+                         tokenSource.Token.ThrowIfCancellationRequested();
+                         await buffer.UploadToAzureSearch(uploadedToAzureSearch);
+                         Console.WriteLine($"Flushing files from buffer (thread: {Environment.CurrentManagedThreadId}):");
+                     }
+                 }, tokenSource.Token);
+            foreach (DriveInfo driveInfo in driveInfos)
             {
-                foreach (var file in info.Value)
+                var myDictor = Files(driveInfo.ToString());
+                int it = 0;
+                //var batch = new List<IndexDocumentsAction<Files>>();
+                foreach (var info in myDictor)
                 {
-                    var batch = IndexDocumentsBatch.Create(
-                        IndexDocumentsAction.Upload(new Files
+                    foreach (var file in info.Value)
+                    {
+                        buffer.Add(IndexDocumentsAction.Upload(new Files
                         {
                             FileID = $"{it}", // Assuming Files has a property ID
                             FileName = $"{file.FileName}",
                             FileText = $"{file.FileText}",
                             FilePath = $"{file.FilePath}"
-                        })
-                    );
+                        }));
 
-                    // Upload the batch to the index
-                    try
-                    {
-                        searchClient.IndexDocuments(batch);
+                        it++;
                     }
-                    catch (Exception ex)
+                }
+
+                try
+                {
+                    uploadedToAzureSearch.WaitOne();
+                    if (buffer.BatchCount == 0)
                     {
-                        // Handle exceptions if necessary
-                        Console.WriteLine($"Error uploading document: {ex.Message}");
+                        tokenSource.Cancel();
                     }
-                    it++;
+
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions if necessary
+                    Console.WriteLine($"Error uploading document: {ex.Message}");
                 }
             }
 
+            //////////////////////////////////
+            //var myDictor = Files(@"J:\\Ai");
+            //int it = 0;
+            //ConcurrentQueue<IndexDocumentsAction<Files>> batch = new ConcurrentQueue<IndexDocumentsAction<Files>>();
 
+            //var buffer = new ThreadServer(searchClient);
 
+            //var TaskServer = Task.Run(
+            //    async () =>
+            //    {
 
+            //        var waitHandle = new AutoResetEvent(false);
+            //        buffer.StartFlushSignals(TimeSpan.FromSeconds(5), waitHandle);
+            //        while (waitHandle.WaitOne())
+            //        {
+            //            tokenSource.Token.ThrowIfCancellationRequested();
+            //            await buffer.UploadToAzureSearch(uploadedToAzureSearch, batch);
+            //            Console.WriteLine($"Flushing files from buffer (thread: {Environment.CurrentManagedThreadId}):");
+            //        }
+            //    }, tokenSource.Token);
+
+            //foreach (var info in myDictor)
+            //{
+
+            //    foreach (var file in info.Value)
+            //    {
+            //        batch.Enqueue(
+            //        IndexDocumentsAction.Upload(new Files
+            //        {
+            //            FileID = $"{it}", // Assuming Files has a property ID
+            //            FileName = $"{file.FileName}",
+            //            FileText = $"{file.FileText}",
+            //            FilePath = $"{file.FilePath}"
+            //        }));
+
+            //        it++;
+            //    }
+            //}
+            //Console.WriteLine($"Flushing files from buffer (thread: {Environment.CurrentManagedThreadId}):");
+            //uploadedToAzureSearch.WaitOne();
+            //if (batch.Count == 0)
+            //{
+            //    tokenSource.Cancel();
+            //}
+            ////////////////////////////////////////////////////////////////
             //try
             //{
             //    IndexDocumentsResult result = searchClient.IndexDocuments(batch);
@@ -179,64 +226,73 @@ namespace AzureSearch.Quickstart
             //    // retrying. This simple demo just logs the failed document keys and continues.
             //    Console.WriteLine("Failed to index some of the documents: {0}");
             //}
+            /////
         }
 
-
-        static Dictionary<string, Data[]> Files(string filesDirectory)
+        static public ConcurrentDictionary<string, Data[]> Files(string filesDirectory)
         {
-            Dictionary<string, Data[]> myDictionary = new Dictionary<string, Data[]>();
-
-            foreach (string filePath in Directory.GetFileSystemEntries(filesDirectory))
-            {
-                try
-                {
-                    if (File.Exists(filePath))
-                    {
-                        string extension = Path.GetExtension(filePath);
-
-                        if (IsSupportedExtension(extension))
-                        {
-                            string pageText = GetFileText(filePath, extension);
-
-                            Data[] dataInfo = new Data[]
-                            {
-                                new Data { FilePath = filePath, FileName = Path.GetFileName(filePath), FileText = pageText.Replace("\n", "") }
-                            };
-
-                            myDictionary.Add(filePath, dataInfo);
-                        }
-                        else
-                        {
-                            var data = new Data[]
-                            {
-                                new Data { FilePath = filePath, FileName = Path.GetFileName(filePath), FileText = "" }
-                            };
-
-                            myDictionary.Add(filePath, data);
-                        }
-                    }
-                    else
-                    {
-                        Dictionary<string, Data[]> subFile = Files(filePath);
-                        foreach (var info in subFile)
-                        {
-                            myDictionary.Add(info.Key, info.Value);
-                        }
-                    }
-                }
-                catch
-                {
-                    // Handle exceptions if needed
-                }
-            }
-
-            return myDictionary;
+            ConcurrentDictionaryFiles ParallelD = new ConcurrentDictionaryFiles(filesDirectory);
+            return ParallelD.Dictionary();
         }
+
+
+        ///////////////////////////////////////////////////////////
+
+        //static public Dictionary<string, Data[]> Files(string filesDirectory)
+        //{
+        //    Dictionary<string, Data[]> myDictionary = new Dictionary<string, Data[]>();
+
+        //    foreach (string filePath in Directory.GetFileSystemEntries(filesDirectory))
+        //    {
+        //        try
+        //        {
+        //            if (File.Exists(filePath))
+        //            {
+        //                string extension = Path.GetExtension(filePath);
+
+        //                if (IsSupportedExtension(extension))
+        //                {
+        //                    string pageText = GetFileText(filePath, extension);
+
+        //                    Data[] dataInfo = new Data[]
+        //                    {
+        //                        new Data { FilePath = filePath, FileName = Path.GetFileName(filePath), FileText = pageText.Replace("\n", "") }
+        //                    };
+
+        //                    myDictionary.Add(filePath, dataInfo);
+        //                }
+        //                else
+        //                {
+        //                    var data = new Data[]
+        //                    {
+        //                        new Data { FilePath = filePath, FileName = Path.GetFileName(filePath), FileText = "" }
+        //                    };
+
+        //                    myDictionary.Add(filePath, data);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Dictionary<string, Data[]> subFile = Files(filePath);
+        //                foreach (var info in subFile)
+        //                {
+        //                    myDictionary.Add(info.Key, info.Value);
+        //                }
+        //            }
+        //        }
+        //        catch
+        //        {
+        //            // Handle exceptions if needed
+        //        }
+        //    }
+
+        //    return myDictionary;
+        //}
 
         static bool IsSupportedExtension(string extension)
         {
             string[] supportedExtensions = { ".pdf", ".docx", ".doc", ".txt" };
-         
+
             return supportedExtensions.Contains(extension);
         }
 
@@ -248,11 +304,11 @@ namespace AzureSearch.Quickstart
             {
                 case ".txt":
                     pageText = File.ReadAllText(filePath).Replace("\n", "").Replace("\r", " ");
-                    Console.WriteLine(pageText);
+                    
                     break;
                 case ".pdf":
                     pageText = ExtractTextFromPdf(filePath);
-                    Console.WriteLine($":{pageText}");
+                    
                     break;
                 case ".docx":
                     //using (WordprocessingDocument docx = WordprocessingDocument.Open(filePath, true))
@@ -276,7 +332,7 @@ namespace AzureSearch.Quickstart
             //Console.WriteLine(pageText.Length);                ///////////need delete
             var rake = new Rake.Rake();
             var result = rake.Run(pageText.ToLower());
-            pageText = string.Join(" ",result.Keys);
+            pageText = string.Join(" ", result.Keys);
 
             return pageText;
         }
@@ -302,20 +358,9 @@ namespace AzureSearch.Quickstart
         }
 
 
+        //////////////////////////////////////////////////////////
 
-        //static string ReadPdfFile(string filePath)
-        //{
-        //    using (PdfReader pdfReader = new PdfReader(filePath))
-        //    {
-        //        using (PdfDocument pdfDocument = new PdfDocument(pdfReader))
-        //        {
-        //            SimpleTextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
-        //            return PdfTextExtractor.GetTextFromPage(pdfDocument.GetFirstPage(), strategy);
-        //        }
-        //    }
-        //}
 
-        // Run queries, use WriteDocuments to print output
         private static void RunQueries(SearchClient srchclient)
         {
             SearchOptions options;
