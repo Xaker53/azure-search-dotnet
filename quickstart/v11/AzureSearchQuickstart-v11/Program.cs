@@ -37,6 +37,7 @@ namespace AzureSearch.Quickstart
         static private AutoResetEvent uploadedToAzureSearch = new AutoResetEvent(false);
         static private CancellationTokenSource tokenSource = new CancellationTokenSource();
         static CancellationToken token = tokenSource.Token;
+        static ConcurrentDictionaryFiles ParallelSearchFile;
         static void Main(string[] args)
         {
             string serviceName = "search53";
@@ -121,12 +122,11 @@ namespace AzureSearch.Quickstart
             //ConcurrentQueue<IndexDocumentsAction<Files>> batch = new ConcurrentQueue<IndexDocumentsAction<Files>>();
             var waitHandle = new AutoResetEvent(false);
             var buffer = new ThreadServer(searchClient, waitHandle, 32000);
-
+            ParallelSearchFile = new ConcurrentDictionaryFiles();
             var TaskServer = Task.Run(
                  async () =>
                  {
-                     var waitHandle = new AutoResetEvent(false);
-                     buffer.StartFlushSignals(TimeSpan.FromMinutes(1));
+                     buffer.StartFlushSignals(TimeSpan.FromMilliseconds(1));
                      while (waitHandle.WaitOne())
                      {
                          tokenSource.Token.ThrowIfCancellationRequested();
@@ -134,26 +134,26 @@ namespace AzureSearch.Quickstart
                          Console.WriteLine($"Flushing files from buffer (thread: {Environment.CurrentManagedThreadId}):");
                      }
                  }, tokenSource.Token);
+
             foreach (DriveInfo driveInfo in driveInfos)
             {
-                var myDictor = Files(driveInfo.ToString());
-                int it = 0;
+                Files(driveInfo.ToString(), buffer);
                 //var batch = new List<IndexDocumentsAction<Files>>();
-                foreach (var info in myDictor)
-                {
-                    foreach (var file in info.Value)
-                    {
-                        buffer.Add(IndexDocumentsAction.Upload(new Files
-                        {
-                            FileID = $"{it}", // Assuming Files has a property ID
-                            FileName = $"{file.FileName}",
-                            FileText = $"{file.FileText}",
-                            FilePath = $"{file.FilePath}"
-                        }));
+                //foreach (var info in myDictor)
+                //{
+                //    foreach (var file in info.Value)
+                //    {
+                //        buffer.Add(IndexDocumentsAction.Upload(new Files
+                //        {
+                //            FileID = $"{it}", // Assuming Files has a property ID
+                //            FileName = $"{file.FileName}",
+                //            FileText = $"{file.FileText}",
+                //            FilePath = $"{file.FilePath}"
+                //        }));
 
-                        it++;
-                    }
-                }
+                //        it++;
+                //    }
+                //}
 
                 try
                 {
@@ -172,46 +172,28 @@ namespace AzureSearch.Quickstart
             }
 
             //////////////////////////////////
-            //var myDictor = Files(@"J:\\Ai");
-            //int it = 0;
-            //ConcurrentQueue<IndexDocumentsAction<Files>> batch = new ConcurrentQueue<IndexDocumentsAction<Files>>();
 
-            //var buffer = new ThreadServer(searchClient);
-
+            //var waitHandle = new AutoResetEvent(false);
+            //var buffer = new ThreadServer(searchClient, waitHandle, 32000);
+            //ParallelSearchFile = new ConcurrentDictionaryFiles();
+            //Files(@"J:\\Ai", buffer);
             //var TaskServer = Task.Run(
-            //    async () =>
-            //    {
+            //     async () =>
+            //     {
+            //         buffer.StartFlushSignals(TimeSpan.FromMilliseconds(1));
+            //         while (waitHandle.WaitOne())
+            //         {
+            //             tokenSource.Token.ThrowIfCancellationRequested();
+            //             await buffer.UploadToAzureSearch(uploadedToAzureSearch);
+            //             Console.WriteLine($"Flushing files from buffer (thread: {Environment.CurrentManagedThreadId}):");
+            //         }
+            //     }, tokenSource.Token);
 
-            //        var waitHandle = new AutoResetEvent(false);
-            //        buffer.StartFlushSignals(TimeSpan.FromSeconds(5), waitHandle);
-            //        while (waitHandle.WaitOne())
-            //        {
-            //            tokenSource.Token.ThrowIfCancellationRequested();
-            //            await buffer.UploadToAzureSearch(uploadedToAzureSearch, batch);
-            //            Console.WriteLine($"Flushing files from buffer (thread: {Environment.CurrentManagedThreadId}):");
-            //        }
-            //    }, tokenSource.Token);
-
-            //foreach (var info in myDictor)
-            //{
-
-            //    foreach (var file in info.Value)
-            //    {
-            //        batch.Enqueue(
-            //        IndexDocumentsAction.Upload(new Files
-            //        {
-            //            FileID = $"{it}", // Assuming Files has a property ID
-            //            FileName = $"{file.FileName}",
-            //            FileText = $"{file.FileText}",
-            //            FilePath = $"{file.FilePath}"
-            //        }));
-
-            //        it++;
-            //    }
-            //}
             //Console.WriteLine($"Flushing files from buffer (thread: {Environment.CurrentManagedThreadId}):");
+
+
             //uploadedToAzureSearch.WaitOne();
-            //if (batch.Count == 0)
+            //if (buffer.BatchCount == 0)
             //{
             //    tokenSource.Cancel();
             //}
@@ -229,10 +211,9 @@ namespace AzureSearch.Quickstart
             /////
         }
 
-        static public ConcurrentDictionary<string, Data[]> Files(string filesDirectory)
+        static public void Files(string filesDirectory, ThreadServer thread)
         {
-            ConcurrentDictionaryFiles ParallelD = new ConcurrentDictionaryFiles(filesDirectory);
-            return ParallelD.Dictionary();
+            ParallelSearchFile.ParallelFiles(filesDirectory, thread);
         }
 
 

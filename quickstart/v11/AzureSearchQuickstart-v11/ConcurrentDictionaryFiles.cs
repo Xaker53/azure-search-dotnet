@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Azure.Search.Documents.Models;
+using AzureSearch.Quickstart;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static AzureSearch.Quickstart.Program;
 
@@ -11,9 +14,14 @@ namespace AzureSearchQuickstart_v11
 {
     class ConcurrentDictionaryFiles
     {
-        private ConcurrentDictionary<string, Data[]> myDictionary = new ConcurrentDictionary<string, Data[]>();
-        public ConcurrentDictionaryFiles(string filesDirectory)
+        private ThreadServer ThreadServer { get; set; }
+        private int index = 0;
+
+        
+        public void ParallelFiles(string filesDirectory, ThreadServer threadServer)
         {
+            this.ThreadServer = threadServer;
+            
             Parallel.ForEach(Directory.GetFileSystemEntries(filesDirectory), filePath =>
             {
                 try
@@ -26,40 +34,43 @@ namespace AzureSearchQuickstart_v11
                         {
                             GetFileText FileText = new GetFileText(filePath, extension);
                             string pageText = FileText.getPageText();
-
-                            Data[] dataInfo = new Data[]
-                            {
-                                new Data { FilePath = filePath, FileName = Path.GetFileName(filePath), FileText = pageText.Replace("\n", "") }
-                            };
-
-                            myDictionary.TryAdd(filePath, dataInfo);
+                            
+                            AddIndex(Path.GetFileName(filePath),filePath,pageText.Replace("\n", ""));
+                            Interlocked.Increment(ref index);
+                            
                         }
                         else
                         {
-                            var data = new Data[]
-                            {
-                        new Data { FilePath = filePath, FileName = Path.GetFileName(filePath), FileText = "" }
-                            };
-
-                            myDictionary.TryAdd(filePath, data);
+                            AddIndex(Path.GetFileName(filePath), filePath);
+                            Interlocked.Increment(ref index);
                         }
                     }
                     else
                     {
-                        ConcurrentDictionary<string, Data[]> subFile = Files(filePath);
-                        foreach (var info in subFile)
-                        {
-                            myDictionary.TryAdd(info.Key, info.Value);
-                        }
+                        Files(filePath, ThreadServer);
                     }
 
                 }
                 catch (Exception ex) 
                 {
-                    Console.WriteLine(ex.Message);
+                    //Console.WriteLine(ex.Message);
                 }
 
             });
+        }
+
+
+        private void AddIndex(string fileName,string filePath, string pageText = "")
+        {
+            ThreadServer.Add(IndexDocumentsAction.Upload(new Files
+            {
+                 // Assuming Files has a property ID
+                FileID = $"{index}",
+                FileName = $"{fileName}",
+                FileText = $"{pageText}",
+                FilePath = $"{filePath}"
+            }));;
+
         }
 
         private bool IsSupportedExtension(string extension)
@@ -67,11 +78,6 @@ namespace AzureSearchQuickstart_v11
             string[] supportedExtensions = { ".pdf", ".docx", ".doc", ".txt" };
 
             return supportedExtensions.Contains(extension);
-        }
-
-        public ConcurrentDictionary<string, Data[]> Dictionary()
-        {
-            return this.myDictionary;
         }
     }
 }
