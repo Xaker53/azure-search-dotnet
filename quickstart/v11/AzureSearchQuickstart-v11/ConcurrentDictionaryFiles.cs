@@ -39,11 +39,11 @@ namespace AzureSearchQuickstart_v11
                             Interlocked.Increment(ref index);
                             
                         }
-                        else
-                        {
-                            AddIndex(Path.GetFileName(filePath), filePath);
-                            Interlocked.Increment(ref index);
-                        }
+                        //else
+                        //{
+                        //    AddIndex(Path.GetFileName(filePath), filePath);
+                        //    Interlocked.Increment(ref index);
+                        //}
                     }
                     else
                     {

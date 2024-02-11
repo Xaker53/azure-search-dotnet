@@ -119,14 +119,13 @@ namespace AzureSearch.Quickstart
         private static async void UploadDocuments(SearchClient searchClient)
         {
             DriveInfo[] driveInfos = DriveInfo.GetDrives();
-            //ConcurrentQueue<IndexDocumentsAction<Files>> batch = new ConcurrentQueue<IndexDocumentsAction<Files>>();
             var waitHandle = new AutoResetEvent(false);
             var buffer = new ThreadServer(searchClient, waitHandle, 32000);
             ParallelSearchFile = new ConcurrentDictionaryFiles();
             var TaskServer = Task.Run(
                  async () =>
                  {
-                     buffer.StartFlushSignals(TimeSpan.FromMilliseconds(1));
+                     buffer.StartFlushSignals(TimeSpan.FromSeconds(5));
                      while (waitHandle.WaitOne())
                      {
                          tokenSource.Token.ThrowIfCancellationRequested();
@@ -138,22 +137,6 @@ namespace AzureSearch.Quickstart
             foreach (DriveInfo driveInfo in driveInfos)
             {
                 Files(driveInfo.ToString(), buffer);
-                //var batch = new List<IndexDocumentsAction<Files>>();
-                //foreach (var info in myDictor)
-                //{
-                //    foreach (var file in info.Value)
-                //    {
-                //        buffer.Add(IndexDocumentsAction.Upload(new Files
-                //        {
-                //            FileID = $"{it}", // Assuming Files has a property ID
-                //            FileName = $"{file.FileName}",
-                //            FileText = $"{file.FileText}",
-                //            FilePath = $"{file.FilePath}"
-                //        }));
-
-                //        it++;
-                //    }
-                //}
 
                 try
                 {
