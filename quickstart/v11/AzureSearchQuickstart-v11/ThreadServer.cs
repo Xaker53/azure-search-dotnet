@@ -36,13 +36,13 @@ namespace AzureSearchQuickstart_v11
 
         public void Add(IndexDocumentsAction<Files> elem)
         {
-            elem.Document.FileID = $"{Index}";
+            //elem.Document.FileID = $"{Index}";
             batch.Enqueue(elem);
             if (batch.Count > FlushAfterCount)
             {
                 AutoResetEvent.Set();
             }
-            Index++;
+            //Index++;
         }
 
         public IEnumerable<IndexDocumentsAction<Files>> FlushBuffer()

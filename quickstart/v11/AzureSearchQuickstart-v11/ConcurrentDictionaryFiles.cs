@@ -16,6 +16,7 @@ namespace AzureSearchQuickstart_v11
     {
         private ThreadServer ThreadServer { get; set; }
         private int index;
+        
 
         public ConcurrentDictionaryFiles(int Index)
         {
@@ -27,6 +28,7 @@ namespace AzureSearchQuickstart_v11
             
             Parallel.ForEach(Directory.GetFileSystemEntries(filesDirectory), filePath =>
             {
+
                 try
                 {
                     if (File.Exists(filePath))
@@ -39,14 +41,14 @@ namespace AzureSearchQuickstart_v11
                             string pageText = FileText.getPageText();
                             
                             AddIndex(Path.GetFileName(filePath),filePath,pageText.Replace("\n", ""));
-                            Interlocked.Increment(ref index);
+                            //Interlocked.Increment(ref index);
                             
                         }
-                        //else
-                        //{
-                        //    AddIndex(Path.GetFileName(filePath), filePath);
-                        //    Interlocked.Increment(ref index);
-                        //}
+                        else
+                        {
+                            AddIndex(Path.GetFileName(filePath), filePath);
+                            //Interlocked.Increment(ref index);
+                        }
                     }
                     else
                     {
@@ -63,12 +65,13 @@ namespace AzureSearchQuickstart_v11
         }
 
 
-        private void AddIndex(string fileName,string filePath, string pageText = "")
+        private  void AddIndex(string fileName,string filePath, string pageText = "")
         {
+            int currentIndex = Interlocked.Increment(ref index);
             ThreadServer.Add(IndexDocumentsAction.Upload(new Files
             {
                  // Assuming Files has a property ID
-                FileID = $"{index}",
+                FileID = $"{currentIndex}",
                 FileName = $"{fileName}",
                 FileText = $"{pageText}",
                 FilePath = $"{filePath}"
