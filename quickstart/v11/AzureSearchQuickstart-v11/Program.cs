@@ -121,7 +121,7 @@ namespace AzureSearch.Quickstart
             DriveInfo[] driveInfos = DriveInfo.GetDrives();
             var waitHandle = new AutoResetEvent(false);
             var buffer = new ThreadServer(searchClient, waitHandle, 32000);
-            ParallelSearchFile = new ConcurrentDictionaryFiles();
+            ParallelSearchFile = new ConcurrentDictionaryFiles((int)searchClient.GetDocumentCount().Value);
             var TaskServer = Task.Run(
                  async () =>
                  {

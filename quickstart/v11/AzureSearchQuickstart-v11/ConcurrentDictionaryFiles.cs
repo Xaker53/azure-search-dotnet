@@ -15,9 +15,12 @@ namespace AzureSearchQuickstart_v11
     class ConcurrentDictionaryFiles
     {
         private ThreadServer ThreadServer { get; set; }
-        private int index = 0;
+        private int index;
 
-        
+        public ConcurrentDictionaryFiles(int Index)
+        {
+            this.index = Index;
+        }
         public void ParallelFiles(string filesDirectory, ThreadServer threadServer)
         {
             this.ThreadServer = threadServer;
