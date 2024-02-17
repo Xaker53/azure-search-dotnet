@@ -16,7 +16,9 @@ namespace AzureSearchQuickstart_v11
     {
         private ThreadServer ThreadServer { get; set; }
         private int index;
-        
+
+
+        public ConcurrentDictionaryFiles() { }
 
         public ConcurrentDictionaryFiles(int Index)
         {
@@ -24,7 +26,7 @@ namespace AzureSearchQuickstart_v11
         }
         public void ParallelFiles(string filesDirectory, ThreadServer threadServer)
         {
-            this.ThreadServer = threadServer;
+            this.ThreadServer ??= threadServer;
             
             Parallel.ForEach(Directory.GetFileSystemEntries(filesDirectory), filePath =>
             {
@@ -52,7 +54,7 @@ namespace AzureSearchQuickstart_v11
                     }
                     else
                     {
-                        Files(filePath, ThreadServer);
+                        Files(filePath);
                     }
 
                 }
@@ -75,7 +77,7 @@ namespace AzureSearchQuickstart_v11
                 FileName = $"{fileName}",
                 FileText = $"{pageText}",
                 FilePath = $"{filePath}"
-            }));;
+            }));
 
         }
 

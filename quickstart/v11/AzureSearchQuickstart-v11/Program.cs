@@ -31,62 +31,62 @@ namespace AzureSearch.Quickstart
 
 
 {
-    class Program
+    public class Program
     {
 
-        static private AutoResetEvent uploadedToAzureSearch = new AutoResetEvent(false);
-        static private CancellationTokenSource tokenSource = new CancellationTokenSource();
-        static CancellationToken token = tokenSource.Token;
+        private AutoResetEvent uploadedToAzureSearch = new AutoResetEvent(false);
+        private static CancellationTokenSource tokenSource = new CancellationTokenSource();
+        private CancellationToken token = tokenSource.Token;
         static ConcurrentDictionaryFiles ParallelSearchFile;
-        static void Main(string[] args)
+        private static ThreadServer buffer;
+        public void Start()
         {
-            string serviceName = "search53";
-            string apiKey = "FVSYI2BfI4x26m6LDy55Ix4vaQqxvKlX7SKCxtmJf2AzSeCxpQRV";
-            string indexName = "hquickstart";
+            ManagementAzure managementAzure = new();
+            managementAzure.Start();
+
+
 
             // Create a SearchIndexClient to send create/delete index commands
-            Uri serviceEndpoint = new Uri($"https://{serviceName}.search.windows.net/");
-            AzureKeyCredential credential = new AzureKeyCredential(apiKey);
-            SearchIndexClient adminClient = new SearchIndexClient(serviceEndpoint, credential);
+
 
             // Create a SearchClient to load and query documents
-            SearchClient srchclient = new SearchClient(serviceEndpoint, indexName, credential);
+
 
             // Delete index if it exists
             Console.WriteLine("{0}", "Deleting index...\n");
-            DeleteIndexIfExists(indexName, adminClient);
+            managementAzure.DeleteIndexIfExists();
 
             // Create index
             Console.WriteLine("{0}", "Creating index...\n");
-            CreateIndex(indexName, adminClient);
+            managementAzure.CreateIndex();
 
-            SearchClient ingesterClient = adminClient.GetSearchClient(indexName);
+            //SearchClient ingesterClient = adminClient.GetSearchClient(indexName);
 
-            // Load documents
+            //// Load documents
             Console.WriteLine("{0}", "Uploading documents...\n");
-            UploadDocuments(ingesterClient);
+            UploadDocuments(managementAzure.IngesterClient);
 
-            // Wait 2 secondsfor indexing to complete before starting queries (for demo and console-app purposes only)
-            Console.WriteLine("Waiting for indexing...\n");
-            System.Threading.Thread.Sleep(2000);
+            //// Wait 2 secondsfor indexing to complete before starting queries (for demo and console-app purposes only)
+            //Console.WriteLine("Waiting for indexing...\n");
+            //System.Threading.Thread.Sleep(2000);
 
-            // Call the RunQueries method to invoke a series of queries
-            Console.WriteLine("Starting queries...\n");
-            RunQueries(srchclient);
+            //// Call the RunQueries method to invoke a series of queries
+            //Console.WriteLine("Starting queries...\n");
+            //RunQueries(srchclient);
 
             // End the program
             Console.WriteLine("{0}", "Complete. Press any key to end this program...\n");
-            Console.ReadKey();
+            //Console.ReadKey();
         }
 
         // Delete the hotels-quickstart index to reuse its name
-        private static void DeleteIndexIfExists(string indexName, SearchIndexClient adminClient)
-        {
-            adminClient.GetIndexNames();
-            {
-                adminClient.DeleteIndex(indexName);
-            }
-        }
+        //private void DeleteIndexIfExists(string indexName, SearchIndexClient adminClient)
+        //{
+        //    adminClient.GetIndexNames();
+        //    {
+        //        adminClient.DeleteIndex(indexName);
+        //    }
+        //}
         // Create hotels-quickstart index
 
         public class Data
@@ -96,27 +96,27 @@ namespace AzureSearch.Quickstart
             public string FileText { get; set; }
         }
 
-        private static void CreateIndex(string indexName, SearchIndexClient adminClient)
-        {
-            FieldBuilder fieldBuilder = new FieldBuilder();
-            var searchFields = fieldBuilder.Build(typeof(Files));
+        //private void CreateIndex(string indexName, SearchIndexClient adminClient)
+        //{
+        //    FieldBuilder fieldBuilder = new FieldBuilder();
+        //    var searchFields = fieldBuilder.Build(typeof(Files));
 
-            var definition = new SearchIndex(indexName, searchFields);
-
-
-            var suggester = new SearchSuggester("sg", new[] { "FileText" });
+        //    var definition = new SearchIndex(indexName, searchFields);
 
 
-            definition.Suggesters.Add(suggester);
-
-            adminClient.CreateOrUpdateIndex(definition);
-        }
+        //    var suggester = new SearchSuggester("sg", new[] { "FileText" });
 
 
+        //    definition.Suggesters.Add(suggester);
 
-        
+        //    adminClient.CreateOrUpdateIndex(definition);
+        //}
+
+
+
+
         // Upload documents in a single Upload request.
-        private static async void UploadDocuments(SearchClient searchClient)
+        private async void UploadDocuments(SearchClient searchClient)
         {
             //DriveInfo[] driveInfos = DriveInfo.GetDrives();
             //var waitHandle = new AutoResetEvent(false);
@@ -157,9 +157,9 @@ namespace AzureSearch.Quickstart
             //////////////////////////////////
 
             var waitHandle = new AutoResetEvent(false);
-            var buffer = new ThreadServer(searchClient, waitHandle, 32000);
+            buffer = new ThreadServer(searchClient, waitHandle, 32000);
             ParallelSearchFile = new ConcurrentDictionaryFiles((int)searchClient.GetDocumentCount().Value);
-            Files(@"J:\\Ai", buffer);
+            Files(@"J:\\Ai");
             var TaskServer = Task.Run(
                  async () =>
                  {
@@ -194,10 +194,11 @@ namespace AzureSearch.Quickstart
             /////
         }
 
-        static public void Files(string filesDirectory, ThreadServer thread)
+        public static void Files(string filesDirectory)
         {
-            ParallelSearchFile.ParallelFiles(filesDirectory, thread);
+            ParallelSearchFile.ParallelFiles(filesDirectory, buffer);
         }
+
 
 
         ///////////////////////////////////////////////////////////
@@ -253,14 +254,14 @@ namespace AzureSearch.Quickstart
         //    return myDictionary;
         //}
 
-        static bool IsSupportedExtension(string extension)
+        bool IsSupportedExtension(string extension)
         {
             string[] supportedExtensions = { ".pdf", ".docx", ".doc", ".txt" };
 
             return supportedExtensions.Contains(extension);
         }
 
-        static string GetFileText(string filePath, string extension)
+        string GetFileText(string filePath, string extension)
         {
             string pageText = "";
 
@@ -268,11 +269,11 @@ namespace AzureSearch.Quickstart
             {
                 case ".txt":
                     pageText = File.ReadAllText(filePath).Replace("\n", "").Replace("\r", " ");
-                    
+
                     break;
                 case ".pdf":
                     pageText = ExtractTextFromPdf(filePath);
-                    
+
                     break;
                 case ".docx":
                     //using (WordprocessingDocument docx = WordprocessingDocument.Open(filePath, true))
@@ -301,7 +302,7 @@ namespace AzureSearch.Quickstart
             return pageText;
         }
 
-        static string ExtractTextFromPdf(string filePath)
+        string ExtractTextFromPdf(string filePath)
         {
             string pageText = "";
 
@@ -325,7 +326,7 @@ namespace AzureSearch.Quickstart
         //////////////////////////////////////////////////////////
 
 
-        private static void RunQueries(SearchClient srchclient)
+        private void RunQueries(SearchClient srchclient)
         {
             SearchOptions options;
             SearchResults<Files> response;
@@ -364,7 +365,7 @@ namespace AzureSearch.Quickstart
 
         }
         // Write search results to console
-        private static void WriteDocuments(SearchResults<Files> searchResults)
+        private void WriteDocuments(SearchResults<Files> searchResults)
         {
             foreach (SearchResult<Files> result in searchResults.GetResults())
             {
@@ -374,7 +375,7 @@ namespace AzureSearch.Quickstart
             Console.WriteLine();
         }
 
-        private static void WriteDocuments(AutocompleteResults autoResults)
+        private void WriteDocuments(AutocompleteResults autoResults)
         {
             foreach (AutocompleteItem result in autoResults.Results)
             {
