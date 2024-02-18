@@ -13,10 +13,10 @@ namespace AzureSearch.Quickstart
         [SearchableField(IsSortable = true)]
         public string FileName { get; set; }
 
-        [SearchableField(IsSortable = true)]
+        [SearchableField (IsSortable = true)]
         public string FileText { get; set; }
 
-        [SearchableField(AnalyzerName = LexicalAnalyzerName.Values.EnLucene)]
+        [SearchableField(IsFilterable = true)]
         public string FilePath { get; set; }
 
     }

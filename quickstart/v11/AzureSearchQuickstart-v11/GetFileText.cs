@@ -36,9 +36,14 @@ namespace AzureSearchQuickstart_v11
                     this.pageText = doc.GetText().Remove(0, 69).Replace("\r", "");
                     break;
             }
-            var rake = new Rake.Rake();
-            var result = rake.Run(this.pageText.ToLower());
-            this.pageText = string.Join(" ", result.Keys);
+
+            if (pageText.Length > 27090)
+            {
+                var rake = new Rake.Rake();
+                var result = rake.Run(this.pageText.ToLower());
+                this.pageText = string.Join(" ", result.Keys);
+            }
+            
         }
 
         private string ExtractTextFromPdf(string filePath)

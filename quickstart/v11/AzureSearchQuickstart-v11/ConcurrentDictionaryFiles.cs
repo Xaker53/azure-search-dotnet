@@ -42,13 +42,13 @@ namespace AzureSearchQuickstart_v11
                             GetFileText FileText = new GetFileText(filePath, extension);
                             string pageText = FileText.getPageText();
                             
-                            AddIndex(Path.GetFileName(filePath),filePath,pageText.Replace("\n", ""));
+                            AddIndex(Path.GetFileName(filePath), Path.GetFullPath(filePath), pageText.Replace("\n", ""));
                             //Interlocked.Increment(ref index);
                             
                         }
                         else
                         {
-                            AddIndex(Path.GetFileName(filePath), filePath);
+                            AddIndex(Path.GetFileName(filePath), Path.GetFullPath(filePath));
                             //Interlocked.Increment(ref index);
                         }
                     }

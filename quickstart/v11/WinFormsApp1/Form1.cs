@@ -21,10 +21,10 @@ namespace WinFormsApp1
             watcher.Renamed += OnRenamed;
             watcher.Changed += OnChanger;
             watcher.Deleted += OnDeleted;
-            //watcher.Created
+
+            watcher.Created += OnCreated;
 
         }
-
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -67,23 +67,28 @@ namespace WinFormsApp1
 
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
-            string NewName = new string(e.Name.Reverse().TakeWhile(c => c != '\\').Reverse().ToArray());
-            string OldName = new string(e.OldName.Reverse().TakeWhile(c => c != '\\').Reverse().ToArray());
+            string NewName = Path.GetFileName(e.FullPath);
+            string OldName = Path.GetFileName(e.OldName);
 
-            managementAzure.RunQueries(OldName, "Renamed", e.FullPath, NewName);
+            managementAzure.RunQueries(e.OldFullPath, "Renamed", e.FullPath, NewName);
             label1.Text = $"old path {OldName}, new {e.FullPath}, file name {NewName}";
         }
 
         private void OnChanger(object sender, FileSystemEventArgs e)
         {
-            string NameFile = new string(e.Name.Reverse().TakeWhile(c => c != '\\').Reverse().ToArray());
-            managementAzure.RunQueries(NameFile, "Changer", PathFile:e.FullPath );
+            //string NameFile = new string(e.Name.Reverse().TakeWhile(c => c != '\\').Reverse().ToArray());
+            managementAzure.RunQueries(e.FullPath, "Changer");
         }
+
+        private void OnCreated(object sender, FileSystemEventArgs e)
+        {
+            label1.Text = "Created: "+e.FullPath;
+        }
+
 
         private void OnDeleted(object sender, FileSystemEventArgs e)
         {
-            //string NameFile = new string(e.Name.Reverse().TakeWhile(c => c != '\\').Reverse().ToArray());
-            //managementAzure.RunQueries(NameFile, "Deleted", PathFile: e.FullPath);
+            //managementAzure.RunQueries(e.FullPath, "Deleted", PathFile: e.FullPath);
         }
     }
 }

@@ -11,6 +11,8 @@ using Azure.Search.Documents.Indexes.Models;
 using AzureSearch.Quickstart;
 using Azure.Search.Documents.Models;
 using System.IO;
+using System.Runtime.CompilerServices;
+using AzureSearchQuickstart_v11;
 
 namespace AzureSearch.Quickstart
 {
@@ -34,6 +36,9 @@ namespace AzureSearch.Quickstart
 
         private List<Files> resultSearch;
 
+
+        private static ThreadServer buffer;
+
         public ManagementAzure()
         {
 
@@ -54,9 +59,9 @@ namespace AzureSearch.Quickstart
         public void DeleteIndexIfExists()
         {
             adminClient.GetIndexNames();
-            {
-                adminClient.DeleteIndex(indexName);
-            }
+            
+            adminClient.DeleteIndex(indexName);
+            
         }
 
         public void CreateIndex()
@@ -79,15 +84,17 @@ namespace AzureSearch.Quickstart
         {
             SearchOptions options;
             SearchResults<Files> response;
-
+            
 
             options = new SearchOptions();
-            options.Select.Add("FileID");
-            options.Select.Add("FileName");
-            options.Select.Add("FileText");
-            options.Select.Add("FilePath");
-            response = srchclient.Search<Files>($"{request}", options);
-
+            var path = Path.GetFullPath(request);
+            options.Filter = SearchFilter.Create(FormattableStringFactory.Create($"{nameof(Files.FilePath)} eq '{path}'"));
+            //options.Select.Add("FileID");
+            //options.Select.Add("FileName");
+            //options.Select.Add("FileText");
+            //options.Select.Add("FilePath");
+            response = srchclient.Search<Files>($"*", options);
+            var Fortest = response.GetResults().FirstOrDefault();
             if (response.GetResults().FirstOrDefault() != null)
             {
                 var test = response.GetResults().FirstOrDefault().Document;
@@ -96,21 +103,23 @@ namespace AzureSearch.Quickstart
                     case "Renamed":
                         this.resultSearch = new List<Files>();
                         test.FileName = $"{NewName}";
-                        test.FilePath = NewPath;
+                        test.FilePath = Path.GetFullPath(NewPath);
                         this.resultSearch.Add(test);
                         SendRequest();
                         break;
                     case "Changer":
-                        if (IsSupportedExtension(Path.GetExtension(PathFile)))
+                        if (IsSupportedExtension(Path.GetExtension(path)))
                         {
-                            if (Path.GetFullPath(PathFile) == Path.GetFullPath(test.FilePath))
+                            if (path == Path.GetFullPath(test.FilePath))
                             {
-                                AzureSearchQuickstart_v11.GetFileText getFileText = new(Path.GetFullPath(PathFile), Path.GetExtension(PathFile));
+                                AzureSearchQuickstart_v11.GetFileText getFileText = new(path, Path.GetExtension(path));
                                 this.resultSearch = new List<Files>();
+
                                 test.FileText = getFileText.getPageText();
                                 this.resultSearch.Add(test);
                                 SendRequest();
                             }
+                            //else if ()
                             //else if (Path.GetFullPath(PathFile) != Path.GetFullPath(test.FilePath))
                             //{
                             //    test.FilePath = PathFile;
@@ -129,6 +138,21 @@ namespace AzureSearch.Quickstart
 
                 }
             }
+            //else if (response.GetResults().FirstOrDefault() == null && function == "Changer")
+            //{
+            //    if (IsSupportedExtension(Path.GetExtension(path)))
+            //    {
+            //        var test = new Files();
+            //        AzureSearchQuickstart_v11.GetFileText getFileText = new(path, Path.GetExtension(path));
+            //        this.resultSearch = new List<Files>();
+            //        test.FileText = getFileText.getPageText();
+            //        test.FileName = Path.GetFileName(path);
+            //        test.FileID = (IngesterClient.GetDocumentCount().Value + 1).ToString();
+            //        test.FilePath = path;
+            //        this.resultSearch.Add(test);
+            //        SendRequest();
+            //    }
+            //}
 
 
             //if (response.GetResults().FirstOrDefault() != null)
