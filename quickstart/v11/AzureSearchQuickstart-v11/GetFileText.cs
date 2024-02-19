@@ -9,7 +9,7 @@ using Spire.Doc;
 
 namespace AzureSearchQuickstart_v11
 {
-    class GetFileText
+    public class GetFileText
     {
         private string pageText { get; set;} = "";
         public GetFileText(string filePath, string extension)

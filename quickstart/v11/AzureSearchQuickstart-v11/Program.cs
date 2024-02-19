@@ -77,6 +77,7 @@ namespace AzureSearch.Quickstart
             // End the program
             Console.WriteLine("{0}", "Complete. Press any key to end this program...\n");
             //Console.ReadKey();
+            
         }
 
         // Delete the hotels-quickstart index to reuse its name
@@ -179,6 +180,7 @@ namespace AzureSearch.Quickstart
             if (buffer.BatchCount == 0)
             {
                 tokenSource.Cancel();
+               
             }
             ////////////////////////////////////////////////////////////////
             //try

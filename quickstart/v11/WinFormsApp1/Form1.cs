@@ -9,20 +9,22 @@ namespace WinFormsApp1
         public Form1()
         {
             InitializeComponent();
-
-            managementAzure.Start();
-            DriveInfo[] driveInfos = DriveInfo.GetDrives();
-            FileSystemWatcher watcher = new FileSystemWatcher(@"\");
+            SystemWather systemWather = new(this);
             
-            watcher.EnableRaisingEvents = true;
-            watcher.SynchronizingObject = this;
-            watcher.IncludeSubdirectories = true;
-            //watcher.Created += new FileSystemEventHandler(WatherCreated);
-            watcher.Renamed += OnRenamed;
-            watcher.Changed += OnChanger;
-            watcher.Deleted += OnDeleted;
 
-            watcher.Created += OnCreated;
+            //managementAzure.Start();
+            //DriveInfo[] driveInfos = DriveInfo.GetDrives();
+            //FileSystemWatcher watcher = new FileSystemWatcher(@"\");
+
+            //watcher.EnableRaisingEvents = true;
+            //watcher.SynchronizingObject = this;
+            //watcher.IncludeSubdirectories = true;
+            ////watcher.Created += new FileSystemEventHandler(WatherCreated);
+            //watcher.Renamed += OnRenamed;
+            //watcher.Changed += OnChanger;
+            //watcher.Deleted += OnDeleted;
+
+            //watcher.Created += OnCreated;
 
         }
 
@@ -60,35 +62,35 @@ namespace WinFormsApp1
        
         private void button2_Click(object sender, EventArgs e)
         {
-            managementAzure.Start();
+            
             //managementAzure.RunQueries(@"J:\Ai\archive\A_Z Handwritten Data\Text Document.txt");
 
         }
 
-        private void OnRenamed(object sender, RenamedEventArgs e)
-        {
-            string NewName = Path.GetFileName(e.FullPath);
-            string OldName = Path.GetFileName(e.OldName);
+        //private void OnRenamed(object sender, RenamedEventArgs e)
+        //{
+        //    string NewName = Path.GetFileName(e.FullPath);
+        //    string OldName = Path.GetFileName(e.OldName);
 
-            managementAzure.RunQueries(e.OldFullPath, "Renamed", e.FullPath, NewName);
-            label1.Text = $"old path {OldName}, new {e.FullPath}, file name {NewName}";
-        }
+        //    managementAzure.RunQueries(e.OldFullPath, "Renamed", e.FullPath, NewName);
+        //    label1.Text = $"old path {OldName}, new {e.FullPath}, file name {NewName}";
+        //}
 
-        private void OnChanger(object sender, FileSystemEventArgs e)
-        {
-            //string NameFile = new string(e.Name.Reverse().TakeWhile(c => c != '\\').Reverse().ToArray());
-            managementAzure.RunQueries(e.FullPath, "Changer");
-        }
+        //private void OnChanger(object sender, FileSystemEventArgs e)
+        //{
+        //    //string NameFile = new string(e.Name.Reverse().TakeWhile(c => c != '\\').Reverse().ToArray());
+        //    managementAzure.RunQueries(e.FullPath, "Changer");
+        //}
 
-        private void OnCreated(object sender, FileSystemEventArgs e)
-        {
-            label1.Text = "Created: "+e.FullPath;
-        }
+        //private void OnCreated(object sender, FileSystemEventArgs e)
+        //{
+        //    label1.Text = "Created: "+e.FullPath;
+        //}
 
 
-        private void OnDeleted(object sender, FileSystemEventArgs e)
-        {
-            //managementAzure.RunQueries(e.FullPath, "Deleted", PathFile: e.FullPath);
-        }
+        //private void OnDeleted(object sender, FileSystemEventArgs e)
+        //{
+        //    //managementAzure.RunQueries(e.FullPath, "Deleted", PathFile: e.FullPath);
+        //}
     }
 }

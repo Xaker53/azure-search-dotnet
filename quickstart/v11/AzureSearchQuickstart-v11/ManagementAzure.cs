@@ -25,8 +25,8 @@ namespace AzureSearch.Quickstart
         private Uri serviceEndpoint;
         private AzureKeyCredential credential;
         private SearchIndexClient adminClient;
-        private SearchClient srchclient;
-        private SearchClient ingesterClient;
+        protected SearchClient srchclient;
+        protected SearchClient ingesterClient;
 
         public SearchClient Srchclient => srchclient;
         public SearchIndexClient AdminClient => adminClient;
@@ -80,107 +80,107 @@ namespace AzureSearch.Quickstart
             adminClient.CreateOrUpdateIndex(definition);
         }
 
-        public void RunQueries(string request, string function, string NewPath = "", string NewName = "", string PathFile = "")
-        {
-            SearchOptions options;
-            SearchResults<Files> response;
+        //public void RunQueries(string request, string function, string NewPath = "", string NewName = "", string PathFile = "")
+        //{
+        //    SearchOptions options;
+        //    SearchResults<Files> response;
             
 
-            options = new SearchOptions();
-            var path = Path.GetFullPath(request);
-            options.Filter = SearchFilter.Create(FormattableStringFactory.Create($"{nameof(Files.FilePath)} eq '{path}'"));
-            //options.Select.Add("FileID");
-            //options.Select.Add("FileName");
-            //options.Select.Add("FileText");
-            //options.Select.Add("FilePath");
-            response = srchclient.Search<Files>($"*", options);
-            var Fortest = response.GetResults().FirstOrDefault();
-            if (response.GetResults().FirstOrDefault() != null)
-            {
-                var test = response.GetResults().FirstOrDefault().Document;
-                switch (function)
-                {
-                    case "Renamed":
-                        this.resultSearch = new List<Files>();
-                        test.FileName = $"{NewName}";
-                        test.FilePath = Path.GetFullPath(NewPath);
-                        this.resultSearch.Add(test);
-                        SendRequest();
-                        break;
-                    case "Changer":
-                        if (IsSupportedExtension(Path.GetExtension(path)))
-                        {
-                            if (path == Path.GetFullPath(test.FilePath))
-                            {
-                                AzureSearchQuickstart_v11.GetFileText getFileText = new(path, Path.GetExtension(path));
-                                this.resultSearch = new List<Files>();
+        //    options = new SearchOptions();
+        //    var path = Path.GetFullPath(request);
+        //    options.Filter = SearchFilter.Create(FormattableStringFactory.Create($"{nameof(Files.FilePath)} eq '{path}'"));
+        //    //options.Select.Add("FileID");
+        //    //options.Select.Add("FileName");
+        //    //options.Select.Add("FileText");
+        //    //options.Select.Add("FilePath");
+        //    response = srchclient.Search<Files>($"*", options);
+        //    var Fortest = response.GetResults().FirstOrDefault();
+        //    if (response.GetResults().FirstOrDefault() != null)
+        //    {
+        //        var test = response.GetResults().FirstOrDefault().Document;
+        //        switch (function)
+        //        {
+        //            case "Renamed":
+        //                this.resultSearch = new List<Files>();
+        //                test.FileName = $"{NewName}";
+        //                test.FilePath = Path.GetFullPath(NewPath);
+        //                this.resultSearch.Add(test);
+        //                SendRequest();
+        //                break;
+        //            case "Changer":
+        //                if (IsSupportedExtension(Path.GetExtension(path)))
+        //                {
+        //                    if (path == Path.GetFullPath(test.FilePath))
+        //                    {
+        //                        AzureSearchQuickstart_v11.GetFileText getFileText = new(path, Path.GetExtension(path));
+        //                        this.resultSearch = new List<Files>();
 
-                                test.FileText = getFileText.getPageText();
-                                this.resultSearch.Add(test);
-                                SendRequest();
-                            }
-                            //else if ()
-                            //else if (Path.GetFullPath(PathFile) != Path.GetFullPath(test.FilePath))
-                            //{
-                            //    test.FilePath = PathFile;
-                            //    this.resultSearch.Add(test);
-                            //    SendRequest();
-                            //}
+        //                        test.FileText = getFileText.getPageText();
+        //                        this.resultSearch.Add(test);
+        //                        SendRequest();
+        //                    }
+        //                    //else if ()
+        //                    //else if (Path.GetFullPath(PathFile) != Path.GetFullPath(test.FilePath))
+        //                    //{
+        //                    //    test.FilePath = PathFile;
+        //                    //    this.resultSearch.Add(test);
+        //                    //    SendRequest();
+        //                    //}
                             
-                        }
-                        break;
-                    case "Deleted":
-                        this.resultSearch = new List<Files>();
-                        this.resultSearch.Add(response.GetResults().FirstOrDefault().Document);
-                        var indexActions = this.resultSearch.Select(file => IndexDocumentsAction.Upload(file));
-                        ingesterClient.IndexDocuments(IndexDocumentsBatch.Delete(indexActions));
-                        break;
+        //                }
+        //                break;
+        //            case "Deleted":
+        //                this.resultSearch = new List<Files>();
+        //                this.resultSearch.Add(response.GetResults().FirstOrDefault().Document);
+        //                var indexActions = this.resultSearch.Select(file => IndexDocumentsAction.Upload(file));
+        //                ingesterClient.IndexDocuments(IndexDocumentsBatch.Delete(indexActions));
+        //                break;
 
-                }
-            }
-            //else if (response.GetResults().FirstOrDefault() == null && function == "Changer")
-            //{
-            //    if (IsSupportedExtension(Path.GetExtension(path)))
-            //    {
-            //        var test = new Files();
-            //        AzureSearchQuickstart_v11.GetFileText getFileText = new(path, Path.GetExtension(path));
-            //        this.resultSearch = new List<Files>();
-            //        test.FileText = getFileText.getPageText();
-            //        test.FileName = Path.GetFileName(path);
-            //        test.FileID = (IngesterClient.GetDocumentCount().Value + 1).ToString();
-            //        test.FilePath = path;
-            //        this.resultSearch.Add(test);
-            //        SendRequest();
-            //    }
-            //}
-
-
-            //if (response.GetResults().FirstOrDefault() != null)
-            //{
-            //    this.resultSearch = new List<Files>();
-            //    var test = response.GetResults().FirstOrDefault().Document;
-            //    test.FileText = "test";
-            //    this.resultSearch.Add(test);
-
-            //    var indexActions = this.resultSearch.Select(file => IndexDocumentsAction.Upload(file));
-
-            //    ingesterClient.IndexDocuments(IndexDocumentsBatch.Create(indexActions.ToArray()));
-            //}
+        //        }
+        //    }
+        //    //else if (response.GetResults().FirstOrDefault() == null && function == "Changer")
+        //    //{
+        //    //    if (IsSupportedExtension(Path.GetExtension(path)))
+        //    //    {
+        //    //        var test = new Files();
+        //    //        AzureSearchQuickstart_v11.GetFileText getFileText = new(path, Path.GetExtension(path));
+        //    //        this.resultSearch = new List<Files>();
+        //    //        test.FileText = getFileText.getPageText();
+        //    //        test.FileName = Path.GetFileName(path);
+        //    //        test.FileID = (IngesterClient.GetDocumentCount().Value + 1).ToString();
+        //    //        test.FilePath = path;
+        //    //        this.resultSearch.Add(test);
+        //    //        SendRequest();
+        //    //    }
+        //    //}
 
 
-        }
+        //    //if (response.GetResults().FirstOrDefault() != null)
+        //    //{
+        //    //    this.resultSearch = new List<Files>();
+        //    //    var test = response.GetResults().FirstOrDefault().Document;
+        //    //    test.FileText = "test";
+        //    //    this.resultSearch.Add(test);
 
-        private void SendRequest()
-        {
-            var indexActions = this.resultSearch.Select(file => IndexDocumentsAction.Upload(file));
-            ingesterClient.IndexDocuments(IndexDocumentsBatch.Create(indexActions.ToArray()));
-        }
+        //    //    var indexActions = this.resultSearch.Select(file => IndexDocumentsAction.Upload(file));
 
-        private bool IsSupportedExtension(string extension)
-        {
-            string[] supportedExtensions = { ".pdf", ".docx", ".doc", ".txt" };
+        //    //    ingesterClient.IndexDocuments(IndexDocumentsBatch.Create(indexActions.ToArray()));
+        //    //}
 
-            return supportedExtensions.Contains(extension);
-        }
+
+        //}
+
+        //private void SendRequest()
+        //{
+        //    var indexActions = this.resultSearch.Select(file => IndexDocumentsAction.Upload(file));
+        //    ingesterClient.IndexDocuments(IndexDocumentsBatch.Create(indexActions.ToArray()));
+        //}
+
+        //private bool IsSupportedExtension(string extension)
+        //{
+        //    string[] supportedExtensions = { ".pdf", ".docx", ".doc", ".txt" };
+
+        //    return supportedExtensions.Contains(extension);
+        //}
     }
 }
