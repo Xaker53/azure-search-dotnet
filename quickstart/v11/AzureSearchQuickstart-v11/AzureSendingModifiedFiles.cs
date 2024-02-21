@@ -14,6 +14,7 @@ namespace AzureSearch.Quickstart
     interface ISendFiles
     {
         void SendingInformation();
+        void ConnectSearchFiles(string request);
     }
 
 

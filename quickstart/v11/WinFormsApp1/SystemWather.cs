@@ -9,24 +9,37 @@ using System.Threading.Tasks;
 
 
 
+
 namespace WinFormsApp1
 {
     class SystemWather: AzureSearch.Quickstart.AzureSendingModifiedFiles
     {
         private FileSystemWatcher watcher;
         public string TextLabel = "";
+        private List<EventArgs> textFiles = new();
 
         public SystemWather(System.ComponentModel.ISynchronizeInvoke? synchronize)
         {
-            FileSystemWatcher watcher = new FileSystemWatcher(@"\");
+            watcher = new FileSystemWatcher(@"\");
             watcher.EnableRaisingEvents = true;
-            watcher.SynchronizingObject = synchronize;
+            //watcher.SynchronizingObject = synchronize;
             watcher.IncludeSubdirectories = true;
             
             watcher.Renamed += OnRenamed;
             watcher.Changed += OnChanger;
             watcher.Deleted += OnDeleted;
             watcher.Created += OnCreated;
+            watcher.Error += new ErrorEventHandler(OnError);
+
+        }
+
+        private void OnError(object sender, ErrorEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        ~SystemWather()
+        {
 
         }
 
@@ -35,30 +48,33 @@ namespace WinFormsApp1
         {
             string NewName = Path.GetFileName(e.FullPath);
             string OldName = Path.GetFileName(e.OldName);
-            if (Path.Exists(e.FullPath))
-            {
-                ConnectSearchFiles(e.OldFullPath);
-                Renamed(e);
-            }
-            
+            //textFiles.Add(e);
+
+            ConnectSearchFiles(e.OldFullPath);
+            Renamed(e);
+
+
 
             TextLabel = $"old path {OldName}, new {e.FullPath}, file name {NewName}";
         }
 
         private void OnChanger(object sender, FileSystemEventArgs e)
         {
+            //textFiles.Add(e);
             ConnectSearchFiles(e.FullPath);
             Changer(e);
         }
 
         private void OnCreated(object sender, FileSystemEventArgs e)
         {
+            //textFiles.Add(e);
             TextLabel = "Created: "+e.FullPath;
         }
 
 
         private void OnDeleted(object sender, FileSystemEventArgs e)
         {
+            //textFiles.Add(e);
             //managementAzure.RunQueries(e.FullPath, "Deleted", PathFile: e.FullPath);
         }
 

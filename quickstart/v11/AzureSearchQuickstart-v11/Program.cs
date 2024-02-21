@@ -167,7 +167,14 @@ namespace AzureSearch.Quickstart
                      buffer.StartFlushSignals(TimeSpan.FromMilliseconds(1));
                      while (waitHandle.WaitOne())
                      {
-                         tokenSource.Token.ThrowIfCancellationRequested();
+                         try
+                         {
+                             tokenSource.Token.ThrowIfCancellationRequested();
+                         }
+                         catch (Exception ex) {
+                             throw;
+                         }
+                         
                          await buffer.UploadToAzureSearch(uploadedToAzureSearch);
                          Console.WriteLine($"Flushing files from buffer (thread: {Environment.CurrentManagedThreadId}):");
                      }

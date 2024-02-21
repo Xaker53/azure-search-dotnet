@@ -6,11 +6,21 @@ namespace WinFormsApp1
     {
         FolderBrowserDialog browserDialog;
         AzureSearch.Quickstart.ManagementAzure managementAzure = new();
+        SystemWather systemWather;
         public Form1()
         {
             InitializeComponent();
-            SystemWather systemWather = new(this);
-            
+            systemWather = new(null);
+            //Task.Run(() =>
+            //{
+            //    systemWather = new SystemWather(this);
+            //    GC.KeepAlive(systemWather);
+
+            //});
+
+
+
+            //GC.KeepAlive(systemWather);
 
             //managementAzure.Start();
             //DriveInfo[] driveInfos = DriveInfo.GetDrives();
@@ -28,6 +38,8 @@ namespace WinFormsApp1
 
         }
 
+        ~Form1() { }
+
         private void button1_Click(object sender, EventArgs e)
         {
             browserDialog = new FolderBrowserDialog();
@@ -35,8 +47,19 @@ namespace WinFormsApp1
 
             var result = folderBrowserDialog1.SelectedPath;
 
-            AzureSearch.Quickstart.Program program = new();
-            program.Start();
+            try
+            {
+                AzureSearch.Quickstart.Program program = new();
+                program.Start();
+            }
+            catch (Exception ex) {
+                throw ;
+            };
+
+            //systemWather = new SystemWather(null);
+
+
+
 
         }
 
