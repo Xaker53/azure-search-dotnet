@@ -19,6 +19,7 @@ namespace WinFormsApp1
         private List<EventArgs> textFiles = new();
 
         private AzureSearch.Quickstart.AzureSendingModifiedFiles azureSending;
+        private AzureSearchQuickstart_v11.GetFileText getFileText;
 
 
         public SystemWatcher(System.ComponentModel.ISynchronizeInvoke? synchronize)
@@ -72,6 +73,18 @@ namespace WinFormsApp1
         private void OnCreated(object sender, FileSystemEventArgs e)
         {
             //textFiles.Add(e);
+            string pathFile = Path.GetFullPath(e.FullPath);
+            if (IsSupportedExtension(Path.GetExtension(pathFile)))
+            {
+                //getFileText = new(pathFile, Path.GetExtension(pathFile));
+
+                azureSending.AmendedDocument.FileID = azureSending.LastIndexDocument;
+                azureSending.AmendedDocument.FileName = $"{Path.GetFileName(e.FullPath)}";
+                //azureSending.AmendedDocument.FileText = getFileText.getPageText();
+                azureSending.AmendedDocument.FilePath = pathFile;
+                azureSending.SendingInformation();
+            }
+
             TextLabel = "Created: "+e.FullPath;
         }
 
@@ -103,7 +116,7 @@ namespace WinFormsApp1
                 {
                     if (azureSending.GetPath == Path.GetFullPath(azureSending.AmendedDocument.FilePath))
                     {
-                        AzureSearchQuickstart_v11.GetFileText getFileText = new(azureSending.GetPath, Path.GetExtension(azureSending.GetPath));
+                        getFileText = new(azureSending.GetPath, Path.GetExtension(azureSending.GetPath));
 
                         azureSending.AmendedDocument.FileText = getFileText.getPageText();
                         azureSending.SendingInformation();

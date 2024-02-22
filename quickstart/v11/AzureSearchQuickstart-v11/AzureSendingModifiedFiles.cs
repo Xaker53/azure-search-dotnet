@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.IO;
 using Org.BouncyCastle.Crypto.Agreement.Srp;
-
+using Microsoft.Extensions.Azure;
 namespace AzureSearch.Quickstart
 {
     interface ISendFiles
@@ -27,17 +27,21 @@ namespace AzureSearch.Quickstart
         private string NewPath;
         private string NewName;
         private Files NewDocument { get; set; }
-        private List<Files> resultSearch { get; set; }
+        private Queue<Files> resultSearch  = new Queue<Files>();
         private bool Answer = false;
+        public int LastIndex = 0;
 
         public Files AmendedDocument => NewDocument;
 
         public bool GetAnswer => Answer;
         public string GetPath => path;
+        public string LastIndexDocument => (LastIndex + 1).ToString();
 
         public AzureSendingModifiedFiles() 
         {
             Start();
+            NewDocument = new AzureSearch.Quickstart.Files();
+            GetLastIndex();
         }
         public void ConnectSearchFiles(string request)
         {
@@ -53,7 +57,6 @@ namespace AzureSearch.Quickstart
             if (response.GetResults().FirstOrDefault() != null)
             {
                 Answer = true;
-                this.resultSearch = new List<Files>();
                 NewDocument = (response.GetResults().FirstOrDefault().Document);
             }
             else { Answer = false; }
@@ -61,9 +64,23 @@ namespace AzureSearch.Quickstart
 
         public void SendingInformation()
         {
-            resultSearch.Add(NewDocument);
-            var indexActions = this.resultSearch.Select(file => IndexDocumentsAction.Upload(file));
-            ingesterClient.IndexDocuments(IndexDocumentsBatch.Create(indexActions.ToArray()));
+            resultSearch.Enqueue(NewDocument);
+            //var indexActions = this.resultSearch .Select(file => IndexDocumentsAction.Upload(file));
+            ingesterClient.IndexDocuments(IndexDocumentsBatch.Create(BufferQueue().ToArray()));
+            GetLastIndex();
+        }
+
+        private IEnumerable <IndexDocumentsAction<Files>> BufferQueue()
+        {
+            if (resultSearch.TryDequeue(out var element))
+            {
+                yield return IndexDocumentsAction.Upload(element);
+            }
+        }
+
+        private void GetLastIndex()
+        {
+            LastIndex = (int)srchclient.GetDocumentCount().Value;
         }
     }
 }
