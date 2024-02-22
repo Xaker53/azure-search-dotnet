@@ -12,14 +12,18 @@ using System.Threading.Tasks;
 
 namespace WinFormsApp1
 {
-    class SystemWather: AzureSearch.Quickstart.AzureSendingModifiedFiles
+    class SystemWatcher
     {
         private FileSystemWatcher watcher;
         public string TextLabel = "";
         private List<EventArgs> textFiles = new();
 
-        public SystemWather(System.ComponentModel.ISynchronizeInvoke? synchronize)
+        private AzureSearch.Quickstart.AzureSendingModifiedFiles azureSending;
+
+
+        public SystemWatcher(System.ComponentModel.ISynchronizeInvoke? synchronize)
         {
+            azureSending = new AzureSendingModifiedFiles();
             watcher = new FileSystemWatcher(@"\");
             watcher.EnableRaisingEvents = true;
             //watcher.SynchronizingObject = synchronize;
@@ -38,7 +42,7 @@ namespace WinFormsApp1
             throw new NotImplementedException();
         }
 
-        ~SystemWather()
+        ~SystemWatcher()
         {
 
         }
@@ -50,7 +54,7 @@ namespace WinFormsApp1
             string OldName = Path.GetFileName(e.OldName);
             //textFiles.Add(e);
 
-            ConnectSearchFiles(e.OldFullPath);
+            azureSending.ConnectSearchFiles(e.OldFullPath);
             Renamed(e);
 
 
@@ -61,7 +65,7 @@ namespace WinFormsApp1
         private void OnChanger(object sender, FileSystemEventArgs e)
         {
             //textFiles.Add(e);
-            ConnectSearchFiles(e.FullPath);
+            azureSending.ConnectSearchFiles(e.FullPath);
             Changer(e);
         }
 
@@ -81,28 +85,28 @@ namespace WinFormsApp1
 
         private void Renamed(RenamedEventArgs e)
         {
-            if (GetAnswer)
+            if (azureSending.GetAnswer)
             {
                 string NewName = Path.GetFileName(e.FullPath);
                 //AzureSearchQuickstart_v11.GetFileText getFileText = new(GetPath, Path.GetExtension(GetPath));
-                AmendedDocument.FileName = $"{NewName}";
-                AmendedDocument.FilePath = Path.GetFullPath(e.FullPath);
-                SendingInformation();
+                azureSending.AmendedDocument.FileName = $"{NewName}";
+                azureSending.AmendedDocument.FilePath = Path.GetFullPath(e.FullPath);
+                azureSending.SendingInformation();
             }
         }
 
         private void Changer(FileSystemEventArgs e)
         {
-            if (GetAnswer)
+            if (azureSending.GetAnswer)
             {
-                if (IsSupportedExtension(Path.GetExtension(GetPath)))
+                if (IsSupportedExtension(Path.GetExtension(azureSending.GetPath)))
                 {
-                    if (GetPath == Path.GetFullPath(AmendedDocument.FilePath))
+                    if (azureSending.GetPath == Path.GetFullPath(azureSending.AmendedDocument.FilePath))
                     {
-                        AzureSearchQuickstart_v11.GetFileText getFileText = new(GetPath, Path.GetExtension(GetPath));
+                        AzureSearchQuickstart_v11.GetFileText getFileText = new(azureSending.GetPath, Path.GetExtension(azureSending.GetPath));
 
-                        AmendedDocument.FileText = getFileText.getPageText();
-                        SendingInformation();
+                        azureSending.AmendedDocument.FileText = getFileText.getPageText();
+                        azureSending.SendingInformation();
                     }
                     //else if ()
                     //else if (Path.GetFullPath(PathFile) != Path.GetFullPath(test.FilePath))

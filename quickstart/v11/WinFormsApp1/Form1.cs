@@ -6,11 +6,11 @@ namespace WinFormsApp1
     {
         FolderBrowserDialog browserDialog;
         AzureSearch.Quickstart.ManagementAzure managementAzure = new();
-        SystemWather systemWather;
+        SystemWatcher SystemWatcher;
         public Form1()
         {
             InitializeComponent();
-            systemWather = new(null);
+            SystemWatcher = new(null);
             //Task.Run(() =>
             //{
             //    systemWather = new SystemWather(this);
