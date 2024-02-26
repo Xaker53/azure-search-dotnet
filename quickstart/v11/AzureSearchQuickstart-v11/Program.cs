@@ -35,15 +35,27 @@ namespace AzureSearch.Quickstart
     {
 
         private AutoResetEvent uploadedToAzureSearch = new AutoResetEvent(false);
-        private static CancellationTokenSource tokenSource = new CancellationTokenSource();
-        private CancellationToken token = tokenSource.Token;
+        private static CancellationTokenSource tokenSource ;
+        //private CancellationToken token = tokenSource.Token;
         static ConcurrentDictionaryFiles ParallelSearchFile;
         private static ThreadServer buffer;
-        public void Start()
-        {
-            ManagementAzure managementAzure = new();
-            managementAzure.Start();
+        private ManagementAzure managementAzure;
 
+
+        public Program()
+        {
+            managementAzure = new();
+            managementAzure.Start();
+        }
+
+        public void RecreateIndex()
+        {
+            managementAzure.DeleteIndexIfExists();
+            managementAzure.CreateIndex();
+        }
+        private void Start()
+        {
+            
 
 
             // Create a SearchIndexClient to send create/delete index commands
@@ -53,18 +65,18 @@ namespace AzureSearch.Quickstart
 
 
             // Delete index if it exists
-            Console.WriteLine("{0}", "Deleting index...\n");
-            managementAzure.DeleteIndexIfExists();
+            //Console.WriteLine("{0}", "Deleting index...\n");
+            //managementAzure.DeleteIndexIfExists();
 
             // Create index
-            Console.WriteLine("{0}", "Creating index...\n");
-            managementAzure.CreateIndex();
+            //Console.WriteLine("{0}", "Creating index...\n");
+            //managementAzure.CreateIndex();
 
             //SearchClient ingesterClient = adminClient.GetSearchClient(indexName);
 
             //// Load documents
-            Console.WriteLine("{0}", "Uploading documents...\n");
-            UploadDocuments(managementAzure.IngesterClient);
+            //Console.WriteLine("{0}", "Uploading documents...\n");
+            //UploadDocuments(managementAzure.IngesterClient);
 
             //// Wait 2 secondsfor indexing to complete before starting queries (for demo and console-app purposes only)
             //Console.WriteLine("Waiting for indexing...\n");
@@ -75,7 +87,7 @@ namespace AzureSearch.Quickstart
             //RunQueries(srchclient);
 
             // End the program
-            Console.WriteLine("{0}", "Complete. Press any key to end this program...\n");
+            //Console.WriteLine("{0}", "Complete. Press any key to end this program...\n");
             //Console.ReadKey();
             
         }
@@ -117,72 +129,63 @@ namespace AzureSearch.Quickstart
 
 
         // Upload documents in a single Upload request.
-        private async void UploadDocuments(SearchClient searchClient)
+        public async void UploadDocuments(string PathFileSearch, string Method = "Rake")
         {
-            //DriveInfo[] driveInfos = DriveInfo.GetDrives();
-            //var waitHandle = new AutoResetEvent(false);
-            //var buffer = new ThreadServer(searchClient, waitHandle, 32000);
-            //ParallelSearchFile = new ConcurrentDictionaryFiles((int)searchClient.GetDocumentCount().Value);
-            //var TaskServer = Task.Run(
-            //     async () =>
-            //     {
-            //         buffer.StartFlushSignals(TimeSpan.FromSeconds(5));
-            //         while (waitHandle.WaitOne())
-            //         {
-            //             tokenSource.Token.ThrowIfCancellationRequested();
-            //             await buffer.UploadToAzureSearch(uploadedToAzureSearch);
-            //             Console.WriteLine($"Flushing files from buffer (thread: {Environment.CurrentManagedThreadId}):");
-            //         }
-            //     }, tokenSource.Token);
-
-            //foreach (DriveInfo driveInfo in driveInfos)
-            //{
-            //    Files(driveInfo.ToString(), buffer);
-
-            //    try
-            //    {
-            //        uploadedToAzureSearch.WaitOne();
-            //        if (buffer.BatchCount == 0)
-            //        {
-            //            tokenSource.Cancel();
-            //        }
-
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Handle exceptions if necessary
-            //        Console.WriteLine($"Error uploading document: {ex.Message}");
-            //    }
-            //}
-
-            //////////////////////////////////
-
+            var searchClient = this.managementAzure.IngesterClient;
             var waitHandle = new AutoResetEvent(false);
             buffer = new ThreadServer(searchClient, waitHandle, 32000);
-            ParallelSearchFile = new ConcurrentDictionaryFiles((int)searchClient.GetDocumentCount().Value);
-            Files(@"J:\\Ai");
+            ParallelSearchFile = new ConcurrentDictionaryFiles((int)searchClient.GetDocumentCount().Value, Method);
+            tokenSource = new();
+ 
             var TaskServer = Task.Run(
                  async () =>
                  {
                      buffer.StartFlushSignals(TimeSpan.FromMilliseconds(1));
                      while (waitHandle.WaitOne())
                      {
-
                          tokenSource.Token.ThrowIfCancellationRequested();
                          await buffer.UploadToAzureSearch(uploadedToAzureSearch);
-                         Console.WriteLine($"Flushing files from buffer (thread: {Environment.CurrentManagedThreadId}):");
                      }
                  }, tokenSource.Token);
 
-            Console.WriteLine($"Flushing files from buffer (thread: {Environment.CurrentManagedThreadId}):");
-
+            if (PathFileSearch.Length <= 0)
+            {
+                ScanAllDrive();
+            }
+            else
+            {
+                Files(Path.GetFullPath(PathFileSearch));
+            }
 
             uploadedToAzureSearch.WaitOne();
-            if (buffer.BatchCount == 0)
+            while (buffer.BatchCount == 0)
             {
                 tokenSource.Cancel();
-               
+                break;
             }
+            //////////////////////////////////
+
+            //var waitHandle = new AutoResetEvent(false);
+            //buffer = new ThreadServer(searchClient, waitHandle, 32000);
+            //ParallelSearchFile = new ConcurrentDictionaryFiles((int)searchClient.GetDocumentCount().Value);
+            //Files(@"J:\\Ai");
+            //var TaskServer = Task.Run(
+            //     async () =>
+            //     {
+            //         buffer.StartFlushSignals(TimeSpan.FromMilliseconds(1));
+            //         while (waitHandle.WaitOne())
+            //         {
+
+            //             tokenSource.Token.ThrowIfCancellationRequested();
+            //             await buffer.UploadToAzureSearch(uploadedToAzureSearch);
+
+            //         }
+            //     }, tokenSource.Token);
+
+
+
+
+
             ////////////////////////////////////////////////////////////////
             //try
             //{
@@ -195,6 +198,33 @@ namespace AzureSearch.Quickstart
             //    Console.WriteLine("Failed to index some of the documents: {0}");
             //}
             /////
+            ///
+
+
+        }
+
+
+        private void ScanAllDrive()
+        {
+            DriveInfo[] driveInfos = DriveInfo.GetDrives();
+            foreach (DriveInfo driveInfo in driveInfos)
+            {
+                Files(driveInfo.ToString());
+
+                try
+                {
+                    uploadedToAzureSearch.WaitOne();
+                    if (buffer.BatchCount == 0)
+                    {
+                        tokenSource.Cancel();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error uploading document: {ex.Message}");
+                }
+            }
         }
 
         public static void Files(string filesDirectory)

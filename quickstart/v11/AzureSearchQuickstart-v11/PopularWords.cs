@@ -6,12 +6,13 @@ namespace AzureSearchQuickstart_v11
 {
     class PopularWords
     {
-        public static string Result(string text)
+        private string result = "";
+
+        public string Result => result;
+        public PopularWords(string text)
         {
-            string result = "";
             var words = text.Split(new[] { ' ', '.', ',', '!', '?', '_', '-', '/', '=', '+', ':', ';'},StringSplitOptions.RemoveEmptyEntries);
 
-           
             var wordDiction = new Dictionary<string, int>();
 
             foreach(var word in words)
@@ -37,7 +38,7 @@ namespace AzureSearchQuickstart_v11
                     result += $"{word.Key} ";
                 }
             }
-            return result;
+            
         }
     }
 }

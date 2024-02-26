@@ -12,7 +12,9 @@ namespace AzureSearchQuickstart_v11
     public class GetFileText
     {
         private string pageText { get; set;} = "";
-        public GetFileText(string filePath, string extension)
+        private PopularWords PopularWords;
+        
+        public GetFileText(string filePath, string extension, string Method="Rake")
         {
 
             switch (extension)
@@ -39,9 +41,17 @@ namespace AzureSearchQuickstart_v11
 
             if (pageText.Length > 27090)
             {
-                var rake = new Rake.Rake();
-                var result = rake.Run(this.pageText.ToLower());
-                this.pageText = string.Join(" ", result.Keys);
+                if (Method == "Rake")
+                {
+                    var rake = new Rake.Rake();
+                    var result = rake.Run(this.pageText.ToLower());
+                    this.pageText = string.Join(" ", result.Keys);
+                }else
+                {
+                    PopularWords = new(this.pageText);
+                    pageText = PopularWords.Result;
+                }
+                
             }
             
         }

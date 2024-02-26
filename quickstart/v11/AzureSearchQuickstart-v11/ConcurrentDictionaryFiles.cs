@@ -16,13 +16,14 @@ namespace AzureSearchQuickstart_v11
     {
         private ThreadServer ThreadServer { get; set; }
         private int index;
-
+        private string Method;
 
         public ConcurrentDictionaryFiles() { }
 
-        public ConcurrentDictionaryFiles(int Index)
+        public ConcurrentDictionaryFiles(int Index, string Method)
         {
             this.index = Index;
+            this.Method = Method;
         }
         public void ParallelFiles(string filesDirectory, ThreadServer threadServer)
         {
@@ -39,7 +40,7 @@ namespace AzureSearchQuickstart_v11
 
                         if (IsSupportedExtension(extension))
                         {
-                            GetFileText FileText = new GetFileText(filePath, extension);
+                            GetFileText FileText = new GetFileText(filePath, extension, this.Method);
                             string pageText = FileText.getPageText();
                             
                             AddIndex(Path.GetFileName(filePath), Path.GetFullPath(filePath), pageText.Replace("\n", ""));
@@ -48,7 +49,7 @@ namespace AzureSearchQuickstart_v11
                         }
                         else
                         {
-                            AddIndex(Path.GetFileName(filePath), Path.GetFullPath(filePath));
+                            //AddIndex(Path.GetFileName(filePath), Path.GetFullPath(filePath));
                             //Interlocked.Increment(ref index);
                         }
                     }

@@ -20,14 +20,18 @@ namespace WinFormsApp1
 
         private AzureSearch.Quickstart.AzureSendingModifiedFiles azureSending;
         private AzureSearchQuickstart_v11.GetFileText getFileText;
+        private DateTime lastCreatedTime = DateTime.MinValue;
 
 
         public SystemWatcher(System.ComponentModel.ISynchronizeInvoke? synchronize)
         {
+
             azureSending = new AzureSendingModifiedFiles();
             watcher = new FileSystemWatcher(@"\");
+
+            
             watcher.EnableRaisingEvents = true;
-            //watcher.SynchronizingObject = synchronize;
+            watcher.SynchronizingObject = null;
             watcher.IncludeSubdirectories = true;
             
             watcher.Renamed += OnRenamed;
@@ -66,25 +70,31 @@ namespace WinFormsApp1
         private void OnChanger(object sender, FileSystemEventArgs e)
         {
             //textFiles.Add(e);
-            azureSending.ConnectSearchFiles(e.FullPath);
-            Changer(e);
+            DateTime lastWriteTime = File.GetCreationTime(e.FullPath);
+            if (lastWriteTime != lastCreatedTime)
+            {
+                azureSending.ConnectSearchFiles(e.FullPath);
+                Changer(e);
+            }
+                
+                
         }
 
         private void OnCreated(object sender, FileSystemEventArgs e)
         {
             //textFiles.Add(e);
             string pathFile = Path.GetFullPath(e.FullPath);
+            lastCreatedTime = File.GetCreationTime(e.FullPath);
             if (IsSupportedExtension(Path.GetExtension(pathFile)))
             {
-                //getFileText = new(pathFile, Path.GetExtension(pathFile));
+                getFileText = new(pathFile, Path.GetExtension(pathFile));
 
                 azureSending.AmendedDocument.FileID = azureSending.LastIndexDocument;
                 azureSending.AmendedDocument.FileName = $"{Path.GetFileName(e.FullPath)}";
-                //azureSending.AmendedDocument.FileText = getFileText.getPageText();
+                azureSending.AmendedDocument.FileText = getFileText.getPageText();
                 azureSending.AmendedDocument.FilePath = pathFile;
                 azureSending.SendingInformation();
             }
-
             TextLabel = "Created: "+e.FullPath;
         }
 

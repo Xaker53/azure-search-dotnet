@@ -80,6 +80,7 @@ namespace AzureSearch.Quickstart
 
         private void GetLastIndex()
         {
+            ThereIndex();
             LastIndex = (int)srchclient.GetDocumentCount().Value;
         }
     }

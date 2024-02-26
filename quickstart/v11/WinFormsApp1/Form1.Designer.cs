@@ -33,23 +33,24 @@
             folderBrowserDialog1 = new FolderBrowserDialog();
             fileSystemWatcher1 = new FileSystemWatcher();
             button2 = new Button();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).BeginInit();
             SuspendLayout();
             // 
             // button1
             // 
-            button1.Location = new Point(121, 219);
+            button1.Location = new Point(32, 401);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 0;
-            button1.Text = "start";
+            button1.Text = "Index Files";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(327, 98);
+            label1.Location = new Point(300, 175);
             label1.Name = "label1";
             label1.Size = new Size(38, 15);
             label1.TabIndex = 1;
@@ -76,11 +77,12 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(781, 442);
             Controls.Add(button2);
             Controls.Add(label1);
             Controls.Add(button1);
             Name = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).EndInit();
@@ -95,5 +97,6 @@
         private FolderBrowserDialog folderBrowserDialog1;
         private FileSystemWatcher fileSystemWatcher1;
         private Button button2;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
