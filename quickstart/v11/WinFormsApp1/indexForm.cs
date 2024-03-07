@@ -18,6 +18,12 @@ namespace WinFormsApp1
         private string PathFile = "";
         private string Algorithm = "Rake";
         private AzureSearch.Quickstart.Program program;
+
+
+        CancellationTokenSource tokenSource = new();
+        CancellationToken token;
+
+
         public indexForm()
         {
             InitializeComponent();
@@ -70,7 +76,12 @@ namespace WinFormsApp1
         private void button2_Click(object sender, EventArgs e)
         {
             //program = new();
-            Task.Run(() => { program.UploadDocuments(this.PathFile, Algorithm); });
+            Task.Run(() => 
+            {
+                tokenSource.Token.ThrowIfCancellationRequested();
+                program.UploadDocuments(this.PathFile, Algorithm);
+            
+            }, tokenSource.Token);
             //program.UploadDocuments(this.PathFile, Algorithm);
         }
 
@@ -106,7 +117,9 @@ namespace WinFormsApp1
 
         private void button4_Click(object sender, EventArgs e)
         {
-
+            program.CancelToken();
+            tokenSource.Cancel();
+            
         }
     }
 }

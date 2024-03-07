@@ -41,6 +41,17 @@ namespace AzureSearch.Quickstart
         private static ThreadServer buffer;
         private ManagementAzure managementAzure;
 
+        ~Program() 
+        {
+            tokenSource.Cancel();
+        }
+
+
+        public void CancelToken()
+        {
+            tokenSource.Cancel();
+
+        }
 
         public Program()
         {
