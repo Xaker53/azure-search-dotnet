@@ -1,0 +1,27 @@
+body
+{
+    position: relative;
+    min-height: 100%;
+}
+footer
+{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    white-space: nowrap;
+}
+section
+{
+   
+    min-height: 100vh;
+
+}
+table{
+    border: 1px solid black;
+  }
+
+  footer
+  {
+    position: absolute;
+    bottom: -28px;
+  }

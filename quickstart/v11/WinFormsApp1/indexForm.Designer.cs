@@ -62,15 +62,15 @@
             // rakeToolStripMenuItem
             // 
             rakeToolStripMenuItem.Name = "rakeToolStripMenuItem";
-            rakeToolStripMenuItem.Size = new Size(200, 22);
+            rakeToolStripMenuItem.Size = new Size(184, 22);
             rakeToolStripMenuItem.Text = "Rake";
             rakeToolStripMenuItem.Click += rakeToolStripMenuItem_Click;
             // 
             // frequentlyEncounteredToolStripMenuItem
             // 
             frequentlyEncounteredToolStripMenuItem.Name = "frequentlyEncounteredToolStripMenuItem";
-            frequentlyEncounteredToolStripMenuItem.Size = new Size(200, 22);
-            frequentlyEncounteredToolStripMenuItem.Text = "Frequently encountered";
+            frequentlyEncounteredToolStripMenuItem.Size = new Size(184, 22);
+            frequentlyEncounteredToolStripMenuItem.Text = "Frequently occurring";
             frequentlyEncounteredToolStripMenuItem.Click += frequentlyEncounteredToolStripMenuItem_Click;
             // 
             // folderBrowserDialog1
@@ -160,7 +160,8 @@
             MainMenuStrip = menuStrip1;
             Name = "indexForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Form2";
+            Text = "Index File";
+            Load += indexForm_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureSearchQuickstart-v11", "AzureSearchQuickstart-v11\AzureSearchQuickstart-v11.csproj", "{D6840DEE-07BF-4FD3-9EF4-E6A17929E02D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApp1", "WinFormsApp1\WinFormsApp1.csproj", "{C5EFA7CA-2AB2-45B5-B691-55EDED47DD58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormsApp1", "WinFormsApp1\WinFormsApp1.csproj", "{C5EFA7CA-2AB2-45B5-B691-55EDED47DD58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

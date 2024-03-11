@@ -76,11 +76,11 @@ namespace WinFormsApp1
         private void button2_Click(object sender, EventArgs e)
         {
             //program = new();
-            Task.Run(() => 
+            Task.Run(() =>
             {
                 tokenSource.Token.ThrowIfCancellationRequested();
                 program.UploadDocuments(this.PathFile, Algorithm);
-            
+
             }, tokenSource.Token);
             //program.UploadDocuments(this.PathFile, Algorithm);
         }
@@ -119,7 +119,17 @@ namespace WinFormsApp1
         {
             program.CancelToken();
             tokenSource.Cancel();
-            
+
+        }
+
+        private void indexForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
         }
     }
 }
