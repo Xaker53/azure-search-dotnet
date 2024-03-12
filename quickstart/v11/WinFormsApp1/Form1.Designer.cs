@@ -29,13 +29,17 @@
         private void InitializeComponent()
         {
             button1 = new Button();
-            label1 = new Label();
             folderBrowserDialog1 = new FolderBrowserDialog();
             fileSystemWatcher1 = new FileSystemWatcher();
             button2 = new Button();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             textBox1 = new TextBox();
+            ResultInfo = new DataGridView();
+            FileName = new DataGridViewTextBoxColumn();
+            FileText = new DataGridViewTextBoxColumn();
+            Path = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ResultInfo).BeginInit();
             SuspendLayout();
             // 
             // button1
@@ -47,16 +51,6 @@
             button1.Text = "Index Files";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(300, 175);
-            label1.Name = "label1";
-            label1.Size = new Size(38, 15);
-            label1.TabIndex = 1;
-            label1.Text = "label1";
-            label1.Click += label1_Click;
             // 
             // fileSystemWatcher1
             // 
@@ -82,20 +76,62 @@
             textBox1.TabIndex = 3;
             textBox1.TextChanged += textBox1_TextChanged;
             // 
+            // ResultInfo
+            // 
+            ResultInfo.AllowUserToAddRows = false;
+            ResultInfo.AllowUserToDeleteRows = false;
+            ResultInfo.AllowUserToResizeColumns = false;
+            ResultInfo.AllowUserToResizeRows = false;
+            ResultInfo.BackgroundColor = Color.FromArgb(224, 224, 224);
+            ResultInfo.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            ResultInfo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            ResultInfo.ColumnHeadersVisible = false;
+            ResultInfo.Columns.AddRange(new DataGridViewColumn[] { FileName, FileText, Path });
+            ResultInfo.Location = new Point(88, 100);
+            ResultInfo.Name = "ResultInfo";
+            ResultInfo.RowHeadersVisible = false;
+            ResultInfo.RowTemplate.Height = 30;
+            ResultInfo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            ResultInfo.Size = new Size(614, 213);
+            ResultInfo.TabIndex = 4;
+            ResultInfo.CellContentClick += ResultInfo_CellContentClick;
+            // 
+            // FileName
+            // 
+            FileName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            FileName.DataPropertyName = "fileName";
+            FileName.HeaderText = "FileName";
+            FileName.Name = "FileName";
+            // 
+            // FileText
+            // 
+            FileText.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            FileText.DataPropertyName = "fileText";
+            FileText.HeaderText = "FileText";
+            FileText.Name = "FileText";
+            // 
+            // Path
+            // 
+            Path.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Path.DataPropertyName = "filePath";
+            Path.HeaderText = "Path";
+            Path.Name = "Path";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(781, 442);
+            Controls.Add(ResultInfo);
             Controls.Add(textBox1);
             Controls.Add(button2);
-            Controls.Add(label1);
             Controls.Add(button1);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Form1";
+            Text = "Index File";
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ResultInfo).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -103,11 +139,14 @@
         #endregion
 
         private Button button1;
-        private Label label1;
         private FolderBrowserDialog folderBrowserDialog1;
         private FileSystemWatcher fileSystemWatcher1;
         private Button button2;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private TextBox textBox1;
+        private DataGridView ResultInfo;
+        private DataGridViewTextBoxColumn FileName;
+        private DataGridViewTextBoxColumn FileText;
+        private DataGridViewTextBoxColumn Path;
     }
 }

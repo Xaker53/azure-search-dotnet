@@ -2,7 +2,10 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using Newtonsoft.Json;
+using Microsoft.VisualBasic.ApplicationServices;
+using Newtonsoft.Json.Linq;
 
 namespace WinFormsApp1
 {
@@ -53,13 +56,14 @@ namespace WinFormsApp1
 
         }
 
-        private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
+        private void loadResult()
         {
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -84,7 +88,6 @@ namespace WinFormsApp1
         private async void textBox1_TextChanged(object sender, EventArgs e)
         {
             var test = textBox1.Text;
-            mClient.BaseAddress = new Uri($"http://127.0.0.1:5191/api/weatherforecast");
 
             StringContent jsonContent = new StringContent(JsonConvert.SerializeObject("Повестка"),
                 Encoding.UTF8,
@@ -96,10 +99,15 @@ namespace WinFormsApp1
             var tt = response.EnsureSuccessStatusCode();
             var jsonResponse = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"{jsonResponse}\n");
+            var json = JsonConvert.DeserializeObject(jsonResponse);
+            ResultInfo.DataSource = json;
 
             //HttpRequestMessage request = await mClient.PostAsync(textBox1.Text);
         }
 
+        private void ResultInfo_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
 
+        }
     }
 }
