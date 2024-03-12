@@ -34,6 +34,7 @@
             fileSystemWatcher1 = new FileSystemWatcher();
             button2 = new Button();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            textBox1 = new TextBox();
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).BeginInit();
             SuspendLayout();
             // 
@@ -73,11 +74,20 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(88, 58);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(614, 23);
+            textBox1.TabIndex = 3;
+            textBox1.TextChanged += textBox1_TextChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(781, 442);
+            Controls.Add(textBox1);
             Controls.Add(button2);
             Controls.Add(label1);
             Controls.Add(button1);
@@ -98,5 +108,6 @@
         private FileSystemWatcher fileSystemWatcher1;
         private Button button2;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private TextBox textBox1;
     }
 }

@@ -20,7 +20,7 @@ namespace WebApplication4.Controllers
         //}
         private ConnectAzure connect = new();
         [HttpPost(Name = "GetWeatherForecast")]
-        public List<Files> Get(string model)
+        public List<Files> Get([FromBody] string model)
         {
             List<Files> list = null;
             if (connect != null)

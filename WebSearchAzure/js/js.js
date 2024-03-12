@@ -83,8 +83,13 @@ addEventListener('DOMContentLoaded', async ()=>
     
     async function Server (text)
     {
-        let res = await fetch(`http://127.0.0.1:5191/api/weatherforecast?model=${text}`,{
+        let test = JSON.stringify(text)
+        let res = await fetch(`http://127.0.0.1:5191/api/weatherforecast`,{
             method: "POST",
+            body: test,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+              }
             });
             if (!res.ok)
             {
