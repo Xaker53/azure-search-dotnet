@@ -31,7 +31,7 @@ namespace WinFormsApp1
 
             
             watcher.EnableRaisingEvents = true;
-            watcher.SynchronizingObject = null;
+            watcher.SynchronizingObject = synchronize;
             watcher.IncludeSubdirectories = true;
             
             watcher.Renamed += OnRenamed;
@@ -58,9 +58,12 @@ namespace WinFormsApp1
             string NewName = Path.GetFileName(e.FullPath);
             string OldName = Path.GetFileName(e.OldName);
             //textFiles.Add(e);
-
-            azureSending.ConnectSearchFiles(e.OldFullPath);
-            Renamed(e);
+            if (Path.Exists(NewName))
+            {
+                azureSending.ConnectSearchFiles(e.OldFullPath);
+                Renamed(e);
+            }
+            
 
 
 
@@ -82,10 +85,12 @@ namespace WinFormsApp1
 
         private void OnCreated(object sender, FileSystemEventArgs e)
         {
+            Thread.Sleep(100);
             //textFiles.Add(e);
+            
             string pathFile = Path.GetFullPath(e.FullPath);
             lastCreatedTime = File.GetCreationTime(e.FullPath);
-            if (IsSupportedExtension(Path.GetExtension(pathFile)))
+            if (IsSupportedExtension(Path.GetExtension(pathFile)) && Path.Exists(pathFile))
             {
                 getFileText = new(pathFile, Path.GetExtension(pathFile));
 

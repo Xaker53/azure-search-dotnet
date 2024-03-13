@@ -6,14 +6,18 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 using Newtonsoft.Json;
 using Microsoft.VisualBasic.ApplicationServices;
 using Newtonsoft.Json.Linq;
+using Azure;
+using System.Timers;
+using System;
 
 namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
-        FolderBrowserDialog browserDialog;
-        AzureSearch.Quickstart.ManagementAzure managementAzure = new();
         SystemWatcher SystemWatcher;
+
+        private string jsonResponse { get; set; }
+
 
         private HttpClient mClient = new()
         {
@@ -32,27 +36,10 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //browserDialog = new FolderBrowserDialog();
-            //folderBrowserDialog1.ShowDialog();
 
-            //var result = folderBrowserDialog1.SelectedPath;
-
-            //try
-            //{
-            //    AzureSearch.Quickstart.Program program = new();
-            //    program.Start();
-            //}
-            //catch (Exception ex) {
-            //    throw ;
-            //};
             indexForm indexForm = new();
             this.Hide();
             indexForm.Show();
-
-            //systemWather = new SystemWather(null);
-
-
-
 
         }
 
@@ -63,7 +50,7 @@ namespace WinFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -85,29 +72,56 @@ namespace WinFormsApp1
         }
 
 
-        private async void textBox1_TextChanged(object sender, EventArgs e)
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            var test = textBox1.Text;
 
-            StringContent jsonContent = new StringContent(JsonConvert.SerializeObject("Повестка"),
+
+            if (textBox1.Text.Length > 0)
+            {
+                FetchToServer(textBox1.Text);
+
+            }
+            else
+            {
+                ResultInfo.Rows.Clear();
+            }
+
+
+
+            //HttpRequestMessage request = await mClient.PostAsync(textBox1.Text);
+        }
+
+        private async void FetchToServer(string TextInput)
+        {
+            StringContent jsonContent = new StringContent(JsonConvert.SerializeObject(TextInput),
                 Encoding.UTF8,
                 "text/json");
             var response = await mClient.PostAsync(
                 $"http://127.0.0.1:5191/api/weatherforecast",
                 jsonContent);
-
             var tt = response.EnsureSuccessStatusCode();
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"{jsonResponse}\n");
-            var json = JsonConvert.DeserializeObject(jsonResponse);
-            ResultInfo.DataSource = json;
+            this.jsonResponse = await response.Content.ReadAsStringAsync();
+            if (jsonResponse.Length > 2)
+            {
+                ResultInfo.DataSource = JsonConvert.DeserializeObject(jsonResponse);
+            }
+            else if (jsonResponse.Length <=2)
+            {
+                ResultInfo.Rows.Clear();
+            }
+            
 
-            //HttpRequestMessage request = await mClient.PostAsync(textBox1.Text);
+            
         }
 
         private void ResultInfo_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
+            string PathFile = (ResultInfo.CurrentRow.Cells["Path"].EditedFormattedValue).ToString();
+            if (File.Exists(PathFile))
+            {
+                System.Diagnostics.Process.Start("explorer.exe", PathFile);
+            }
+            
         }
     }
 }

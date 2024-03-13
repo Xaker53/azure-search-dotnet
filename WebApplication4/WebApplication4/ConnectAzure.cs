@@ -41,7 +41,7 @@ namespace WebApplication4
                 
                 QueryType = SearchQueryType.Full
             };
-            //options.Select.Add("FileID");
+            options.Select.Add("FileID");
             options.Select.Add("FileName");
             options.Select.Add("FileText");
             options.Select.Add("FilePath");

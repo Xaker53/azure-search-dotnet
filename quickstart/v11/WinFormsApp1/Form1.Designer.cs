@@ -38,6 +38,7 @@
             FileName = new DataGridViewTextBoxColumn();
             FileText = new DataGridViewTextBoxColumn();
             Path = new DataGridViewTextBoxColumn();
+            fileID = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ResultInfo).BeginInit();
             SuspendLayout();
@@ -86,10 +87,12 @@
             ResultInfo.CellBorderStyle = DataGridViewCellBorderStyle.None;
             ResultInfo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             ResultInfo.ColumnHeadersVisible = false;
-            ResultInfo.Columns.AddRange(new DataGridViewColumn[] { FileName, FileText, Path });
+            ResultInfo.Columns.AddRange(new DataGridViewColumn[] { FileName, FileText, Path, fileID });
             ResultInfo.Location = new Point(88, 100);
             ResultInfo.Name = "ResultInfo";
+            ResultInfo.ReadOnly = true;
             ResultInfo.RowHeadersVisible = false;
+            ResultInfo.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             ResultInfo.RowTemplate.Height = 30;
             ResultInfo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             ResultInfo.Size = new Size(614, 213);
@@ -102,6 +105,8 @@
             FileName.DataPropertyName = "fileName";
             FileName.HeaderText = "FileName";
             FileName.Name = "FileName";
+            FileName.ReadOnly = true;
+            FileName.Resizable = DataGridViewTriState.False;
             // 
             // FileText
             // 
@@ -109,6 +114,8 @@
             FileText.DataPropertyName = "fileText";
             FileText.HeaderText = "FileText";
             FileText.Name = "FileText";
+            FileText.ReadOnly = true;
+            FileText.Resizable = DataGridViewTriState.False;
             // 
             // Path
             // 
@@ -116,6 +123,16 @@
             Path.DataPropertyName = "filePath";
             Path.HeaderText = "Path";
             Path.Name = "Path";
+            Path.ReadOnly = true;
+            Path.Resizable = DataGridViewTriState.False;
+            // 
+            // fileID
+            // 
+            fileID.DataPropertyName = "fileID";
+            fileID.HeaderText = "fileID";
+            fileID.Name = "fileID";
+            fileID.ReadOnly = true;
+            fileID.Visible = false;
             // 
             // Form1
             // 
@@ -148,5 +165,6 @@
         private DataGridViewTextBoxColumn FileName;
         private DataGridViewTextBoxColumn FileText;
         private DataGridViewTextBoxColumn Path;
+        private DataGridViewTextBoxColumn fileID;
     }
 }

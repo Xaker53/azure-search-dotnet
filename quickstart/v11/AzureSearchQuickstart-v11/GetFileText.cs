@@ -16,7 +16,7 @@ namespace AzureSearchQuickstart_v11
         
         public GetFileText(string filePath, string extension, string Method="Rake")
         {
-
+            
             switch (extension)
             {
                 case ".txt":
