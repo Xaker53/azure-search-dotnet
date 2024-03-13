@@ -84,6 +84,7 @@ namespace WinFormsApp1
             else
             {
                 ResultInfo.Rows.Clear();
+                ResultInfo.Height = 0;
             }
 
 
@@ -104,14 +105,20 @@ namespace WinFormsApp1
             if (jsonResponse.Length > 2)
             {
                 ResultInfo.DataSource = JsonConvert.DeserializeObject(jsonResponse);
+
+                ResultInfo.Height = ResultInfo.Rows.Count * 30;
+
+
+
             }
             else if (jsonResponse.Length <=2)
             {
                 ResultInfo.Rows.Clear();
+                ResultInfo.Height = 0;
             }
-            
 
-            
+
+
         }
 
         private void ResultInfo_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -121,7 +128,12 @@ namespace WinFormsApp1
             {
                 System.Diagnostics.Process.Start("explorer.exe", PathFile);
             }
-            
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

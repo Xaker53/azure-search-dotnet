@@ -39,8 +39,10 @@
             FileText = new DataGridViewTextBoxColumn();
             Path = new DataGridViewTextBoxColumn();
             fileID = new DataGridViewTextBoxColumn();
+            groupBox1 = new GroupBox();
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ResultInfo).BeginInit();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // button1
@@ -88,14 +90,14 @@
             ResultInfo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             ResultInfo.ColumnHeadersVisible = false;
             ResultInfo.Columns.AddRange(new DataGridViewColumn[] { FileName, FileText, Path, fileID });
-            ResultInfo.Location = new Point(88, 100);
+            ResultInfo.Location = new Point(0, 13);
             ResultInfo.Name = "ResultInfo";
             ResultInfo.ReadOnly = true;
             ResultInfo.RowHeadersVisible = false;
             ResultInfo.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             ResultInfo.RowTemplate.Height = 30;
             ResultInfo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            ResultInfo.Size = new Size(614, 213);
+            ResultInfo.Size = new Size(614, 0);
             ResultInfo.TabIndex = 4;
             ResultInfo.CellContentClick += ResultInfo_CellContentClick;
             // 
@@ -134,12 +136,24 @@
             fileID.ReadOnly = true;
             fileID.Visible = false;
             // 
+            // groupBox1
+            // 
+            groupBox1.BackgroundImageLayout = ImageLayout.None;
+            groupBox1.Controls.Add(ResultInfo);
+            groupBox1.Location = new Point(88, 87);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(614, 294);
+            groupBox1.TabIndex = 5;
+            groupBox1.TabStop = false;
+            groupBox1.Enter += groupBox1_Enter;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(781, 442);
-            Controls.Add(ResultInfo);
+            Controls.Add(groupBox1);
             Controls.Add(textBox1);
             Controls.Add(button2);
             Controls.Add(button1);
@@ -149,6 +163,7 @@
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).EndInit();
             ((System.ComponentModel.ISupportInitialize)ResultInfo).EndInit();
+            groupBox1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -166,5 +181,6 @@
         private DataGridViewTextBoxColumn FileText;
         private DataGridViewTextBoxColumn Path;
         private DataGridViewTextBoxColumn fileID;
+        private GroupBox groupBox1;
     }
 }
