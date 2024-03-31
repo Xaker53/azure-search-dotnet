@@ -40,14 +40,16 @@ namespace WinFormsApp1
         {
 
             indexForm indexForm = new();
+            //SystemWatcher = null;
             this.Hide();
             indexForm.Show();
+            
 
         }
 
         private void loadResult()
         {
-
+            SystemWatcher = new(this);
         }
 
         private void Form1_Load(object sender, EventArgs e)

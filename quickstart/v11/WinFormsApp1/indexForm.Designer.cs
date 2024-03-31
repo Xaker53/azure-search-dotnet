@@ -39,6 +39,7 @@
             button2 = new Button();
             button3 = new Button();
             button4 = new Button();
+            button5 = new Button();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -145,11 +146,22 @@
             button4.UseVisualStyleBackColor = true;
             button4.Click += button4_Click;
             // 
+            // button5
+            // 
+            button5.Location = new Point(12, 27);
+            button5.Name = "button5";
+            button5.Size = new Size(64, 21);
+            button5.TabIndex = 7;
+            button5.Text = "<---";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
             // indexForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(772, 284);
+            Controls.Add(button5);
             Controls.Add(button4);
             Controls.Add(button3);
             Controls.Add(button2);
@@ -181,5 +193,6 @@
         private ToolStripMenuItem rakeToolStripMenuItem;
         private ToolStripMenuItem frequentlyEncounteredToolStripMenuItem;
         private Button button4;
+        private Button button5;
     }
 }
