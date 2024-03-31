@@ -17,54 +17,73 @@ namespace AzureSearchQuickstart_v11
         private ThreadServer ThreadServer { get; set; }
         private int index;
         private string Method;
+        static CancellationTokenSource cts = new();
 
-        public ConcurrentDictionaryFiles() { }
+
+        private ParallelOptions options;
+
+        public ConcurrentDictionaryFiles()
+        {
+        }
 
         public ConcurrentDictionaryFiles(int Index, string Method)
         {
             this.index = Index;
             this.Method = Method;
+            cts = new();
+            options = new()
+            {
+                CancellationToken = cts.Token,
+                MaxDegreeOfParallelism = Environment.ProcessorCount
+            };
         }
         public void ParallelFiles(string filesDirectory, ThreadServer threadServer)
         {
             this.ThreadServer ??= threadServer;
-            
-            Parallel.ForEach(Directory.GetFileSystemEntries(filesDirectory), filePath =>
+            try
             {
-
-                try
+                Parallel.ForEach(Directory.GetFileSystemEntries(filesDirectory), options, filePath =>
                 {
-                    if (File.Exists(filePath))
-                    {
-                        string extension = Path.GetExtension(filePath);
 
-                        if (IsSupportedExtension(extension))
+                    try
+                    {
+                        if (File.Exists(filePath))
                         {
-                            GetFileText FileText = new GetFileText(filePath, extension, this.Method);
-                            string pageText = FileText.getPageText();
-                            
-                            AddIndex(Path.GetFileName(filePath), Path.GetFullPath(filePath), pageText.Replace("\n", ""));
-                            //Interlocked.Increment(ref index);
-                            
+                            string extension = Path.GetExtension(filePath);
+
+                            if (IsSupportedExtension(extension))
+                            {
+                                GetFileText FileText = new GetFileText(filePath, extension, this.Method);
+                                string pageText = FileText.getPageText();
+
+                                AddIndex(Path.GetFileName(filePath), Path.GetFullPath(filePath), pageText.Replace("\n", ""));
+                                //Interlocked.Increment(ref index);
+
+                            }
+                            else
+                            {
+                                //AddIndex(Path.GetFileName(filePath), Path.GetFullPath(filePath));
+                                //Interlocked.Increment(ref index);
+                            }
                         }
                         else
                         {
-                            //AddIndex(Path.GetFileName(filePath), Path.GetFullPath(filePath));
-                            //Interlocked.Increment(ref index);
+                            Files(filePath);
                         }
+
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        Files(filePath);
+                        //Console.WriteLine(ex.Message);
                     }
 
-                }
-                catch (Exception ex) 
-                {
-                    //Console.WriteLine(ex.Message);
-                }
-
-            });
+                });
+            }
+            catch (Exception e)
+            {
+                
+            }
+            
         }
 
 
@@ -82,6 +101,10 @@ namespace AzureSearchQuickstart_v11
 
         }
 
+        public void Cancel()
+        {
+            cts.Cancel();
+        }
         private bool IsSupportedExtension(string extension)
         {
             string[] supportedExtensions = { ".pdf", ".docx", ".doc", ".txt" };

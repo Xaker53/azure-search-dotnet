@@ -49,8 +49,11 @@ namespace AzureSearch.Quickstart
 
         public void CancelToken()
         {
-            tokenSource.Cancel();
-
+            if (tokenSource != null)
+            {
+                tokenSource.Cancel();
+                ParallelSearchFile.Cancel();
+            }
         }
 
         public Program()

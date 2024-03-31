@@ -96,6 +96,7 @@
             ResultInfo.RowHeadersVisible = false;
             ResultInfo.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             ResultInfo.RowTemplate.Height = 30;
+            ResultInfo.ScrollBars = ScrollBars.Vertical;
             ResultInfo.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             ResultInfo.Size = new Size(614, 0);
             ResultInfo.TabIndex = 4;

@@ -20,7 +20,7 @@ namespace WinFormsApp1
         private AzureSearch.Quickstart.Program program;
 
 
-        CancellationTokenSource tokenSource = new();
+        CancellationTokenSource tokenSource;
         CancellationToken token;
 
 
@@ -76,6 +76,7 @@ namespace WinFormsApp1
         private void button2_Click(object sender, EventArgs e)
         {
             //program = new();
+            tokenSource = new();
             Task.Run(() =>
             {
                 tokenSource.Token.ThrowIfCancellationRequested();
@@ -117,8 +118,11 @@ namespace WinFormsApp1
 
         private void button4_Click(object sender, EventArgs e)
         {
-            program.CancelToken();
-            tokenSource.Cancel();
+            if (tokenSource != null)
+            {
+                program.CancelToken();
+                tokenSource.Cancel();
+            }
 
         }
 

@@ -85,7 +85,7 @@ namespace WinFormsApp1
 
         private void OnCreated(object sender, FileSystemEventArgs e)
         {
-            Thread.Sleep(100);
+            Thread.Sleep(200);
             //textFiles.Add(e);
             
             string pathFile = Path.GetFullPath(e.FullPath);
