@@ -32,7 +32,7 @@ namespace WinFormsApp1
             InitializeComponent();
             SystemWatcher = new(this);
             SystemWatcher.OnSystemWatcher();
-
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             indexForm.GetForm = this;
         }
 
@@ -43,7 +43,7 @@ namespace WinFormsApp1
             this.Show();
             SystemWatcher.OnSystemWatcher();
         }
-        private void button1_Click(object sender, EventArgs e)
+        private void guna2Button1_Click(object sender, EventArgs e)
         {
             this.Hide();
             SystemWatcher.OffSystemWatcher();
@@ -53,7 +53,7 @@ namespace WinFormsApp1
 
         private void loadResult()
         {
-            
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -80,7 +80,7 @@ namespace WinFormsApp1
         }
 
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
         {
 
             if (textBox1.Text.Length > 0)
@@ -128,19 +128,25 @@ namespace WinFormsApp1
 
         }
 
-        private void ResultInfo_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ResultInfo_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
             string PathFile = (ResultInfo.CurrentRow.Cells["Path"].EditedFormattedValue).ToString();
             if (File.Exists(PathFile))
             {
                 System.Diagnostics.Process.Start("explorer.exe", PathFile);
             }
-
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
+        private void guna2Button2_Click(object sender, EventArgs e)
         {
-
+            this.Close();
         }
     }
 }

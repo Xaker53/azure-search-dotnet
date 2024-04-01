@@ -30,10 +30,10 @@ namespace WinFormsApp1
 
             program = new();
 
-            button2.Enabled = false;
+            guna2Button4.Enabled = false;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void guna2Button2_Click(object sender, EventArgs e)
         {
             radioButton1.Checked = false;
             folderBrowserDialog1.ShowDialog(this);
@@ -46,11 +46,11 @@ namespace WinFormsApp1
         {
             if (richTextBox1.Text.Length == 0)
             {
-                button2.Enabled = false;
+                guna2Button4.Enabled = false;
             }
             else
             {
-                button2.Enabled = true;
+                guna2Button4.Enabled = true;
             }
         }
 
@@ -64,16 +64,16 @@ namespace WinFormsApp1
             richTextBox1.Text = "";
             if (radioButton1.Checked == false)
             {
-                button2.Enabled = false;
+                guna2Button4.Enabled = false;
             }
             else
             {
-                button2.Enabled = true;
+                guna2Button4.Enabled = true;
                 this.PathFile = "";
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void guna2Button4_Click(object sender, EventArgs e)
         {
             tokenSource = new();
             Task.Run(() =>
@@ -85,7 +85,7 @@ namespace WinFormsApp1
             //program.UploadDocuments(this.PathFile, Algorithm);
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void guna2Button5_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show("Delete all index?", "Delete", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
@@ -115,7 +115,7 @@ namespace WinFormsApp1
             Algorithm = "PopularWords";
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void guna2Button3_Click(object sender, EventArgs e)
         {
             if (tokenSource != null)
             {
@@ -135,7 +135,7 @@ namespace WinFormsApp1
 
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void guna2Button1_Click(object sender, EventArgs e)
         {
             this.Hide();
             GetForm.ShowInterface();
