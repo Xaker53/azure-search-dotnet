@@ -72,9 +72,6 @@ namespace WinFormsApp1
                 Renamed(e);
             }
             
-
-
-
             TextLabel = $"old path {OldName}, new {e.FullPath}, file name {NewName}";
         }
 
