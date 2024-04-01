@@ -75,7 +75,6 @@ namespace WinFormsApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //program = new();
             tokenSource = new();
             Task.Run(() =>
             {
