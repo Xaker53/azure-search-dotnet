@@ -32,6 +32,8 @@ namespace WinFormsApp1
             InitializeComponent();
             SystemWatcher = new(this);
             SystemWatcher.OnSystemWatcher();
+
+            indexForm.GetForm = this;
         }
 
         ~Form1() { }
@@ -44,7 +46,6 @@ namespace WinFormsApp1
         private void button1_Click(object sender, EventArgs e)
         {
             this.Hide();
-            indexForm.GetForm = this;
             SystemWatcher.OffSystemWatcher();
             indexForm.Show();
 
