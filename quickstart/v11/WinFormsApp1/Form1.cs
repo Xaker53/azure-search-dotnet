@@ -16,7 +16,8 @@ namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
-        SystemWatcher SystemWatcher;
+        private SystemWatcher SystemWatcher;
+        private indexForm indexForm = new();
 
         private string jsonResponse { get; set; }
 
@@ -30,26 +31,28 @@ namespace WinFormsApp1
         {
             InitializeComponent();
             SystemWatcher = new(this);
-
-
+            SystemWatcher.OnSystemWatcher();
         }
 
         ~Form1() { }
 
+        public void ShowInterface()
+        {
+            this.Show();
+            SystemWatcher.OnSystemWatcher();
+        }
         private void button1_Click(object sender, EventArgs e)
         {
-
-            indexForm indexForm = new();
-            //SystemWatcher = null;
             this.Hide();
+            indexForm.GetForm = this;
+            SystemWatcher.OffSystemWatcher();
             indexForm.Show();
-            
 
         }
 
         private void loadResult()
         {
-            SystemWatcher = new(this);
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -79,7 +82,6 @@ namespace WinFormsApp1
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
-            
             if (textBox1.Text.Length > 0)
             {
                 FetchToServer(textBox1.Text);

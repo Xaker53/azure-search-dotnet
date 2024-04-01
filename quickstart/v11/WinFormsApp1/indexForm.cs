@@ -18,7 +18,7 @@ namespace WinFormsApp1
         private string PathFile = "";
         private string Algorithm = "Rake";
         private AzureSearch.Quickstart.Program program;
-
+        public Form1 GetForm = null;
 
         CancellationTokenSource tokenSource;
         CancellationToken token;
@@ -138,9 +138,8 @@ namespace WinFormsApp1
 
         private void button5_Click(object sender, EventArgs e)
         {
-            Form1 form = new Form1();
-            this.Hide();;
-            form.Show();
+            this.Hide();
+            GetForm.ShowInterface();
         }
     }
 }

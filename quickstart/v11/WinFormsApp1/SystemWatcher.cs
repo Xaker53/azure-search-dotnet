@@ -16,7 +16,6 @@ namespace WinFormsApp1
     {
         private FileSystemWatcher watcher;
         public string TextLabel = "";
-        private List<EventArgs> textFiles = new();
 
         private AzureSearch.Quickstart.AzureSendingModifiedFiles azureSending;
         private AzureSearchQuickstart_v11.GetFileText getFileText;
@@ -30,7 +29,7 @@ namespace WinFormsApp1
             watcher = new FileSystemWatcher(@"\");
 
             
-            watcher.EnableRaisingEvents = true;
+            watcher.EnableRaisingEvents = false;
             watcher.SynchronizingObject = synchronize;
             watcher.IncludeSubdirectories = true;
             
@@ -40,6 +39,15 @@ namespace WinFormsApp1
             watcher.Created += OnCreated;
             watcher.Error += new ErrorEventHandler(OnError);
 
+        }
+
+        public void OnSystemWatcher()
+        {
+            watcher.EnableRaisingEvents = true;
+        }
+        public void OffSystemWatcher()
+        {
+            watcher.EnableRaisingEvents = false;
         }
 
         private void OnError(object sender, ErrorEventArgs e)
@@ -58,7 +66,7 @@ namespace WinFormsApp1
             string NewName = Path.GetFileName(e.FullPath);
             string OldName = Path.GetFileName(e.OldName);
             //textFiles.Add(e);
-            if (Path.Exists(NewName))
+            if (Path.Exists(e.FullPath))
             {
                 azureSending.ConnectSearchFiles(e.OldFullPath);
                 Renamed(e);
