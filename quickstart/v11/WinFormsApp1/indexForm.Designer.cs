@@ -91,8 +91,7 @@
             // richTextBox1
             // 
             richTextBox1.BackColor = Color.White;
-            richTextBox1.Enabled = false;
-            richTextBox1.ForeColor = SystemColors.MenuText;
+            richTextBox1.ForeColor = Color.Black;
             richTextBox1.ImeMode = ImeMode.NoControl;
             richTextBox1.Location = new Point(144, 78);
             richTextBox1.Name = "richTextBox1";
