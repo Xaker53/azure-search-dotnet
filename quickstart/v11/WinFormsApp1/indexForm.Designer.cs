@@ -224,7 +224,7 @@
             MainMenuStrip = menuStrip1;
             Name = "indexForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Index File";
+            Text = "IndexTF";
             Load += indexForm_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
