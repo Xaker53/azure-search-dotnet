@@ -105,7 +105,7 @@ namespace WinFormsApp1
                 Encoding.UTF8,
                 "text/json");
             var response = await mClient.PostAsync(
-                $"http://127.0.0.1:5191/api/weatherforecast",
+                $"http://127.0.0.1:5191/api/azure",
                 jsonContent);
             var tt = response.EnsureSuccessStatusCode();
             this.jsonResponse = await response.Content.ReadAsStringAsync();
