@@ -69,13 +69,6 @@ namespace AzureSearch.Quickstart
         }
        
 
-        public class Data
-        {
-            public string FileName { get; set; }
-            public string FilePath { get; set; }
-            public string FileText { get; set; }
-        }
-
        
         // Upload documents in a single Upload request.
         public async void UploadDocuments(string PathFileSearch, string Method = "Rake")
