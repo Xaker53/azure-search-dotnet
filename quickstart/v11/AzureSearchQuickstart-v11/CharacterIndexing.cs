@@ -12,10 +12,11 @@ namespace AzureSearchQuickstart_v11
     {
         private Dictionary<string, List<int>> SaveLetter;
         private string JsonText;
-        private int Position = 0;
+        private int Position;
 
         public void Compression(string _Text)
         {
+            this.Position = 0;
             SaveLetter = new();
             SaveLetter["Text_size"] = new List<int> { _Text.Length };
 
