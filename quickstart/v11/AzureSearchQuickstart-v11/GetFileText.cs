@@ -48,8 +48,9 @@ namespace AzureSearchQuickstart_v11
                     this.pageText = string.Join(" ", result.Keys);
                 }else
                 {
-                    PopularWords = new(this.pageText);
-                    pageText = PopularWords.Result;
+                    PopularWords = new();
+                    PopularWords.Compression(this.pageText);//new(this.pageText);
+                    pageText = PopularWords.OutText();
                 }
                 
             }
