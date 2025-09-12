@@ -9,5 +9,6 @@ namespace AzureSearchQuickstart_v11
     interface IWordCompression
     {
         void Compression(string _Text);
+        string OutText();
     }
 }
