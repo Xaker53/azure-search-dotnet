@@ -75,7 +75,7 @@ namespace WinFormsApp1
             TextLabel = $"old path {OldName}, new {e.FullPath}, file name {NewName}";
         }
 
-        private void OnChanger(object sender, FileSystemEventArgs e)
+        private void OnChanger(object sender, FileSystemEventArgs e) // ERROR Create and update file!
         {
             //textFiles.Add(e);
             DateTime lastWriteTime = File.GetCreationTime(e.FullPath);

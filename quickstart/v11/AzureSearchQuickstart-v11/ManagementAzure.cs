@@ -19,7 +19,7 @@ namespace AzureSearch.Quickstart
     public class ManagementAzure
     {
         private string serviceName = "search53";
-        private string apiKey = "FVSYI2BfI4x26m6LDy55Ix4vaQqxvKlX7SKCxtmJf2AzSeCxpQRV";
+        private string apiKey = "6K3kpg0y3j9s0xYgRbeQjFxVBaBESO1YOmDPspfvznAzSeAY3Xmf";
         private string indexName = "hquickstart";
 
         private Uri serviceEndpoint;
