@@ -42,6 +42,7 @@
             testToolStripMenuItem = new ToolStripMenuItem();
             rakeToolStripMenuItem = new ToolStripMenuItem();
             frequentlyEncounteredToolStripMenuItem = new ToolStripMenuItem();
+            characterIndexingToolStripMenuItem = new ToolStripMenuItem();
             folderBrowserDialog1 = new FolderBrowserDialog();
             richTextBox1 = new RichTextBox();
             guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
@@ -64,7 +65,7 @@
             // 
             // testToolStripMenuItem
             // 
-            testToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { rakeToolStripMenuItem, frequentlyEncounteredToolStripMenuItem });
+            testToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { rakeToolStripMenuItem, frequentlyEncounteredToolStripMenuItem, characterIndexingToolStripMenuItem });
             testToolStripMenuItem.Name = "testToolStripMenuItem";
             testToolStripMenuItem.Size = new Size(73, 20);
             testToolStripMenuItem.Text = "Algorithm";
@@ -83,6 +84,13 @@
             frequentlyEncounteredToolStripMenuItem.Size = new Size(184, 22);
             frequentlyEncounteredToolStripMenuItem.Text = "Frequently occurring";
             frequentlyEncounteredToolStripMenuItem.Click += frequentlyEncounteredToolStripMenuItem_Click;
+            // 
+            // characterIndexingToolStripMenuItem
+            // 
+            characterIndexingToolStripMenuItem.Name = "characterIndexingToolStripMenuItem";
+            characterIndexingToolStripMenuItem.Size = new Size(184, 22);
+            characterIndexingToolStripMenuItem.Text = "Character indexing";
+            characterIndexingToolStripMenuItem.Click += characterIndexingToolStripMenuItem_Click;
             // 
             // folderBrowserDialog1
             // 
@@ -246,5 +254,6 @@
         private Guna.UI2.WinForms.Guna2Button guna2Button3;
         private Guna.UI2.WinForms.Guna2Button guna2Button4;
         private Guna.UI2.WinForms.Guna2Button guna2Button5;
+        private ToolStripMenuItem characterIndexingToolStripMenuItem;
     }
 }

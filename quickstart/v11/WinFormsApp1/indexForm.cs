@@ -110,6 +110,7 @@ namespace WinFormsApp1
             Algorithm = rakeToolStripMenuItem.Text;
         }
 
+
         private void frequentlyEncounteredToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Algorithm = "PopularWords";
@@ -139,6 +140,11 @@ namespace WinFormsApp1
         {
             this.Hide();
             GetForm.ShowInterface();
+        }
+
+        private void characterIndexingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Algorithm = "";
         }
     }
 }
