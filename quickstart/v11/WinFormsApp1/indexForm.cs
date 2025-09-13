@@ -144,7 +144,7 @@ namespace WinFormsApp1
 
         private void characterIndexingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Algorithm = "";
+            Algorithm = "CharacterIndexing";
         }
     }
 }
