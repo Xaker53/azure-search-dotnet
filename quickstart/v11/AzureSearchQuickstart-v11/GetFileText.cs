@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Spire.Doc;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace AzureSearchQuickstart_v11
 {
@@ -13,7 +15,6 @@ namespace AzureSearchQuickstart_v11
     {
         private string pageText { get; set;} = "";
         private PopularWords PopularWords;
-        
         public GetFileText(string filePath, string extension, string Method="Rake")
         {
             
@@ -39,20 +40,41 @@ namespace AzureSearchQuickstart_v11
                     break;
             }
 
-            if (pageText.Length > 27090)
+            if (pageText.Length != null)
             {
-                if (Method == "Rake")
-                {
-                    var rake = new Rake.Rake();
-                    var result = rake.Run(this.pageText.ToLower());
-                    this.pageText = string.Join(" ", result.Keys);
-                }else
-                {
-                    PopularWords = new();
-                    PopularWords.Compression(this.pageText);//new(this.pageText);
-                    pageText = PopularWords.OutText();
-                }
-                
+                var compressor = CompressionRegistrationDI.Instance.TryGet(Method);
+                compressor.Compression(this.pageText);
+                this.pageText = compressor.OutText();
+
+
+                //ServiceCollection services = new ServiceCollection();
+                //services.AddKeyedTransient<IWordCompression, PopularWords>("PopularWords");
+                //services.AddKeyedTransient<IWordCompression, Rake.Rake>("Rake");
+                //services.AddKeyedTransient<IWordCompression, CharacterIndexing>("CharacterIndexing");
+
+                //var provider = services.BuildServiceProvider();
+                //var result = provider.GetRequiredKeyedService<IWordCompression>("Rake");
+                //result.Compression(this.pageText);
+                //this.pageText = result.OutText();
+
+
+                //if (Method == "Rake")
+                //{
+                //    //var rake = new Rake.Rake();
+                //    //var result = rake.Compression(this.pageText.ToLower());
+                //    //this.pageText = string.Join(" ", result.Keys);
+
+                //    var rake = new Rake.Rake();
+                //    rake.Compression(this.pageText.ToLower());
+                //    this.pageText = rake.OutText();
+                //}
+                //else
+                //{
+                //    PopularWords = new();
+                //    PopularWords.Compression(this.pageText);//new(this.pageText);
+                //    pageText = PopularWords.OutText();
+                //}
+
             }
             
         }
