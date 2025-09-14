@@ -1,23 +1,37 @@
 using System.Text.Json;
 using AzureSearchQuickstart_v11;
+
 namespace Test_Algorithm
 {
     public class UnitTest1
     {
+
+        private readonly string input = "ABA"; 
         [Fact]
-        public void Test1()
+        public void TestAlgorithmCharacterIndexing()
         {
 
             var sut = new CharacterIndexing();
-            var input = "ABA";
-
 
             sut.Compression(input);
             var json = sut.OutText();
             var dict = JsonSerializer.Deserialize<Dictionary<string, List<int>>>(json)!;
 
 
-            Assert.Equal(3, dict["Text_size"][0]);       
+            OutAlgorithm(dict);
+        }
+
+        [Fact]
+        public void TestCallAlgorithm()
+        {
+            var compressor = CompressionRegistrationDI.Instance.TryGet("CharacterIndexing");
+            compressor.Compression(input);
+            OutAlgorithm(JsonSerializer.Deserialize<Dictionary<string, List<int>>>(compressor.OutText()));
+        }
+
+        public void OutAlgorithm(Dictionary<string, List<int>> dict)
+        {
+            Assert.Equal(3, dict["Text_size"][0]);
             Assert.Equal(new[] { 0, 2 }, dict["A"]);
             Assert.Equal(new[] { 1 }, dict["B"]);
         }
