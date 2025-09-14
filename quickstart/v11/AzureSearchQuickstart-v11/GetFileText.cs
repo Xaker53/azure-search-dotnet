@@ -45,36 +45,6 @@ namespace AzureSearchQuickstart_v11
                 var compressor = CompressionRegistrationDI.Instance.TryGet(Method);
                 compressor.Compression(this.pageText);
                 this.pageText = compressor.OutText();
-
-
-                //ServiceCollection services = new ServiceCollection();
-                //services.AddKeyedTransient<IWordCompression, PopularWords>("PopularWords");
-                //services.AddKeyedTransient<IWordCompression, Rake.Rake>("Rake");
-                //services.AddKeyedTransient<IWordCompression, CharacterIndexing>("CharacterIndexing");
-
-                //var provider = services.BuildServiceProvider();
-                //var result = provider.GetRequiredKeyedService<IWordCompression>("Rake");
-                //result.Compression(this.pageText);
-                //this.pageText = result.OutText();
-
-
-                //if (Method == "Rake")
-                //{
-                //    //var rake = new Rake.Rake();
-                //    //var result = rake.Compression(this.pageText.ToLower());
-                //    //this.pageText = string.Join(" ", result.Keys);
-
-                //    var rake = new Rake.Rake();
-                //    rake.Compression(this.pageText.ToLower());
-                //    this.pageText = rake.OutText();
-                //}
-                //else
-                //{
-                //    PopularWords = new();
-                //    PopularWords.Compression(this.pageText);//new(this.pageText);
-                //    pageText = PopularWords.OutText();
-                //}
-
             }
             
         }
