@@ -1,5 +1,5 @@
 using System.Text.Json;
-using AzureSearchQuickstart_v11.Infrastructure;
+using AzureSearchQuickstart_v11.Infrastructure.DependencyInjection;
 
 namespace Test_Algorithm
 {
