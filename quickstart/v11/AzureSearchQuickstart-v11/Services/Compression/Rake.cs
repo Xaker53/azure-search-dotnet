@@ -17,7 +17,7 @@ namespace AzureSearchQuickstart_v11.Services.Compression
         private Dictionary<string, double> keywordCandidates;
 
         public Rake(
-            string stopWordsPath = null,
+            string? stopWordsPath = null,
             int minCharLength = 1,
             int maxWordsLength = 5,
             double minKeywordFrequency = 1)
@@ -37,7 +37,7 @@ namespace AzureSearchQuickstart_v11.Services.Compression
 
             var wordScores = CalculateWordScores(phraseList);
 
-            keywordCandidates = GenerateCandidateKeywordScores(phraseList, wordScores, _minKeywordFrequency);
+            this.keywordCandidates = GenerateCandidateKeywordScores(phraseList, wordScores, _minKeywordFrequency);
 
             //return keywordCandidates
             //    .OrderByDescending(pair => pair.Value)
@@ -46,9 +46,9 @@ namespace AzureSearchQuickstart_v11.Services.Compression
 
         public string OutText()
         {
-            return string.Join(" ", keywordCandidates
+            return string.Join(" ", (keywordCandidates
                 .OrderByDescending(pair => pair.Value)
-                .ToDictionary(pair => pair.Key, pair => pair.Value));
+                .ToDictionary(pair => pair.Key, pair => pair.Value)).Keys);
         }
 
         private Dictionary<string, double> GenerateCandidateKeywordScores(

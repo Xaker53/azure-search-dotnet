@@ -54,7 +54,7 @@ namespace AzureSearchQuickstart_v11.Services.Text
 
                             if (IsSupportedExtension(extension))
                             {
-                                GetFileText FileText = new GetFileText(filePath, extension, Method);
+                                GetFileText FileText = new GetFileText(filePath, extension, this.Method);
                                 string pageText = FileText.getPageText();
 
                                 AddIndex(Path.GetFileName(filePath), Path.GetFullPath(filePath), pageText.Replace("\n", ""));
