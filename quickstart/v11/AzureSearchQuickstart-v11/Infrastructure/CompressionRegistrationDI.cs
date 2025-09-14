@@ -24,11 +24,11 @@ namespace AzureSearchQuickstart_v11.Infrastructure
             services.AddKeyedSingleton<IWordCompression, Services.Compression.Rake>("Rake");
             services.AddKeyedSingleton<IWordCompression, CharacterIndexing>("CharacterIndexing");
 
-            provider = services.BuildServiceProvider();
+            this.provider = services.BuildServiceProvider();
         }
 
 
-        public IWordCompression TryGet(string Key) => provider.GetRequiredKeyedService<IWordCompression>(Key);
+        public IWordCompression TryGet(string Key) => this.provider.GetRequiredKeyedService<IWordCompression>(Key);
 
     }
 }

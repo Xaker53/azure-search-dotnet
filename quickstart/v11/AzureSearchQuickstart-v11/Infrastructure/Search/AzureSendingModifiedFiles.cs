@@ -41,15 +41,15 @@ namespace AzureSearchQuickstart_v11.Infrastructure.Search
         public AzureSendingModifiedFiles() 
         {
             Start();
-            NewDocument = new Files();
+            NewDocument = new AzureSearch.Quickstart.Files();
             GetLastIndex();
         }
         public void ConnectSearchFiles(string request)
         {
             options = new SearchOptions();
-            path = Path.GetFullPath(request);
+            this.path = Path.GetFullPath(request);
             options.Filter = SearchFilter.Create(FormattableStringFactory.Create($"{nameof(Files.FilePath)} eq '{path}'"));
-            response = srchclient.Search<Files>($"*", options);
+            this.response = srchclient.Search<Files>($"*", options);
             GetResult();
         }
 

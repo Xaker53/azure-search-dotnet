@@ -16,7 +16,7 @@ namespace AzureSearchQuickstart_v11.Services.Compression
 
         public void Compression(string _Text)
         {
-            Position = 0;
+            this.Position = 0;
             SaveLetter = new();
             SaveLetter["Text_size"] = new List<int> { _Text.Length };
 
@@ -29,11 +29,11 @@ namespace AzureSearchQuickstart_v11.Services.Compression
                     SaveLetter[value] = new List<int>();
                 }
 
-                SaveLetter[value].Add(Position);
-                Position++;
+                SaveLetter[value].Add(this.Position);
+                this.Position++;
             }
         }
 
-        public string OutText() => JsonText = JsonSerializer.Serialize(SaveLetter);
+        public string OutText() => JsonText = JsonSerializer.Serialize(this.SaveLetter);
     }
 }

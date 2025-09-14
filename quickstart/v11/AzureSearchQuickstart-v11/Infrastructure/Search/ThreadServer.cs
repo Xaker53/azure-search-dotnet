@@ -30,8 +30,8 @@ namespace AzureSearchQuickstart_v11.Infrastructure.Search
         public ThreadServer(SearchClient searchClient, AutoResetEvent autoResetEvent, int flushAfterCount)
         {
             this.searchClient = searchClient;
-            AutoResetEvent = autoResetEvent;
-            FlushAfterCount = flushAfterCount;
+            this.AutoResetEvent = autoResetEvent;
+            this.FlushAfterCount = flushAfterCount;
         }
 
         public void Add(IndexDocumentsAction<Files> elem)
@@ -47,7 +47,7 @@ namespace AzureSearchQuickstart_v11.Infrastructure.Search
 
         public IEnumerable<IndexDocumentsAction<Files>> FlushBuffer()
         {
-            var count = batch.Count;
+            var count = this.batch.Count;
             
             for (var i = 0; i < count; i++)
             {
@@ -69,7 +69,7 @@ namespace AzureSearchQuickstart_v11.Infrastructure.Search
             var timer = new Timer(flushAfter);
             timer.AutoReset = true;
             // Signal the waiting thread that it's time to flush the buffer
-            timer.Elapsed += (sender, e) => AutoResetEvent.Set();
+            timer.Elapsed += (sender, e) => this.AutoResetEvent.Set();
             timer.Start();
         }
 
