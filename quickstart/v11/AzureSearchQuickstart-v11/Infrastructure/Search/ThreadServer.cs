@@ -13,7 +13,7 @@ using NPOI.SS.Formula.Functions;
 using System.Linq;
 
 using Timer = System.Timers.Timer;
-namespace AzureSearchQuickstart_v11
+namespace AzureSearchQuickstart_v11.Infrastructure.Search
 {
     class ThreadServer
     {
@@ -30,8 +30,8 @@ namespace AzureSearchQuickstart_v11
         public ThreadServer(SearchClient searchClient, AutoResetEvent autoResetEvent, int flushAfterCount)
         {
             this.searchClient = searchClient;
-            this.AutoResetEvent = autoResetEvent;
-            this.FlushAfterCount = flushAfterCount;
+            AutoResetEvent = autoResetEvent;
+            FlushAfterCount = flushAfterCount;
         }
 
         public void Add(IndexDocumentsAction<Files> elem)
@@ -47,7 +47,7 @@ namespace AzureSearchQuickstart_v11
 
         public IEnumerable<IndexDocumentsAction<Files>> FlushBuffer()
         {
-            var count = this.batch.Count;
+            var count = batch.Count;
             
             for (var i = 0; i < count; i++)
             {
@@ -69,7 +69,7 @@ namespace AzureSearchQuickstart_v11
             var timer = new Timer(flushAfter);
             timer.AutoReset = true;
             // Signal the waiting thread that it's time to flush the buffer
-            timer.Elapsed += (sender, e) => this.AutoResetEvent.Set();
+            timer.Elapsed += (sender, e) => AutoResetEvent.Set();
             timer.Start();
         }
 

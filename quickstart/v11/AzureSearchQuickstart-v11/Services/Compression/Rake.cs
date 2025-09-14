@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using AzureSearchQuickstart_v11;
 using NPOI.SS.Formula.Functions;
+using Rake;
 
-namespace Rake
+namespace AzureSearchQuickstart_v11.Services.Compression
 {
     public class Rake: IWordCompression
     {
@@ -17,7 +17,7 @@ namespace Rake
         private Dictionary<string, double> keywordCandidates;
 
         public Rake(
-            string? stopWordsPath = null,
+            string stopWordsPath = null,
             int minCharLength = 1,
             int maxWordsLength = 5,
             double minKeywordFrequency = 1)
@@ -37,7 +37,7 @@ namespace Rake
 
             var wordScores = CalculateWordScores(phraseList);
 
-            this.keywordCandidates = GenerateCandidateKeywordScores(phraseList, wordScores, _minKeywordFrequency);
+            keywordCandidates = GenerateCandidateKeywordScores(phraseList, wordScores, _minKeywordFrequency);
 
             //return keywordCandidates
             //    .OrderByDescending(pair => pair.Value)
@@ -46,9 +46,9 @@ namespace Rake
 
         public string OutText()
         {
-            return string.Join(" ", (keywordCandidates
+            return string.Join(" ", keywordCandidates
                 .OrderByDescending(pair => pair.Value)
-                .ToDictionary(pair => pair.Key, pair => pair.Value)));
+                .ToDictionary(pair => pair.Key, pair => pair.Value));
         }
 
         private Dictionary<string, double> GenerateCandidateKeywordScores(

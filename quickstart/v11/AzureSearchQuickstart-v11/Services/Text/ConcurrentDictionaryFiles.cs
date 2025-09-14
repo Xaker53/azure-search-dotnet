@@ -1,5 +1,6 @@
 ﻿using Azure.Search.Documents.Models;
 using AzureSearch.Quickstart;
+using AzureSearchQuickstart_v11.Infrastructure.Search;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static AzureSearch.Quickstart.Program;
 
-namespace AzureSearchQuickstart_v11
+namespace AzureSearchQuickstart_v11.Services.Text
 {
     class ConcurrentDictionaryFiles
     {
@@ -28,7 +29,7 @@ namespace AzureSearchQuickstart_v11
 
         public ConcurrentDictionaryFiles(int Index, string Method)
         {
-            this.index = Index;
+            index = Index;
             this.Method = Method;
             cts = new();
             options = new()
@@ -39,7 +40,7 @@ namespace AzureSearchQuickstart_v11
         }
         public void ParallelFiles(string filesDirectory, ThreadServer threadServer)
         {
-            this.ThreadServer ??= threadServer;
+            ThreadServer ??= threadServer;
             try
             {
                 Parallel.ForEach(Directory.GetFileSystemEntries(filesDirectory), options, filePath =>
@@ -53,7 +54,7 @@ namespace AzureSearchQuickstart_v11
 
                             if (IsSupportedExtension(extension))
                             {
-                                GetFileText FileText = new GetFileText(filePath, extension, this.Method);
+                                GetFileText FileText = new GetFileText(filePath, extension, Method);
                                 string pageText = FileText.getPageText();
 
                                 AddIndex(Path.GetFileName(filePath), Path.GetFullPath(filePath), pageText.Replace("\n", ""));

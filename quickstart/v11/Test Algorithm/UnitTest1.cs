@@ -1,5 +1,5 @@
 using System.Text.Json;
-using AzureSearchQuickstart_v11;
+using AzureSearchQuickstart_v11.Infrastructure;
 
 namespace Test_Algorithm
 {
@@ -11,7 +11,7 @@ namespace Test_Algorithm
         public void TestAlgorithmCharacterIndexing()
         {
 
-            var sut = new CharacterIndexing();
+            var sut = new AzureSearchQuickstart_v11.Services.Compression.CharacterIndexing();
 
             sut.Compression(input);
             var json = sut.OutText();

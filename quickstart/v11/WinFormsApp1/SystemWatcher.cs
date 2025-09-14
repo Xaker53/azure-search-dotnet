@@ -1,4 +1,5 @@
-﻿using AzureSearch.Quickstart;
+﻿using AzureSearchQuickstart_v11.Infrastructure.Search;
+using AzureSearchQuickstart_v11.Services.Text;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,8 @@ namespace WinFormsApp1
         private FileSystemWatcher watcher;
         public string TextLabel = "";
 
-        private AzureSearch.Quickstart.AzureSendingModifiedFiles azureSending;
-        private AzureSearchQuickstart_v11.GetFileText getFileText;
+        private AzureSendingModifiedFiles azureSending;
+        private GetFileText getFileText;
         private DateTime lastCreatedTime = DateTime.MinValue;
 
 

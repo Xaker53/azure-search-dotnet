@@ -7,9 +7,11 @@ using System.IO;
 using System.Text;
 using Spire.Doc;
 using Microsoft.Extensions.DependencyInjection;
+using AzureSearchQuickstart_v11.Services.Compression;
+using AzureSearchQuickstart_v11.Infrastructure;
 
 
-namespace AzureSearchQuickstart_v11
+namespace AzureSearchQuickstart_v11.Services.Text
 {
     public class GetFileText
     {
@@ -21,30 +23,30 @@ namespace AzureSearchQuickstart_v11
             switch (extension)
             {
                 case ".txt":
-                    this.pageText = File.ReadAllText(filePath).Replace("\n", "").Replace("\r", " ");
+                    pageText = File.ReadAllText(filePath).Replace("\n", "").Replace("\r", " ");
                     //Console.WriteLine(pageText);
                     break;
                 case ".pdf":
-                    this.pageText = ExtractTextFromPdf(filePath);
+                    pageText = ExtractTextFromPdf(filePath);
                     //Console.WriteLine($":{pageText}");
                     break;
                 case ".docx":
                     Document document = new Document();
                     document.LoadText(filePath);
-                    this.pageText = document.GetText().Remove(0, 69).Replace("\r", "");
+                    pageText = document.GetText().Remove(0, 69).Replace("\r", "");
                     break;
                 case ".doc":
                     Document doc = new Document();
                     doc.LoadFromFile(filePath);
-                    this.pageText = doc.GetText().Remove(0, 69).Replace("\r", "");
+                    pageText = doc.GetText().Remove(0, 69).Replace("\r", "");
                     break;
             }
 
             if (pageText.Length != null)
             {
                 var compressor = CompressionRegistrationDI.Instance.TryGet(Method);
-                compressor.Compression(this.pageText);
-                this.pageText = compressor.OutText();
+                compressor.Compression(pageText);
+                pageText = compressor.OutText();
             }
             
         }
@@ -72,7 +74,7 @@ namespace AzureSearchQuickstart_v11
 
         public string getPageText()
         {
-            return this.pageText;
+            return pageText;
         }
     }
 }

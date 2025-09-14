@@ -12,9 +12,8 @@ using AzureSearch.Quickstart;
 using Azure.Search.Documents.Models;
 using System.IO;
 using System.Runtime.CompilerServices;
-using AzureSearchQuickstart_v11;
 
-namespace AzureSearch.Quickstart
+namespace AzureSearchQuickstart_v11.Infrastructure.Search
 {
     public class ManagementAzure
     {

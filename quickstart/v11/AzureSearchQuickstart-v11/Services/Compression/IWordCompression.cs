@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AzureSearchQuickstart_v11
+namespace AzureSearchQuickstart_v11.Services.Compression
 {
     public interface IWordCompression
     {

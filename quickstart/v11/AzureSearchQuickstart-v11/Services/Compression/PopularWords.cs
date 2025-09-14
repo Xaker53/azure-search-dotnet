@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AzureSearchQuickstart_v11
+namespace AzureSearchQuickstart_v11.Services.Compression
 {
     class PopularWords : IWordCompression
     {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace AzureSearchQuickstart_v11
+namespace AzureSearchQuickstart_v11.Services.Compression
 {
     public class CharacterIndexing: IWordCompression
     {
@@ -16,7 +16,7 @@ namespace AzureSearchQuickstart_v11
 
         public void Compression(string _Text)
         {
-            this.Position = 0;
+            Position = 0;
             SaveLetter = new();
             SaveLetter["Text_size"] = new List<int> { _Text.Length };
 
@@ -29,11 +29,11 @@ namespace AzureSearchQuickstart_v11
                     SaveLetter[value] = new List<int>();
                 }
 
-                SaveLetter[value].Add(this.Position);
-                this.Position++;
+                SaveLetter[value].Add(Position);
+                Position++;
             }
         }
 
-        public string OutText() => JsonText = JsonSerializer.Serialize(this.SaveLetter);
+        public string OutText() => JsonText = JsonSerializer.Serialize(SaveLetter);
     }
 }

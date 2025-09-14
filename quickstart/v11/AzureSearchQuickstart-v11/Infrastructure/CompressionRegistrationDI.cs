@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AzureSearchQuickstart_v11.Services.Compression;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AzureSearchQuickstart_v11
+namespace AzureSearchQuickstart_v11.Infrastructure
 {
     public class CompressionRegistrationDI
     {
@@ -20,10 +21,10 @@ namespace AzureSearchQuickstart_v11
         {
             var services = new ServiceCollection();
             services.AddKeyedSingleton<IWordCompression, PopularWords>("PopularWords");
-            services.AddKeyedSingleton<IWordCompression, Rake.Rake>("Rake");
+            services.AddKeyedSingleton<IWordCompression, Services.Compression.Rake>("Rake");
             services.AddKeyedSingleton<IWordCompression, CharacterIndexing>("CharacterIndexing");
 
-            this.provider = services.BuildServiceProvider();
+            provider = services.BuildServiceProvider();
         }
 
 

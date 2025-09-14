@@ -9,7 +9,8 @@ using System.Runtime.CompilerServices;
 using System.IO;
 using Org.BouncyCastle.Crypto.Agreement.Srp;
 using Microsoft.Extensions.Azure;
-namespace AzureSearch.Quickstart
+using AzureSearch.Quickstart;
+namespace AzureSearchQuickstart_v11.Infrastructure.Search
 {
     interface ISendFiles
     {
@@ -40,15 +41,15 @@ namespace AzureSearch.Quickstart
         public AzureSendingModifiedFiles() 
         {
             Start();
-            NewDocument = new AzureSearch.Quickstart.Files();
+            NewDocument = new Files();
             GetLastIndex();
         }
         public void ConnectSearchFiles(string request)
         {
             options = new SearchOptions();
-            this.path = Path.GetFullPath(request);
+            path = Path.GetFullPath(request);
             options.Filter = SearchFilter.Create(FormattableStringFactory.Create($"{nameof(Files.FilePath)} eq '{path}'"));
-            this.response = srchclient.Search<Files>($"*", options);
+            response = srchclient.Search<Files>($"*", options);
             GetResult();
         }
 
@@ -57,7 +58,7 @@ namespace AzureSearch.Quickstart
             if (response.GetResults().FirstOrDefault() != null)
             {
                 Answer = true;
-                NewDocument = (response.GetResults().FirstOrDefault().Document);
+                NewDocument = response.GetResults().FirstOrDefault().Document;
             }
             else { Answer = false; }
         }

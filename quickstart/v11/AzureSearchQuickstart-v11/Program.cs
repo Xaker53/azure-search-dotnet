@@ -17,7 +17,6 @@ using DocumentFormat.OpenXml.Packaging;
 using Spire.Doc;
 using System.Text;
 using System.Linq;
-using AzureSearchQuickstart_v11;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using System.Collections;
@@ -25,6 +24,8 @@ using System.Threading;
 using Microsoft.Extensions.Azure;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using AzureSearchQuickstart_v11.Services.Text;
+using AzureSearchQuickstart_v11.Infrastructure.Search;
 
 
 namespace AzureSearch.Quickstart
