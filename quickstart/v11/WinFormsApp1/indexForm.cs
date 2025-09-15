@@ -28,6 +28,7 @@ namespace WinFormsApp1
         {
             InitializeComponent();
 
+            checkBox1.Checked = true;
             program = new();
 
             guna2Button4.Enabled = false;
@@ -79,7 +80,7 @@ namespace WinFormsApp1
             Task.Run(() =>
             {
                 tokenSource.Token.ThrowIfCancellationRequested();
-                program.UploadDocuments(this.PathFile, Algorithm);
+                program.UploadDocuments(this.PathFile, Algorithm, checkBox1.Checked);
 
             }, tokenSource.Token);
             //program.UploadDocuments(this.PathFile, Algorithm);
@@ -145,6 +146,11 @@ namespace WinFormsApp1
         private void characterIndexingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Algorithm = "CharacterIndexing";
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
