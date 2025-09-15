@@ -51,6 +51,7 @@
             guna2Button3 = new Guna.UI2.WinForms.Guna2Button();
             guna2Button4 = new Guna.UI2.WinForms.Guna2Button();
             guna2Button5 = new Guna.UI2.WinForms.Guna2Button();
+            checkBox1 = new CheckBox();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -216,11 +217,23 @@
             guna2Button5.Text = "Delete all index";
             guna2Button5.Click += guna2Button5_Click;
             // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(629, 183);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(114, 19);
+            checkBox1.TabIndex = 16;
+            checkBox1.Text = "Recoverable Text";
+            checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.CheckedChanged += checkBox1_CheckedChanged;
+            // 
             // indexForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(772, 284);
+            Controls.Add(checkBox1);
             Controls.Add(guna2Button5);
             Controls.Add(guna2Button4);
             Controls.Add(guna2Button3);
@@ -255,5 +268,6 @@
         private Guna.UI2.WinForms.Guna2Button guna2Button4;
         private Guna.UI2.WinForms.Guna2Button guna2Button5;
         private ToolStripMenuItem characterIndexingToolStripMenuItem;
+        private CheckBox checkBox1;
     }
 }
