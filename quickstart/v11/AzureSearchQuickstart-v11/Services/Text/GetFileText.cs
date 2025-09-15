@@ -17,15 +17,29 @@ namespace AzureSearchQuickstart_v11.Services.Text
     public class GetFileText
     {
         private string pageText { get; set;} = "";
+        private string RecoverableText = "";
         private PopularWords PopularWords;
-        public GetFileText(string filePath, string extension, string Method="Rake")
+        
+        public string RecoverableTextOut => RecoverableText;
+        public GetFileText(string filePath, string extension, string Method="Rake", bool _RecoverableText = true)
         {
-            
             if (extension != null)
             {
                 var ReadText = GetTextFromFileDI.Instance.GetRead(extension);
                 pageText = ReadText.GetText(filePath);
 
+
+                if (_RecoverableText)
+                {
+                    this.RecoverableText = CompressorText("CharacterIndexing");
+                }
+            }
+
+            if (pageText.Length > 27090)
+            {
+                //var compressor = CompressionRegistrationDI.Instance.TryGet(Method);
+                //compressor.Compression(pageText);
+                pageText = CompressorText(Method);
             }
 
             //switch (extension)
@@ -50,13 +64,8 @@ namespace AzureSearchQuickstart_v11.Services.Text
             //        break;
             //}
 
-            if (pageText.Length > 27090)
-            {
-                var compressor = CompressionRegistrationDI.Instance.TryGet(Method);
-                compressor.Compression(pageText);
-                pageText = compressor.OutText();
-            }
-            
+
+
         }
 
         //private string ExtractTextFromPdf(string filePath)
@@ -79,6 +88,12 @@ namespace AzureSearchQuickstart_v11.Services.Text
         //    return pageText;
         //}
 
+        private string CompressorText(string Method)
+        {
+            var compressor = CompressionRegistrationDI.Instance.TryGet(Method);
+            compressor.Compression(this.pageText);
+            return compressor.OutText();
+        }
 
         public string getPageText()
         {
