@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using Azure.Search.Documents.Indexes;
 using Azure.Search.Documents.Indexes.Models;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace AzureSearch.Quickstart
 {
@@ -16,10 +17,11 @@ namespace AzureSearch.Quickstart
         [SearchableField(IsSortable = true)]
         public string FileName { get; set; }
 
-        [SearchableField (IsSortable = true)]
+        //[SearchableField (IsSortable = true)]
+        [SearchableField(IsSortable = false, IsFilterable = false, IsFacetable = false)]
         public string FileText { get; set; }
 
-        [SearchableField(IsSortable = true)]
+        [SimpleField(IsFilterable = false, IsSortable = false, IsFacetable = false, IsHidden = false)]
         public string FileRecoveryText { get; set; }
 
         [SearchableField(IsFilterable = true)]
