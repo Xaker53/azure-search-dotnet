@@ -18,6 +18,7 @@ namespace AzureSearchQuickstart_v11.Services.Text
         private ThreadServer ThreadServer { get; set; }
         private int index;
         private string Method;
+        private readonly bool RecoverableText;
         static CancellationTokenSource cts = new();
 
 
@@ -27,10 +28,11 @@ namespace AzureSearchQuickstart_v11.Services.Text
         {
         }
 
-        public ConcurrentDictionaryFiles(int Index, string Method)
+        public ConcurrentDictionaryFiles(int Index, string Method, bool _RecoverableText)
         {
             index = Index;
             this.Method = Method;
+            this.RecoverableText = _RecoverableText;
             cts = new();
             options = new()
             {
@@ -54,10 +56,11 @@ namespace AzureSearchQuickstart_v11.Services.Text
 
                             if (IsSupportedExtension(extension))
                             {
-                                GetFileText FileText = new GetFileText(filePath, extension, this.Method);
+                                GetFileText FileText = new GetFileText(filePath, extension, this.Method, this.RecoverableText);
                                 string pageText = FileText.getPageText();
 
-                                AddIndex(Path.GetFileName(filePath), Path.GetFullPath(filePath), pageText.Replace("\n", ""));
+                                string Recoverable = FileText.RecoverableTextOut;
+                                AddIndex(Path.GetFileName(filePath), Path.GetFullPath(filePath), pageText.Replace("\n", ""), Recoverable);
                                 //Interlocked.Increment(ref index);
 
                             }
@@ -88,7 +91,7 @@ namespace AzureSearchQuickstart_v11.Services.Text
         }
 
 
-        private  void AddIndex(string fileName,string filePath, string pageText = "")
+        private  void AddIndex(string fileName,string filePath, string pageText = "", string _RecoverableText ="")
         {
             int currentIndex = Interlocked.Increment(ref index);
             ThreadServer.Add(IndexDocumentsAction.Upload(new Files
@@ -98,7 +101,8 @@ namespace AzureSearchQuickstart_v11.Services.Text
                 FileName = $"{fileName}",
                 FileText = $"{pageText}",
                 FilePath = $"{filePath}",
-                IndexerName = Environment.MachineName
+                IndexerName = $"{Environment.MachineName}",
+                FileRecoveryText = $"{_RecoverableText}"
             }));
 
         }
