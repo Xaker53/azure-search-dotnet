@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AzureSearchQuickstart_v11.Services.Compression
 {
-    public class CharacterIndexing: IWordCompression
+    public class CharacterIndexing: IWordCompressionWithOutput
     {
         private Dictionary<string, List<int>> SaveLetter;
         private string JsonText;

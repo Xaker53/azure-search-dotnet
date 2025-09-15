@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AzureSearchQuickstart_v11.Services.Compression
 {
-    class PopularWords : IWordCompression
+    class PopularWords : IWordCompressionWithOutput
     {
         private string result = "";
 

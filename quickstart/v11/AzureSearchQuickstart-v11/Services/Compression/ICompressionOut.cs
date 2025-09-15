@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace AzureSearchQuickstart_v11.Services.Compression
 {
-    public interface IWordCompression
+    public interface ICompressionOut
     {
-        void Compression(string _Text);
+        string OutText();
     }
 }

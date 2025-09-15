@@ -8,7 +8,7 @@ using Rake;
 
 namespace AzureSearchQuickstart_v11.Services.Compression
 {
-    public class Rake: IWordCompression
+    public class Rake: IWordCompressionWithOutput
     {
         private readonly int _minCharLength;
         private readonly int _maxWordsLength;
