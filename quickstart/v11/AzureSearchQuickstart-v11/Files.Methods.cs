@@ -17,6 +17,11 @@ namespace AzureSearch.Quickstart
                 builder.AppendFormat("fileID: {0}\n", FileID);
             }
 
+            if (!String.IsNullOrEmpty(IndexerName))
+            {
+                builder.AppendFormat("NameСomputer: {0}\n", IndexerName);
+            }
+
             if (!String.IsNullOrEmpty(FileName))
             {
                 builder.AppendFormat("Name: {0}\n", FileName);
@@ -25,6 +30,11 @@ namespace AzureSearch.Quickstart
             if (!String.IsNullOrEmpty(FileText))
             {
                 builder.AppendFormat("FileText: {0}\n", FileText);
+            }
+
+            if (!String.IsNullOrEmpty(FileRecoveryText))
+            {
+                builder.AppendFormat("FileRecoveryText: {0}\n", FileRecoveryText);
             }
 
             if (!String.IsNullOrEmpty(FilePath))

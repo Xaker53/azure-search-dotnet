@@ -97,7 +97,8 @@ namespace AzureSearchQuickstart_v11.Services.Text
                 FileID = $"{currentIndex}",
                 FileName = $"{fileName}",
                 FileText = $"{pageText}",
-                FilePath = $"{filePath}"
+                FilePath = $"{filePath}",
+                IndexerName = Environment.MachineName
             }));
 
         }
