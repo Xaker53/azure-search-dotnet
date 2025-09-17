@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CodeFirst.Migrations
+namespace DataBase.Migrations
 {
     [DbContext(typeof(UserdbContext))]
-    [Migration("20250916180635_InitCreate")]
+    [Migration("20250917164317_InitCreate")]
     partial class InitCreate
     {
         /// <inheritdoc />

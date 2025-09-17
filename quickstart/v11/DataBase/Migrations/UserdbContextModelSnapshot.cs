@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CodeFirst.Migrations
+namespace DataBase.Migrations
 {
     [DbContext(typeof(UserdbContext))]
     partial class UserdbContextModelSnapshot : ModelSnapshot

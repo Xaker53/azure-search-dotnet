@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace CodeFirst.Migrations
+namespace DataBase.Migrations
 {
     /// <inheritdoc />
     public partial class InitCreate : Migration
