@@ -1,16 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace CodeFirst.Models
 {
+    [Index(nameof(UserGmail), IsUnique = true)]
     public class User
     {
         [Key]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; } = Guid.NewGuid();
 
         [Required]
         public string UserName { get; set; }
 
-        [Required]
+        //[Required]
+        [Required(ErrorMessage = "Incorrect Email")]
+        [RegularExpression(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", ErrorMessage = "Incorrect Email")]
         public string UserGmail { get; set; }
 
 
