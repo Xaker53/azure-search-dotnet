@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace DataBase.Migrations
 {
     /// <inheritdoc />
-    public partial class InitCreate : Migration
+    public partial class InitUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,10 +15,9 @@ namespace DataBase.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserGmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserGmail = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -29,10 +29,9 @@ namespace DataBase.Migrations
                 name: "histories",
                 columns: table => new
                 {
-                    HistoryId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HistoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     HistoryText = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,6 +48,12 @@ namespace DataBase.Migrations
                 name: "IX_histories_UserId",
                 table: "histories",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_users_UserGmail",
+                table: "users",
+                column: "UserGmail",
+                unique: true);
         }
 
         /// <inheritdoc />

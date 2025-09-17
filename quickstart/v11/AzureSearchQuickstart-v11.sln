@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureSearchQuickstart-v11",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormsApp1", "WinFormsApp1\WinFormsApp1.csproj", "{C5EFA7CA-2AB2-45B5-B691-55EDED47DD58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test Algorithm", "Test Algorithm\Test Algorithm.csproj", "{3850EB9E-0059-4B67-A3D4-2F8B74324FE7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "Test Algorithm\UnitTest.csproj", "{3850EB9E-0059-4B67-A3D4-2F8B74324FE7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "DataBase\DataBase.csproj", "{9DBE51BD-E8BB-4E41-83B3-5C81E0D341B0}"
 EndProject

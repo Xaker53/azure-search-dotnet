@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AzureSearchQuickstart-v11\AzureSearchQuickstart-v11.csproj" />
+    <ProjectReference Include="..\DataBase\DataBase.csproj" />
   </ItemGroup>
 
   <ItemGroup>
