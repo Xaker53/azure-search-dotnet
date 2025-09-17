@@ -2,7 +2,7 @@
 {
     public class History
     {
-        public int HistoryId { get; set; }
+        public Guid HistoryId { get; set; } = Guid.NewGuid();
         public string HistoryText { get; set; }
 
         public User User { get; set; }
