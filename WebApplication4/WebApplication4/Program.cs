@@ -1,3 +1,7 @@
+using Core.Interfaces;
+using Persistence.Interactions;
+using Application;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<ICreate, UserCreate>();
+builder.Services.AddScoped<UserAddService>();
+
+builder.Services.AddScoped<IRead, UserGetByGmail>();
+builder.Services.AddScoped<UserReadService>();
+
 
 var app = builder.Build();
 
