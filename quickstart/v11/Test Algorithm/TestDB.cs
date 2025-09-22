@@ -40,8 +40,8 @@ namespace Test_Algorithm
         {
             var user = new Core.Models.User
             {
-                UserName = "test",
-                UserGmail = "test1@gmail.com",
+                UserName = "Oleg",
+                UserGmail = "test@gmail.com",
                 Password = "123",
                 IndexName = "myIndex",
                 ApiKey = "abc123"
@@ -57,7 +57,7 @@ namespace Test_Algorithm
         [Fact]
         public async void TestGetGmailDb()
         {
-            string userGmail = "test@gmail.com";
+            string userGmail = "tes5t@gmail.com";
             using var httpClient = new HttpClient();
             var response = await httpClient.PostAsync("https://localhost:7156/api/GetEmail", Jsonconver(userGmail));
             TryCatch(response);
@@ -87,6 +87,25 @@ namespace Test_Algorithm
             {
                 throw new Exception(await response.Content.ReadAsStringAsync());
             }
+        }
+
+
+        [Fact]
+        public async void TestUpdateUserDb()
+        {
+            var NewUpdate = new Core.Models.UserDTO
+            {
+                UserGmail = "testjj53@gmail.com",
+                Password = "OlegPass"
+
+            };
+            using var httpClient = new HttpClient();
+            var response = await httpClient.PostAsync("https://localhost:7156/api/UpdateUser", Jsonconver(NewUpdate));
+            TryCatch(response);
+
+
+            //Assert.Equal(response.StatusCode, HttpStatusCode.OK);
+            Assert.Equal(response.StatusCode, HttpStatusCode.BadRequest);
         }
     }
 }
