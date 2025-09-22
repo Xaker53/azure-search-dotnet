@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Core.Interfaces
 {
-    internal interface IDelete
+    public interface IDelete
     {
+        public Task<bool> DeleteUser(string email);
     }
 }
