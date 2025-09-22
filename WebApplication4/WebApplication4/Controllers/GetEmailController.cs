@@ -19,7 +19,7 @@ namespace WebApplication4.Controllers
         [HttpPost]
         public async Task<IActionResult> GetInfoUser([FromBody] string Email)
         {
-            return  await _userReadService.GetInfoGmail(Email) != null  ? Ok() : NotFound("Not found Email");
+            return  await _userReadService.GetInfoGmail(Email) != null  ? Ok() : NotFound("Not found Email"); // need to return User
 
         }
     }
