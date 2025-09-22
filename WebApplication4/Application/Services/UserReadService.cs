@@ -7,7 +7,7 @@ using Application.Interface;
 using Core.Interfaces;
 using Core.Models;
 
-namespace Application
+namespace Application.Services
 {
     public class UserReadService: IUserGetInfoService
     {
@@ -15,7 +15,7 @@ namespace Application
 
         public UserReadService(IRead post)
         {
-            this.GetByIntfo = post;
+            GetByIntfo = post;
         }
 
         public async Task<User> GetInfoGmail(string Gmail)

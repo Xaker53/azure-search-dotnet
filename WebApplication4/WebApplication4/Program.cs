@@ -1,6 +1,5 @@
 using Core.Interfaces;
 using Persistence.Interactions;
-using Application;
 using Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);

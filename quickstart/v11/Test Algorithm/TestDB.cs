@@ -37,7 +37,7 @@ namespace Test_Algorithm
             using var httpClient = new HttpClient();
             var response = await httpClient.PostAsync("https://localhost:7156/api/Create", Jsonconver(user));
             TryCatch(response);
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
 
         }
@@ -96,7 +96,7 @@ namespace Test_Algorithm
 
 
             //Assert.Equal(response.StatusCode, HttpStatusCode.OK);
-            Assert.Equal(response.StatusCode, HttpStatusCode.BadRequest);
+            Assert.Equal(response.StatusCode, HttpStatusCode.OK);
         }
 
         [Fact]

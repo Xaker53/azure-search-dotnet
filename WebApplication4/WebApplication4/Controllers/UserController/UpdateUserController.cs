@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
-using Application;
+using Application.Services;
 using Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApplication4.Controllers
+namespace WebApplication4.Controllers.UserController
 {
     [ApiController]
     [Route("api/[controller]")]

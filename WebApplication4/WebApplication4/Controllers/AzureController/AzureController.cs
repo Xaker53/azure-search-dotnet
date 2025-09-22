@@ -1,7 +1,7 @@
 ﻿using AzureSearch.Quickstart;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApplication4.Controllers
+namespace WebApplication4.Controllers.AzureController
 {
     [ApiController]
     [Route("api/[controller]")]

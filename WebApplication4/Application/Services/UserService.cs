@@ -3,7 +3,7 @@ using Core.Models;
 using Core.Interfaces;
 
 
-namespace UserService
+namespace Application.Services
 {
     public static class UserService
     {

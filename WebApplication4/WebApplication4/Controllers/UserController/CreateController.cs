@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Core.Interfaces;
 using Core.Models;
-using UserService;
-using Application;
+using Application.Services;
 
-namespace WebApplication4.Controllers
+namespace WebApplication4.Controllers.UserController
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -14,7 +13,7 @@ namespace WebApplication4.Controllers
 
         public CreateController(UserAddService create)
         {
-            this._create = create;
+            _create = create;
         }
 
         [HttpPost]

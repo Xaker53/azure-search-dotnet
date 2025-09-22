@@ -7,7 +7,7 @@ using Application.Interface;
 using Core.Interfaces;
 using Core.Models;
 
-namespace Application
+namespace Application.Services
 {
     public class UserAddService: IUserAddService
     {
