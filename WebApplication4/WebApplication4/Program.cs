@@ -18,6 +18,10 @@ builder.Services.AddScoped<IRead, UserGetByGmail>();
 builder.Services.AddScoped<UserReadService>();
 
 
+builder.Services.AddScoped<IUpdate, UserUpdate>();
+builder.Services.AddScoped<UserUpdateService>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
