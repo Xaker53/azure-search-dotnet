@@ -20,19 +20,6 @@ namespace Test_Algorithm
         {
             BaseAddress = new Uri("http://127.0.0.1:5191/api/azure")
         };
-        //[Fact]
-        //public void TestValidatorDb()
-        //{
-        //    var User = new User();
-        //    User.UserName = "test";
-        //    User.Password = "test";
-        //    User.UserGmail = "testf@gmail.com";
-
-        //    UserdbContext dbContext = new UserdbContext();
-        //    Validator.ValidateObject(User, new ValidationContext(User), true);
-        //    dbContext.Add(User);
-        //    dbContext.SaveChanges();
-        //}
 
         [Fact]
 
@@ -41,7 +28,7 @@ namespace Test_Algorithm
             var user = new Core.Models.User
             {
                 UserName = "Oleg",
-                UserGmail = "test@gmail.com",
+                UserGmail = "test53@gmail.com",
                 Password = "123",
                 IndexName = "myIndex",
                 ApiKey = "abc123"
@@ -59,7 +46,7 @@ namespace Test_Algorithm
         {
             string userGmail = "test@gmail.com";
             using var httpClient = new HttpClient();
-            var response = await httpClient.PostAsync("https://localhost:7156/api/GetEmail", Jsonconver(userGmail));
+            var response = await httpClient.GetAsync($"https://localhost:7156/api/GetEmail/?email={userGmail}");
             TryCatch(response);
 
             //var test = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
@@ -100,7 +87,7 @@ namespace Test_Algorithm
             var NewUpdate = new Core.Models.UserDTO
             {
                 UserGmail = "test53@gmail.com",
-                Password = "OlegPass"
+                Password = "OlegPass22"
 
             };
             using var httpClient = new HttpClient();
@@ -110,6 +97,19 @@ namespace Test_Algorithm
 
             //Assert.Equal(response.StatusCode, HttpStatusCode.OK);
             Assert.Equal(response.StatusCode, HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async void TestDeleteUser()
+        {
+            var EmailUser = "test53@gmail.com";
+            using var httpClient = new HttpClient();
+            var response = await httpClient.DeleteAsync($"https://localhost:7156/api/DeleteUser/{EmailUser}");
+            TryCatch(response);
+
+
+            //Assert.Equal(response.StatusCode, HttpStatusCode.OK);
+            Assert.Equal(response.StatusCode, HttpStatusCode.OK);
         }
     }
 }
