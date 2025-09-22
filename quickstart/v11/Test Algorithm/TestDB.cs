@@ -57,13 +57,17 @@ namespace Test_Algorithm
         [Fact]
         public async void TestGetGmailDb()
         {
-            string userGmail = "tes5t@gmail.com";
+            string userGmail = "test@gmail.com";
             using var httpClient = new HttpClient();
             var response = await httpClient.PostAsync("https://localhost:7156/api/GetEmail", Jsonconver(userGmail));
             TryCatch(response);
 
+            //var test = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
+            var user = JsonConvert.DeserializeObject<Core.Models.User>(response.Content.ReadAsStringAsync().Result);
+            //var testst = user?.UserGmail;
 
-           Assert.Equal(response.StatusCode, HttpStatusCode.OK);
+
+           Assert.True(user!=null);
 
         }
 
@@ -95,7 +99,7 @@ namespace Test_Algorithm
         {
             var NewUpdate = new Core.Models.UserDTO
             {
-                UserGmail = "testjj53@gmail.com",
+                UserGmail = "test53@gmail.com",
                 Password = "OlegPass"
 
             };

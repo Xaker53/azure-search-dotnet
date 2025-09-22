@@ -5,6 +5,8 @@
         public Guid HistoryId { get; set; } = Guid.NewGuid();
         public string HistoryText { get; set; }
 
-        //public User User { get; set; }
+        public Guid UserId { get; set; }
+
+        public User User { get; set; }
     }
 }

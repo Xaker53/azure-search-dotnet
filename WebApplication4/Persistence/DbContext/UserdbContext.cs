@@ -8,7 +8,7 @@ namespace Persistence.Models
         public UserdbContext() { }
 
         public UserdbContext(DbContextOptions<UserdbContext> options)
-        :base (options) { }
+        : base(options) { }
 
         public DbSet<User> users { get; set; }
         public DbSet<History> histories { get; set; }
@@ -20,6 +20,40 @@ namespace Persistence.Models
             {
                 optionsBuilder.UseSqlServer("Server=.;Database=UserDatabase;TrustServerCertificate=True;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(u => u.UserId);
+
+                entity.HasIndex(u => u.UserGmail)
+                    .IsUnique();
+
+                entity.Property(u => u.UserGmail)
+                    .IsRequired();
+
+                entity.Property(u => u.Password)
+                .IsRequired();
+
+                entity.Property(u => u.IndexName)
+                    .IsRequired();
+
+                entity.Property(u => u.ApiKey)
+                      .IsRequired();
+
+                entity.HasMany(u => u.histories)
+                    .WithOne(h => h.User)
+                    .HasForeignKey(u => u.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+            });
+
+            modelBuilder.Entity<History>(entity =>
+            {
+                entity.HasKey(h => h.HistoryId);
+            });
         }
     }
 }
