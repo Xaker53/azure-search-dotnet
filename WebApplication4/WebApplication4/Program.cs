@@ -1,6 +1,7 @@
 using Core.Interfaces;
 using Persistence.Interactions;
 using Application;
+using Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,9 @@ builder.Services.AddScoped<UserReadService>();
 
 builder.Services.AddScoped<IUpdate, UserUpdate>();
 builder.Services.AddScoped<UserUpdateService>();
+
+builder.Services.AddScoped<IDelete, UserDelete>();
+builder.Services.AddScoped<UserDeleteService>();
 
 
 var app = builder.Build();
