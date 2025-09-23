@@ -1,21 +1,27 @@
-﻿using Application.Services;
+﻿using Application.Interface.CQRS.DeleteUser;
+using Application.Services;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Interactions;
 
 namespace WebApplication4.Controllers.UserController
 {
     //[Route("api/[controller]")]
-    public class DeleteUserController (UserDeleteService _userDelete) : Controller
+    public class DeleteUserController(ISender sender) : Controller
     {
-        [HttpDelete ("api/DeleteUser/{EmailUser}")]
-        public async Task<IActionResult> DeleteUser(string EmailUser)
+        private readonly ISender _sender;
+
+        [HttpDelete ("api/DeleteUser/{Gmail}")]
+        public async Task<IActionResult> DeleteUser(UserDeleteCQRS EmailUser)
         {
             try
             {
-                return await _userDelete.Delete(EmailUser) == true? Ok() : throw new Exception("User not found or deleted");
+                return await sender.Send(EmailUser) == true ? Ok() : throw new Exception("User not found or deleted");
+                //return await _userDelete.Delete(EmailUser) == true? Ok() : throw new Exception("User not found or deleted");
             }
             catch(Exception e)
             {
-                return BadRequest(e.Message);
+                return NotFound(e.Message);
             }
         }
     }

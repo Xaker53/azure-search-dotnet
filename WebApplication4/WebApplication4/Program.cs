@@ -1,6 +1,7 @@
 using Core.Interfaces;
 using Persistence.Interactions;
 using Application.Services;
+using Application.Interface.CQRS.DeleteUser;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMediatR(configuration =>
+{
+    configuration.RegisterServicesFromAssembly(typeof(UserDeleteCQRS).Assembly);
+});
 
 builder.Services.AddScoped<ICreate, UserCreate>();
 builder.Services.AddScoped<UserAddService>();
@@ -22,7 +27,7 @@ builder.Services.AddScoped<IUpdate, UserUpdate>();
 builder.Services.AddScoped<UserUpdateService>();
 
 builder.Services.AddScoped<IDelete, UserDelete>();
-builder.Services.AddScoped<UserDeleteService>();
+//builder.Services.AddScoped<UserDeleteService>();
 
 
 var app = builder.Build();
