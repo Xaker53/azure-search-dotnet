@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 
-namespace Application.Interface.CQRS.DeleteUser
+namespace Application.CQRS.DeleteUser
 {
     public record UserDeleteCQRS (string Gmail) : IRequest<bool>;
 }

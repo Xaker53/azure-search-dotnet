@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Services;
-using Application.Interface.CQRS.DeleteUser;
 
 using MediatR;
 using Core.Interfaces;
+using Application.CQRS.DeleteUser;
 
-namespace Application.Handler
+namespace Application.CQRS.Handler
 {
     public class UserDeleteHandler (IDelete _userDelete) : IRequestHandler<UserDeleteCQRS, bool>
     {

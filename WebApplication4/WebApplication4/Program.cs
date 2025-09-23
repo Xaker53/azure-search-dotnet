@@ -1,7 +1,7 @@
 using Core.Interfaces;
 using Persistence.Interactions;
 using Application.Services;
-using Application.Interface.CQRS.DeleteUser;
+using Application.CQRS.DeleteUser;
 
 var builder = WebApplication.CreateBuilder(args);
 
