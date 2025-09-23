@@ -7,12 +7,18 @@ using Application.Services;
 
 using MediatR;
 using Core.Interfaces;
-using Application.CQRS.DeleteUser;
 
-namespace Application.CQRS.Handler
+namespace Application.CQRS.DeleteUser
 {
-    public class UserDeleteHandler (IDelete _userDelete) : IRequestHandler<UserDeleteCQRS, bool>
+    public class UserDeleteHandler : IRequestHandler<UserDeleteCQRS, bool>
     {
+        private readonly IDelete _userDelete;
+
+        public UserDeleteHandler (IDelete delete)
+        {
+            _userDelete = delete;
+        }
+
         async Task<bool> IRequestHandler<UserDeleteCQRS, bool>.Handle(UserDeleteCQRS request, CancellationToken cancellationToken)
         {
             return await _userDelete.DeleteUser(request.Gmail);

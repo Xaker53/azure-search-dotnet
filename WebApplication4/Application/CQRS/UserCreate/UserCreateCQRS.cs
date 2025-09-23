@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core.Interfaces;
 using Core.Models;
+using MediatR;
 
-namespace Application.Interface
+namespace Application.CQRS.UserCreate
 {
-    interface IUserAddService
-    {
-        public Task Add(User user);
-    }
+    public record UserCreateCQRS (User user) : IRequest;
 }

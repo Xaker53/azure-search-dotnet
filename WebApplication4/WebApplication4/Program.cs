@@ -2,6 +2,7 @@ using Core.Interfaces;
 using Persistence.Interactions;
 using Application.Services;
 using Application.CQRS.DeleteUser;
+using Application.CQRS.UserCreate;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +15,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(configuration =>
 {
     configuration.RegisterServicesFromAssembly(typeof(UserDeleteCQRS).Assembly);
+    configuration.RegisterServicesFromAssembly(typeof(UserCreateCQRS).Assembly);
 });
 
 builder.Services.AddScoped<ICreate, UserCreate>();
-builder.Services.AddScoped<UserAddService>();
+//builder.Services.AddScoped<UserAddService>();
 
 builder.Services.AddScoped<IRead, UserGetByGmail>();
 builder.Services.AddScoped<UserReadService>();

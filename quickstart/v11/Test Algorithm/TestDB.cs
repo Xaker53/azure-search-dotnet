@@ -28,7 +28,7 @@ namespace Test_Algorithm
             var user = new Core.Models.User
             {
                 UserName = "Oleg",
-                UserGmail = "test53@gmail.com",
+                UserGmail = "Un5itTest@gmail.com",
                 Password = "123",
                 IndexName = "myIndex",
                 ApiKey = "abc123"
@@ -44,7 +44,7 @@ namespace Test_Algorithm
         [Fact]
         public async void TestGetGmailDb()
         {
-            string userGmail = "test@gmail.com";
+            string userGmail = "UnitTest@gmail.com";
             using var httpClient = new HttpClient();
             var response = await httpClient.GetAsync($"https://localhost:7156/api/GetEmail/?email={userGmail}");
             TryCatch(response);
@@ -86,8 +86,8 @@ namespace Test_Algorithm
         {
             var NewUpdate = new Core.Models.UserDTO
             {
-                UserGmail = "test53@gmail.com",
-                Password = "OlegPass22"
+                UserGmail = "UnitTest@gmail.com",
+                Password = "UnitTEst228"
 
             };
             using var httpClient = new HttpClient();
@@ -102,7 +102,7 @@ namespace Test_Algorithm
         [Fact]
         public async void TestDeleteUser()
         {
-            var EmailUser = "test53@gmail.com";
+            var EmailUser = "Un5itTest@gmail.com";
             using var httpClient = new HttpClient();
             var response = await httpClient.DeleteAsync($"https://localhost:7156/api/DeleteUser/{EmailUser}");
             TryCatch(response);

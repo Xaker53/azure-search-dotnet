@@ -2,6 +2,8 @@
 using Core.Interfaces;
 using Core.Models;
 using Application.Services;
+using MediatR;
+using Application.CQRS.UserCreate;
 
 namespace WebApplication4.Controllers.UserController
 {
@@ -9,9 +11,9 @@ namespace WebApplication4.Controllers.UserController
     [Route("api/[controller]")]
     public class CreateController : ControllerBase
     {
-        private readonly UserAddService _create;
+        private readonly ISender _create;
 
-        public CreateController(UserAddService create)
+        public CreateController(ISender create)
         {
             _create = create;
         }
@@ -25,7 +27,7 @@ namespace WebApplication4.Controllers.UserController
                 {
                     return BadRequest(ModelState);
                 }
-                await _create.Add(user);
+                await _create.Send(new UserCreateCQRS(user));
                 return Ok();
             }
             catch (Exception e)
