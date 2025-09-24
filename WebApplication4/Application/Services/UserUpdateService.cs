@@ -13,11 +13,6 @@ namespace Application.Services
     public class UserUpdateService (IUpdate updateService) : IUpdateService
     {
 
-        public string Json(User UpdatedUser)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<User> UpdateUser(UserDTO? NewChanges)
         {
             foreach (var prop in typeof(UserDTO).GetProperties())

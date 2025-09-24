@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.CQRS.UserCreate;
+using Application.Services;
+using AutoMapper;
+using Core.Entities.MappingProfiles;
 using Core.Interfaces;
 using Core.Models;
-using Application.Services;
 using MediatR;
-using Application.CQRS.UserCreate;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication4.Controllers.UserController
 {
@@ -12,14 +14,16 @@ namespace WebApplication4.Controllers.UserController
     public class CreateController : ControllerBase
     {
         private readonly ISender _create;
+        private readonly IMapper _mapper;
 
-        public CreateController(ISender create)
+        public CreateController(ISender create, IMapper mapper)
         {
             _create = create;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddUser([FromBody] User user)
+        public async Task<ActionResult> AddUser([FromBody] UserRequest user)
         {
             try
             {
@@ -27,7 +31,7 @@ namespace WebApplication4.Controllers.UserController
                 {
                     return BadRequest(ModelState);
                 }
-                await _create.Send(new UserCreateCQRS(user));
+                await _create.Send(new UserCreateCQRS(_mapper.Map<User>(user)));
                 return Ok();
             }
             catch (Exception e)

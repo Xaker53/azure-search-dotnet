@@ -10,6 +10,5 @@ namespace Application.Interface
     public interface IUpdateService
     {
         public Task<User> UpdateUser(UserDTO NewChanges);
-        public string Json(User UpdatedUser);
     }
 }

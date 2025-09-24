@@ -11,6 +11,7 @@ using Core.Models;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Newtonsoft.Json;
+using Core.Entities.MappingProfiles;
 
 namespace Test_Algorithm
 {
@@ -20,33 +21,30 @@ namespace Test_Algorithm
         {
             BaseAddress = new Uri("http://127.0.0.1:5191/api/azure")
         };
+        
+        private UserRequest _User = new UserRequest()
+        {
+            Name = "Oleg228",
+            Gmail = "OlegGiveMeSvetBlat@gmail.com",
+            Password = "33cmXyi",
+            IndexName = "myIndex",
+            ApiKey = "abc123"
+        };
 
         [Fact]
-
         public async void TestAddDb()
         {
-            var user = new Core.Models.User
-            {
-                UserName = "Oleg",
-                UserGmail = "Un5itTest@gmail.com",
-                Password = "123",
-                IndexName = "myIndex",
-                ApiKey = "abc123"
-            };
-
             using var httpClient = new HttpClient();
-            var response = await httpClient.PostAsync("https://localhost:7156/api/Create", Jsonconver(user));
+            var response = await httpClient.PostAsync("https://localhost:7156/api/Create", Jsonconver(this._User));
             TryCatch(response);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-
         }
         [Fact]
         public async void TestGetGmailDb()
         {
-            string userGmail = "UnitTest@gmail.com";
+            //string userGmail = "Un5itTest@gmail.com";
             using var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"https://localhost:7156/api/GetEmail/?email={userGmail}");
+            var response = await httpClient.GetAsync($"https://localhost:7156/api/GetEmail/?email={_User.Gmail}");
             TryCatch(response);
 
             //var test = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
@@ -58,8 +56,7 @@ namespace Test_Algorithm
 
         }
 
-
-
+        
         public StringContent Jsonconver(object ob)
         {
             return new StringContent(JsonConvert.SerializeObject(ob),
@@ -84,10 +81,10 @@ namespace Test_Algorithm
         [Fact]
         public async void TestUpdateUserDb()
         {
-            var NewUpdate = new Core.Models.UserDTO
+            var NewUpdate = new UserRequest()
             {
-                UserGmail = "UnitTest@gmail.com",
-                Password = "UnitTEst228"
+                Gmail = this._User.Gmail,
+                Password = "TestUpdateUserDb"
 
             };
             using var httpClient = new HttpClient();
@@ -102,9 +99,9 @@ namespace Test_Algorithm
         [Fact]
         public async void TestDeleteUser()
         {
-            var EmailUser = "Un5itTest@gmail.com";
+            // var EmailUser = "Un5itTest@gmail.com";
             using var httpClient = new HttpClient();
-            var response = await httpClient.DeleteAsync($"https://localhost:7156/api/DeleteUser/{EmailUser}");
+            var response = await httpClient.DeleteAsync($"https://localhost:7156/api/DeleteUser/{_User.Gmail}");
             TryCatch(response);
 
 

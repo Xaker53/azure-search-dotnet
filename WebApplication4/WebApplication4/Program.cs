@@ -3,6 +3,7 @@ using Persistence.Interactions;
 using Application.Services;
 using Application.CQRS.DeleteUser;
 using Application.CQRS.UserCreate;
+using Core.Entities.MappingProfiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services.AddMediatR(configuration =>
     configuration.RegisterServicesFromAssembly(typeof(UserDeleteCQRS).Assembly);
     configuration.RegisterServicesFromAssembly(typeof(UserCreateCQRS).Assembly);
 });
+
+builder.Services.AddAutoMapper(typeof(MapperUser).Assembly);
 
 builder.Services.AddScoped<ICreate, UserCreate>();
 //builder.Services.AddScoped<UserAddService>();
