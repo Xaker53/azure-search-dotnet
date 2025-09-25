@@ -10,7 +10,7 @@ namespace Core.Models
         public Guid UserId { get; set; } = Guid.NewGuid();
 
         [Required]
-        public string UserName { get; set; } 
+        public string UserName { get; set; }
 
         //[Required]
         [Required(ErrorMessage = "Incorrect Email")]

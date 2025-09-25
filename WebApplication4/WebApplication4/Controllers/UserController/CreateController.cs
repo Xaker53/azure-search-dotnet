@@ -15,11 +15,13 @@ namespace WebApplication4.Controllers.UserController
     {
         private readonly ISender _create;
         private readonly IMapper _mapper;
+        private readonly UserService _userService;
 
-        public CreateController(ISender create, IMapper mapper)
+        public CreateController(ISender create, IMapper mapper, UserService userService) 
         {
             _create = create;
             _mapper = mapper;
+            _userService = userService;
         }
 
         [HttpPost]
@@ -31,6 +33,8 @@ namespace WebApplication4.Controllers.UserController
                 {
                     return BadRequest(ModelState);
                 }
+
+                user.Password = await _userService.Register(user.Gmail, user.Password);
                 await _create.Send(new UserCreateCQRS(_mapper.Map<User>(user)));
                 return Ok();
             }

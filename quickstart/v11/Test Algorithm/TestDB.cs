@@ -24,9 +24,9 @@ namespace Test_Algorithm
         
         private UserRequest _User = new UserRequest()
         {
-            Name = "Oleg228",
-            Gmail = "OlegGiveMeSvetBlat@gmail.com",
-            Password = "33cmXyi",
+            Name = "UnitTest",
+            Gmail = "GmailTest@gmail.com",
+            Password = "3cmXyi",
             IndexName = "myIndex",
             ApiKey = "abc123"
         };
@@ -39,6 +39,23 @@ namespace Test_Algorithm
             TryCatch(response);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
+
+        [Fact]
+        public async void TestLogin()
+        {
+            using var httpClient = new HttpClient();
+            var LoginUser = new Core.Entities.UserLogin()
+            {
+                UserGmail = this._User.Gmail,
+                Password = this._User.Password,
+            };
+            
+            var response = await httpClient.PostAsync("https://localhost:7156/api/Login", Jsonconver (LoginUser));
+            var test = response.Content.ReadAsStringAsync().Result;
+            TryCatch(response);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
         [Fact]
         public async void TestGetGmailDb()
         {

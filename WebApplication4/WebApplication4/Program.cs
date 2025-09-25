@@ -1,9 +1,13 @@
-using Core.Interfaces;
-using Persistence.Interactions;
-using Application.Services;
 using Application.CQRS.DeleteUser;
 using Application.CQRS.UserCreate;
+using Application.Interface.Auth;
+using Application.Services;
 using Core.Entities.MappingProfiles;
+using Core.Interfaces;
+using Infrastructure;
+using Microsoft.Extensions.Options;
+using Persistence.Interactions;
+using WebApplication4.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +22,15 @@ builder.Services.AddMediatR(configuration =>
     configuration.RegisterServicesFromAssembly(typeof(UserDeleteCQRS).Assembly);
     configuration.RegisterServicesFromAssembly(typeof(UserCreateCQRS).Assembly);
 });
+
+
+
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
+
+builder.Services.AddApiAuthentication(
+    builder.Configuration,
+    builder.Services.BuildServiceProvider().GetRequiredService<IOptions<JwtOptions>>()
+);
 
 builder.Services.AddAutoMapper(typeof(MapperUser).Assembly);
 
@@ -34,6 +47,14 @@ builder.Services.AddScoped<UserUpdateService>();
 builder.Services.AddScoped<IDelete, UserDelete>();
 //builder.Services.AddScoped<UserDeleteService>();
 
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+builder.Services.AddScoped<UserService>();
+
+
+builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 
@@ -49,6 +70,8 @@ app.UseCors(
         options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
     );
 //app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
