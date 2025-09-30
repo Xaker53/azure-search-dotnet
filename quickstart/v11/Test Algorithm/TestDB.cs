@@ -24,11 +24,11 @@ namespace Test_Algorithm
         
         private UserRequest _User = new UserRequest()
         {
-            Name = "UnitTest",
-            Gmail = "GmailTest@gmail.com",
+            Name = "TestforGit",
+            Gmail = "Git@gmail.com",
             Password = "3cmXyi",
             IndexName = "myIndex",
-            ApiKey = "abc123"
+            ApiKey = "nullll"
         };
 
         [Fact]
@@ -61,11 +61,13 @@ namespace Test_Algorithm
         {
             //string userGmail = "Un5itTest@gmail.com";
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmODZhMjk1ZS02MWZkLTQwZjktYjFhMC1kZTE1OTlmZTIyMTYiLCJleHAiOjE3NjEzNDQwODB9.dk8hzF5_xfVE8ktHQN9Y4FQQTcU9As_dqU2OmfCOG78");
             var response = await httpClient.GetAsync($"https://localhost:7156/api/GetEmail/?email={_User.Gmail}");
             TryCatch(response);
 
             //var test = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
-            var user = JsonConvert.DeserializeObject<Core.Models.User>(response.Content.ReadAsStringAsync().Result);
+            var user = JsonConvert.DeserializeObject<UserRequest>(response.Content.ReadAsStringAsync().Result);
             //var testst = user?.UserGmail;
 
 

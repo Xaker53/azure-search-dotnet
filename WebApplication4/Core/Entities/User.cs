@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Models
@@ -27,6 +28,7 @@ namespace Core.Models
         [Required]
         public string ApiKey { get; set; }
 
+        public ICollection<RoleEntity> Roles { get; set; } = [];
         public ICollection<History> histories { get; set; } = new List<History>();
     }
 }

@@ -19,8 +19,8 @@ namespace Core.Entities.MappingProfiles
         public string? Password { get; set; } = null;
 
         public string? IndexName { get; set; } = null;
+        public string? ApiKey { get; set; }
 
-        public string? ApiKey { get; set; } = null;
 
         //public ICollection<History>? histories { get; set; } = new List<History>();
     }

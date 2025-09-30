@@ -2,6 +2,7 @@
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -23,8 +24,6 @@ namespace WebApplication4.Extensions
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Jwtoptions.Value.SecretKey))
                     };
                 });
-
-            services.AddAuthentication();
         }
     }
 }

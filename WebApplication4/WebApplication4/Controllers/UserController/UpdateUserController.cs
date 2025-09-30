@@ -9,6 +9,7 @@ namespace WebApplication4.Controllers.UserController
 {
     [ApiController]
     [Route("api/[controller]")]
+
     public class UpdateUserController : Controller
     {
         private readonly UserUpdateService? _userUpdateService;

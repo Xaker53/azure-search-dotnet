@@ -25,6 +25,12 @@ namespace Core.Entities.MappingProfiles
                 .ForMember(dest => dest.UserGmail,
                 opt => opt.MapFrom(src => src.Gmail))
                 .ForSourceMember(src => src.OtherGmail, opt => opt.DoNotValidate());
+
+            CreateMap<User, UserRequest>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.UserName))
+            .ForMember(dest => dest.Gmail, opt => opt.MapFrom(src => src.UserGmail))
+            .ForMember(dest => dest.Password, opt => opt.MapFrom(src=> (string?)"Why do you need a password? Go on your way, stalker."))
+            .ForMember(dest => dest.OtherGmail, opt => opt.Ignore());
         }
     }
 }

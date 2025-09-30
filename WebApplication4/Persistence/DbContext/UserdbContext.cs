@@ -1,17 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Core.Models;
+using Microsoft.Extensions.Options;
+using Persistence.Configuration;
+using Core.Entities;
 
 namespace Persistence.Models
 {
-    public class UserdbContext : DbContext
+    public class UserdbContext: DbContext
     {
+        private readonly IOptions<AuthorizationOptions> authOption;
         public UserdbContext() { }
 
-        public UserdbContext(DbContextOptions<UserdbContext> options)
-        : base(options) { }
+        public UserdbContext(DbContextOptions<UserdbContext> options, IOptions<AuthorizationOptions> authOption = null)
+        : base(options) {
+            this.authOption = authOption;
+        }
 
         public DbSet<User> users { get; set; }
         public DbSet<History> histories { get; set; }
+
+        public DbSet<RoleEntity> Roles { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -28,17 +36,24 @@ namespace Persistence.Models
             {
                 entity.HasKey(u => u.UserId);
 
+                entity.Property(u => u.UserName)
+                .HasMaxLength(50)
+                .IsRequired();
+
                 entity.HasIndex(u => u.UserGmail)
                     .IsUnique();
 
                 entity.Property(u => u.UserGmail)
-                    .IsRequired();
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(u => u.Password)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(100);
 
                 entity.Property(u => u.IndexName)
-                    .IsRequired();
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(u => u.ApiKey)
                       .IsRequired();
@@ -54,6 +69,13 @@ namespace Persistence.Models
             {
                 entity.HasKey(h => h.HistoryId);
             });
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserdbContext).Assembly);
+            if (authOption != null)
+            {
+                modelBuilder.ApplyConfiguration(new RolePermissionConfiguration(authOption.Value));
+            }
+            
         }
     }
 }
