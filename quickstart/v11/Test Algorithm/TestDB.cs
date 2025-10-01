@@ -21,19 +21,25 @@ namespace Test_Algorithm
         {
             BaseAddress = new Uri("http://127.0.0.1:5191/api/azure")
         };
-        
-        private UserRequest _User = new UserRequest()
-        {
-            Name = "TestforGit",
-            Gmail = "Git@gmail.com",
-            Password = "3cmXyi",
-            IndexName = "myIndex",
-            ApiKey = "nullll"
-        };
+
+        //private UserRequest _User = new UserRequest()
+        //{
+        //    Name = "TestforGit",
+        //    Gmail = "Git@gmail.com",
+        //    Password = "3cmXyi",
+        //    IndexName = "myIndex",
+        //    ApiKey = "nullll"
+        //};
+
+       private UserRequest _User = new FakerUser().Request();
+
+        private string _JWTToken = "";
 
         [Fact]
-        public async void TestAddDb()
+        public async Task TestAddDb()
         {
+            //UserRequest _User = new FakerUser().Request();
+            
             using var httpClient = new HttpClient();
             var response = await httpClient.PostAsync("https://localhost:7156/api/Create", Jsonconver(this._User));
             TryCatch(response);
@@ -41,7 +47,7 @@ namespace Test_Algorithm
         }
 
         [Fact]
-        public async void TestLogin()
+        public async Task TestLogin()
         {
             using var httpClient = new HttpClient();
             var LoginUser = new Core.Entities.UserLogin()
@@ -51,18 +57,18 @@ namespace Test_Algorithm
             };
             
             var response = await httpClient.PostAsync("https://localhost:7156/api/Login", Jsonconver (LoginUser));
-            var test = response.Content.ReadAsStringAsync().Result;
+            _JWTToken = response.Content.ReadAsStringAsync().Result;
             TryCatch(response);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Fact]
-        public async void TestGetGmailDb()
+        public async Task TestGetGmailDb()
         {
             //string userGmail = "Un5itTest@gmail.com";
             using var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization =
-                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmODZhMjk1ZS02MWZkLTQwZjktYjFhMC1kZTE1OTlmZTIyMTYiLCJleHAiOjE3NjEzNDQwODB9.dk8hzF5_xfVE8ktHQN9Y4FQQTcU9As_dqU2OmfCOG78");
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", $"{_JWTToken}");
             var response = await httpClient.GetAsync($"https://localhost:7156/api/GetEmail/?email={_User.Gmail}");
             TryCatch(response);
 
@@ -71,7 +77,7 @@ namespace Test_Algorithm
             //var testst = user?.UserGmail;
 
 
-           Assert.True(user!=null);
+           Assert.True(user.Gmail == _User.Gmail);
 
         }
 
@@ -98,7 +104,7 @@ namespace Test_Algorithm
 
 
         [Fact]
-        public async void TestUpdateUserDb()
+        public async Task TestUpdateUserDb()
         {
             var NewUpdate = new UserRequest()
             {
@@ -116,7 +122,7 @@ namespace Test_Algorithm
         }
 
         [Fact]
-        public async void TestDeleteUser()
+        public async Task TestDeleteUser()
         {
             // var EmailUser = "Un5itTest@gmail.com";
             using var httpClient = new HttpClient();
@@ -126,6 +132,16 @@ namespace Test_Algorithm
 
             //Assert.Equal(response.StatusCode, HttpStatusCode.OK);
             Assert.Equal(response.StatusCode, HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async Task FullUserLifecycleTest()
+        {
+            await TestAddDb();
+            await TestLogin();
+            await TestGetGmailDb();
+            await TestUpdateUserDb();
+            await TestDeleteUser();
         }
     }
 }
