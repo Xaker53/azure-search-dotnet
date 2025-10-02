@@ -1,4 +1,5 @@
 ﻿using Application.CQRS.UserCreate;
+using Application.Interface;
 using Application.Services;
 using AutoMapper;
 using Core.Entities.MappingProfiles;
@@ -15,13 +16,16 @@ namespace WebApplication4.Controllers.UserController
     {
         private readonly ISender _create;
         private readonly IMapper _mapper;
-        private readonly UserService _userService;
+        //private readonly UserService _userService;
+        //private readonly ISalt _Salt;
 
-        public CreateController(ISender create, IMapper mapper, UserService userService) 
+
+        public CreateController(ISender create, IMapper mapper) 
         {
             _create = create;
             _mapper = mapper;
-            _userService = userService;
+            //_userService = userService;
+            //_Salt = salt;
         }
 
         [HttpPost]
@@ -34,7 +38,7 @@ namespace WebApplication4.Controllers.UserController
                     return BadRequest(ModelState);
                 }
 
-                user.Password = await _userService.Register(user.Gmail, user.Password);
+                //user.Password = await _userService.Register(user.Gmail, user.Password, _Salt.GetSalt());
                 await _create.Send(new UserCreateCQRS(_mapper.Map<User>(user)));
                 return Ok();
             }

@@ -58,6 +58,8 @@ namespace Persistence.Models
                 entity.Property(u => u.ApiKey)
                       .IsRequired();
 
+                entity.Property(u => u.Salt).IsRequired().HasMaxLength(50);
+
                 entity.HasMany(u => u.histories)
                     .WithOne(h => h.User)
                     .HasForeignKey(u => u.UserId)

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Interface;
 using Application.Interface.Auth;
 using Core.Interfaces;
 
 
 namespace Application.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IPasswordHasher _passwordHasher;
         private readonly IRead GetByIntfo;
@@ -20,9 +21,9 @@ namespace Application.Services
             this.GetByIntfo = GetByUserGmail;
             this._jwtProvider = jwtProvider;
         }
-        public async Task<string> Register(string email, string password)
+        public async Task<string> Register(string email, string password, string salt)
         {
-            return _passwordHasher.Generate(password);
+            return _passwordHasher.Generate(password, salt);
         }
 
         public async Task<string> Login (string email, string password)
@@ -30,7 +31,7 @@ namespace Application.Services
             var user = await GetByIntfo.GetByGmail(email);
             if (user != null)
             {
-                var resuld = _passwordHasher.Verify(password, user.Password);
+                var resuld = _passwordHasher.Verify(password + user.Salt, user.Password);
 
                 if (resuld != true)
                 {

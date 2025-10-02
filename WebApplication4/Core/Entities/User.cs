@@ -28,6 +28,9 @@ namespace Core.Models
         [Required]
         public string ApiKey { get; set; }
 
+        [Required]
+        public string Salt { get; set; }
+
         public ICollection<RoleEntity> Roles { get; set; } = [];
         public ICollection<History> histories { get; set; } = new List<History>();
     }

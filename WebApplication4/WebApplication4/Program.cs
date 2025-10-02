@@ -78,7 +78,7 @@ builder.Services.AddScoped<IDelete, UserDelete>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 
 builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
@@ -86,6 +86,8 @@ builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHand
 
 builder.Services.AddScoped<IUserGetPermissionsRepository, GetUserIDPermissions>();
 builder.Services.AddScoped<IPermissionService, PermissionsService>();
+
+builder.Services.AddScoped<ISalt, CreateSalt>();
 
 
 

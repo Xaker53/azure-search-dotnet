@@ -1,21 +1,21 @@
 ﻿using Application.CQRS.UserCreate;
+using Application.Interface;
 using Application.Services;
 using AutoMapper;
+using Core.Entities;
 using Core.Entities.MappingProfiles;
 using Core.Interfaces;
 using Core.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Core.Entities;
 
 namespace WebApplication4.Controllers.UserController
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LoginController (UserReadService userReadService, UserService userService) : ControllerBase
+    public class LoginController (IUserService userService) : ControllerBase
     {
-        private readonly UserReadService _userReadService = userReadService;
-        private readonly UserService _userService = userService;
+        private readonly IUserService _userService = userService;
 
 
         [HttpPost]

@@ -7,7 +7,7 @@ using Core.Models;
 
 namespace Application.Interface
 {
-    interface IUserGetInfoService
+    public interface IUserGetInfoService
     {
         public Task<User> GetInfoGmail(string Gmail);
     }

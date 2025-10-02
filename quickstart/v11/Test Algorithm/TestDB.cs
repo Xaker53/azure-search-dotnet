@@ -22,18 +22,18 @@ namespace Test_Algorithm
             BaseAddress = new Uri("http://127.0.0.1:5191/api/azure")
         };
 
-        //private UserRequest _User = new UserRequest()
-        //{
-        //    Name = "TestforGit",
-        //    Gmail = "Git@gmail.com",
-        //    Password = "3cmXyi",
-        //    IndexName = "myIndex",
-        //    ApiKey = "nullll"
-        //};
+        private UserRequest _User = new UserRequest()
+        {
+            Name = "TestforGit",
+            Gmail = "Git@gmail.com",
+            Password = "3cmXyi",
+            IndexName = "myIndex",
+            ApiKey = "nullll"
+        };
 
-       private UserRequest _User = new FakerUser().Request();
+       //private UserRequest _User = new FakerUser().Request();
 
-        private string _JWTToken = "";
+        private string _JWTToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkZTFhMWYxYi1lMTU0LTQ2ZTctYWRhMC1iNjRjZWZlNzgyZTciLCJleHAiOjE3NjE1MTcwNjN9.-QES4jkMOCMwIoGwvdsHxxui8UDrbiIt0QKd8LcaLVk";
 
         [Fact]
         public async Task TestAddDb()
