@@ -87,7 +87,7 @@ builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHand
 builder.Services.AddScoped<IUserGetPermissionsRepository, GetUserIDPermissions>();
 builder.Services.AddScoped<IPermissionService, PermissionsService>();
 
-builder.Services.AddScoped<ISalt, CreateSalt>();
+builder.Services.AddSingleton<ISalt, CreateSalt>();
 
 
 

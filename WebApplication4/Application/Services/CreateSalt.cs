@@ -10,14 +10,9 @@ namespace Application.Services
 {
     public class CreateSalt : ISalt
     {
-        private readonly string _salt;
-        public CreateSalt()
-        {
-            this._salt = Convert.ToBase64String(RandomNumberGenerator.GetBytes(128 / 8));
-        }
         public string GetSalt()
         {
-            return _salt;
+            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(128 / 8));
         }
     }
 }
