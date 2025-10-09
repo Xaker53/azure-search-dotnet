@@ -18,7 +18,7 @@ namespace Persistence.Interactions
         {
             using (var DbContext = new UserdbContext())
             {
-                var emailUser = new UserGetByGmail().GetByGmail(email);
+                 var emailUser = new UserGetByGmail().GetByGmail(email);
 
                 if (emailUser.Result != null)
                 {

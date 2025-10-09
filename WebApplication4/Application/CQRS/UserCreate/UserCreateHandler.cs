@@ -14,20 +14,19 @@ namespace Application.CQRS.UserCreate
     public class UserCreateHandler : IRequestHandler<UserCreateCQRS>
     {
         private readonly ICreate _create;
-        private readonly IUserService _UserService;
-        private readonly ISalt _Salt;
+        private readonly IGenerateSaltAndHash _generateSaltAndHash;
 
-        public UserCreateHandler(ICreate create, IUserService userService, ISalt Salt)
+        public UserCreateHandler(ICreate create, IUserService userService, ISalt Salt, IGenerateSaltAndHash generateSaltAndHash)
         {
             _create = create;
-            _UserService = userService;
-            _Salt = Salt;
+            _generateSaltAndHash= generateSaltAndHash;
         }
 
         async Task IRequestHandler<UserCreateCQRS>.Handle(UserCreateCQRS request, CancellationToken cancellationToken)
         {
-            request.user.Salt = _Salt.GetSalt();
-            request.user.Password = await _UserService.Register(request.user.UserGmail, request.user.Password, request.user.Salt);
+            _generateSaltAndHash.Generate(request.user.Password);
+            request.user.Salt = _generateSaltAndHash.ReturnSalt;
+            request.user.Password = _generateSaltAndHash.ReturnHash;
             await _create.Add(request.user);
         }
     }

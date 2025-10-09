@@ -25,8 +25,8 @@ namespace Test_Algorithm
         private UserRequest _User = new UserRequest()
         {
             Name = "TestforGit",
-            Gmail = "Git@gmail.com",
-            Password = "3cmXyi",
+            Gmail = "Git4@gmail.com",
+            Password = "3cmXeyi",
             IndexName = "myIndex",
             ApiKey = "nullll"
         };
@@ -109,9 +109,9 @@ namespace Test_Algorithm
             var NewUpdate = new UserRequest()
             {
                 Gmail = this._User.Gmail,
-                Password = "TestUpdateUserDb"
-
+                Password = "UnitTest@gmail.com"
             };
+            _User.Password = NewUpdate.Password;
             using var httpClient = new HttpClient();
             var response = await httpClient.PostAsync("https://localhost:7156/api/UpdateUser", Jsonconver(NewUpdate));
             TryCatch(response);
@@ -141,6 +141,7 @@ namespace Test_Algorithm
             await TestLogin();
             await TestGetGmailDb();
             await TestUpdateUserDb();
+            await TestLogin();
             await TestDeleteUser();
         }
     }

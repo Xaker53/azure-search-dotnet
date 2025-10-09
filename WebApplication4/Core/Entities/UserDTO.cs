@@ -23,6 +23,8 @@ namespace Core.Models
 
         public string? ApiKey { get; set; }
 
+        public string? Salt { get; set; }
+
         //public ICollection<History>? histories { get; set; } = new List<History>();
     }
 }

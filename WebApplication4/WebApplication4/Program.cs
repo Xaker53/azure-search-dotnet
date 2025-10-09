@@ -62,6 +62,12 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddAutoMapper(typeof(MapperUser).Assembly);
 
+builder.Services.AddDbContext<DbContext, UserdbContext>(options =>
+{
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 builder.Services.AddScoped<ICreate, UserCreate>();
 //builder.Services.AddScoped<UserAddService>();
 
@@ -88,6 +94,8 @@ builder.Services.AddScoped<IUserGetPermissionsRepository, GetUserIDPermissions>(
 builder.Services.AddScoped<IPermissionService, PermissionsService>();
 
 builder.Services.AddSingleton<ISalt, CreateSalt>();
+
+builder.Services.AddScoped<IGenerateSaltAndHash, GenerateSaltAndHash>();
 
 
 
