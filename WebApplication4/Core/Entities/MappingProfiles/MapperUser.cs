@@ -13,10 +13,9 @@ namespace Core.Entities.MappingProfiles
         public MapperUser()
         {
             CreateMap<UserRequest, UserDTO>()
-                .ForMember(dest => dest.UserName, opt =>
-                opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.UserGmail,
-                opt => opt.MapFrom(src => src.Gmail));
+                .ForMember(dest => dest.UserName, opt =>opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.UserGmail,opt => opt.MapFrom(src => src.Gmail))
+                .ForMember (dest => dest.OtherEmail, opt => opt.MapFrom(src => src.OtherGmail));
 
 
             CreateMap<UserRequest, User>()
