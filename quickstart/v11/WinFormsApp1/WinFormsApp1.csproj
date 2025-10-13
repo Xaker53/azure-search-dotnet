@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Guna.UI2.WinForms" Version="2.0.4.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +34,12 @@
 
   <ItemGroup>
     <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Core">
+      <HintPath>..\..\..\WebApplication4\Application\bin\Debug\net8.0\Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
