@@ -24,11 +24,9 @@ namespace Test_Algorithm
 
         private UserRequest _User = new UserRequest()
         {
-            Name = "TestforGit",
-            Gmail = "Git4@gmail.com",
-            Password = "3cmXeyi",
-            IndexName = "myIndex",
-            ApiKey = "nullll"
+            Name = "Test2forGit",
+            Gmail = "Gi2t4@gmail.com",
+            Password = "3cmXeyi"
         };
 
        //private UserRequest _User = new FakerUser().Request();

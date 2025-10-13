@@ -16,9 +16,7 @@ namespace Test_Algorithm
             FakeUser = new Faker<UserRequest> ()
                 .RuleFor(u => u.Gmail, (f,u) => f.Internet.Email(u.Name))
                 .RuleFor(u=>u.Name, (f,u) => f.Name.FirstName())
-                .RuleFor(u => u.IndexName, (f,u)=> f.Name.FirstName())
-                .RuleFor(u=> u.Password, (f,u)=> f.Internet.Password())
-                .RuleFor(u=> u.ApiKey, (f,u)=> f.Internet.DomainSuffix());
+                .RuleFor(u=> u.Password, (f,u)=> f.Internet.Password());
             return FakeUser.Generate();
 
         }

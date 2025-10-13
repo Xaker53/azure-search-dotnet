@@ -23,12 +23,6 @@ namespace Core.Models
         public string Password { get; set; }
 
         [Required]
-        public string IndexName { get; set; }
-
-        [Required]
-        public string ApiKey { get; set; }
-
-        [Required]
         public string Salt { get; set; }
 
         public ICollection<RoleEntity> Roles { get; set; } = [];
