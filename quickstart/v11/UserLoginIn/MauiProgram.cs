@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using UserLoginIn.Interface;
 using UserLoginIn.Requests;
 using UserLoginIn.Tools;
@@ -17,8 +18,11 @@ namespace UserLoginIn
 {
     public static class MauiProgram
     {
+        [DllImport("User32.dll")]
+        private static extern uint GetDpiForWindow(IntPtr hWnd);
         public static MauiApp CreateMauiApp()
         {
+
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
@@ -36,7 +40,7 @@ namespace UserLoginIn
 
             builder.Services.AddSingleton<ITryCatchRequest, TryCatchRequest>();
 
-            
+
 
 
             builder.Services.AddScoped<IRegistrationRequests, RegistrationRequests>();
@@ -46,33 +50,38 @@ namespace UserLoginIn
             builder.Logging.AddDebug();
 #endif
 
-  
+
             builder.ConfigureLifecycleEvents(events =>
             {
 #if WINDOWS
                 events.AddWindows(windows =>
-                {
-                    windows.OnWindowCreated(window =>
-                    {
-                        const int width = 430;
-                        const int height = 730;
+    {
+        windows.OnWindowCreated(window =>
+        {
+            const int logicalWidth = 430;
+            const int logicalHeight = 730;
 
-                        var hwnd = WindowNative.GetWindowHandle(window);
-                        var windowId = Win32Interop.GetWindowIdFromWindow(hwnd);
-                        var appWindow = AppWindow.GetFromWindowId(windowId);
+            var hwnd = WindowNative.GetWindowHandle(window);
+            var windowId = Win32Interop.GetWindowIdFromWindow(hwnd);
+            var appWindow = AppWindow.GetFromWindowId(windowId);
 
-                        if (appWindow.Presenter is OverlappedPresenter presenter)
-                        {
-                            presenter.IsResizable = false;  
-                            presenter.IsMaximizable = false;
-                            presenter.IsMinimizable = true;
+            if (appWindow.Presenter is OverlappedPresenter presenter)
+            {
+                presenter.IsResizable = false;
+                presenter.IsMaximizable = false;
+                presenter.IsMinimizable = true;
+            }
 
-                            // presenter.SetBorderAndTitleBar(false, false);
-                        }
+            // Get DPI for the window
+            uint dpi = GetDpiForWindow(hwnd);
+            float scalingFactor = dpi / 96f;
 
-                        appWindow.Resize(new SizeInt32(width, height));
-                    });
-                });
+            int scaledWidth = (int)(logicalWidth * scalingFactor);
+            int scaledHeight = (int)(logicalHeight * scalingFactor);
+
+            appWindow.Resize(new SizeInt32(scaledWidth, scaledHeight));
+        });
+    });
 #endif
             });
 
