@@ -1,0 +1,46 @@
+using Core.Entities.MappingProfiles;
+using System.Net;
+using UserLoginIn.Interface;
+
+namespace UserLoginIn;
+
+public partial class RegistrationsPage : ContentPage
+{
+    private UserRequest userRequest = new UserRequest();
+    private readonly IRegistrationRequests _registrationRequests;
+    public RegistrationsPage(IRegistrationRequests registrationRequests)
+	{
+		InitializeComponent();
+        _registrationRequests = registrationRequests;
+    }
+
+	private async void OnRegisterClicked(object? sender, EventArgs e)
+	{
+        userRequest.Name = NicknameEntry.Text;
+        userRequest.Gmail = GmailEntry.Text;
+        userRequest.Password = PasswordEntry.Text;
+
+        var result =  await _registrationRequests.RegisterUser(userRequest);
+        if (result.StatusCode == HttpStatusCode.OK)
+        {
+            //DialogResult = DialogResult.OK;
+            await DisplayAlert("Success", "Registration successful!", "OK");
+            NicknameEntry.Text = "";
+            GmailEntry.Text = "";
+            PasswordEntry.Text = "";
+            await Navigation.PopAsync();
+
+        }
+        else
+        {
+            await DisplayAlert("ERROR", $"Something happened {result.StatusCode}", "OK");
+            await Navigation.PopAsync();
+            //DialogResult = DialogResult.Cancel;
+        }
+    }
+
+	private async void OnBackClicked(object? sender, EventArgs e) 
+	{
+        await Navigation.PopAsync();
+    }
+}

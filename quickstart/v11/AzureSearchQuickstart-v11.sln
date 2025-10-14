@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "Test Algorithm\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "DataBase\DataBase.csproj", "{9DBE51BD-E8BB-4E41-83B3-5C81E0D341B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserLoginIn", "UserLoginIn\UserLoginIn.csproj", "{699047DB-DF9E-4EEE-82ED-1981444ABA2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,11 @@ Global
 		{9DBE51BD-E8BB-4E41-83B3-5C81E0D341B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DBE51BD-E8BB-4E41-83B3-5C81E0D341B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DBE51BD-E8BB-4E41-83B3-5C81E0D341B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{699047DB-DF9E-4EEE-82ED-1981444ABA2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{699047DB-DF9E-4EEE-82ED-1981444ABA2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{699047DB-DF9E-4EEE-82ED-1981444ABA2A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{699047DB-DF9E-4EEE-82ED-1981444ABA2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{699047DB-DF9E-4EEE-82ED-1981444ABA2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
