@@ -10,11 +10,11 @@ namespace UserLoginIn.Tools
 {
     internal class ConvertToJson : IJsonconver
     {
-        public StringContent Jsonconver(object ob)
+        public StringContent Jsonconver(object ob, string ContentType = "application/json")
         {
             return new StringContent(JsonConvert.SerializeObject(ob),
               Encoding.UTF8,
-              "application/json");
+              ContentType);
         }
     }
 }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace UserLoginIn.Interface
 {
-    public interface IJsonconver
+    public interface ISearchRequests
     {
-        public StringContent Jsonconver(object ob, string ContentType = "application/json");
+        public Task<string> FetchToServer(string TextInput);
     }
 }

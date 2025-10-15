@@ -20,23 +20,32 @@ public partial class RegistrationsPage : ContentPage
         userRequest.Gmail = GmailEntry.Text;
         userRequest.Password = PasswordEntry.Text;
 
-        var result =  await _registrationRequests.RegisterUser(userRequest);
-        if (result.StatusCode == HttpStatusCode.OK)
+        
+        try
         {
-            //DialogResult = DialogResult.OK;
-            await DisplayAlert("Success", "Registration successful!", "OK");
-            NicknameEntry.Text = "";
-            GmailEntry.Text = "";
-            PasswordEntry.Text = "";
-            await Navigation.PopAsync();
+            var result = await _registrationRequests.RegisterUser(userRequest);
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                //DialogResult = DialogResult.OK;
+                await DisplayAlert("Success", "Registration successful!", "OK");
+                NicknameEntry.Text = "";
+                GmailEntry.Text = "";
+                PasswordEntry.Text = "";
+                await Navigation.PopAsync();
 
+            }
+            else
+            {
+                await DisplayAlert("ERROR", $"Something happened", "OK");
+                await Navigation.PopAsync();
+                //DialogResult = DialogResult.Cancel;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            await DisplayAlert("ERROR", $"Something happened {result.StatusCode}", "OK");
-            await Navigation.PopAsync();
-            //DialogResult = DialogResult.Cancel;
+            await DisplayAlert("ERROR", $"Something happened", "OK");
         }
+        
     }
 
 	private async void OnBackClicked(object? sender, EventArgs e) 

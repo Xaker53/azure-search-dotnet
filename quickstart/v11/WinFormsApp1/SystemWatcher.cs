@@ -79,12 +79,12 @@ namespace WinFormsApp1
         private void OnChanger(object sender, FileSystemEventArgs e) // ERROR Create and update file!
         {
             //textFiles.Add(e);
-            DateTime lastWriteTime = File.GetCreationTime(e.FullPath);
-            if (lastWriteTime != lastCreatedTime)
-            {
-                azureSending.ConnectSearchFiles(e.FullPath);
-                Changer(e);
-            }
+            //DateTime lastWriteTime = File.GetCreationTime(e.FullPath);
+            //if (lastWriteTime != lastCreatedTime)
+            //{
+            //    azureSending.ConnectSearchFiles(e.FullPath);
+            //    Changer(e);
+            //}  // maybe need try catch
                 
                 
         }

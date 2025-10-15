@@ -14,7 +14,7 @@ namespace WebApplication4
     public class ConnectAzure
     {
         private string serviceName = "search53";
-        private string apiKey = "6K3kpg0y3j9s0xYgRbeQjFxVBaBESO1YOmDPspfvznAzSeAY3Xmf";
+        private string apiKey = "j7F5AnRIc8XTDGNfdgZ4DIiuSZCb9rbP9IMaUtfJRBAzSeBnW1QG";
         private string indexName = "hquickstart";
         private Uri serviceEndpoint;
         private AzureKeyCredential credential;
@@ -45,6 +45,8 @@ namespace WebApplication4
             options.Select.Add("FileName");
             options.Select.Add("FileText");
             options.Select.Add("FilePath");
+            options.Select.Add("IndexerName");
+            options.Select.Add("FileRecoveryText");
             SearchResults<Files> test = srchclient.Search<Files>($"{request}~", options);
 
             List<Files> list = new();

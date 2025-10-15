@@ -11,10 +11,17 @@ namespace AzureSearch.Quickstart
         public string FileID { get; set; }
 
         [SearchableField(IsSortable = true)]
+        public string IndexerName { get; set; }
+
+        [SearchableField(IsSortable = true)]
         public string FileName { get; set; }
 
-        [SearchableField (IsSortable = true)]
+        //[SearchableField (IsSortable = true)]
+        [SearchableField(IsSortable = false, IsFilterable = false, IsFacetable = false)]
         public string FileText { get; set; }
+
+        [SimpleField(IsFilterable = false, IsSortable = false, IsFacetable = false, IsHidden = false)]
+        public string FileRecoveryText { get; set; }
 
         [SearchableField(IsFilterable = true)]
         public string FilePath { get; set; }

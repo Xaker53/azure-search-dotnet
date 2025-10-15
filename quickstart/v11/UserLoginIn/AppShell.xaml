@@ -6,6 +6,12 @@
     xmlns:local="clr-namespace:UserLoginIn"
     Title="UserLoginIn">
 
+
+    <ShellContent
+        Title="Registration"
+        ContentTemplate="{DataTemplate local:SearchPage}"
+        Route="SearchPage" />
+    
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"

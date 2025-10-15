@@ -10,6 +10,7 @@ namespace UserLoginIn
     {
         private readonly ILoginRequests _loginRequests;
         private readonly RegistrationsPage _registrationsPage;
+        private HttpResponseMessage result;
         private string JwtToken;
 
         public MainPage(ILoginRequests loginRequests, RegistrationsPage registrationsPage)
@@ -27,13 +28,35 @@ namespace UserLoginIn
                 Password = PasswordEntry.Text
             };
 
-            var result = await _loginRequests.LoginUser(userRequest);
-            JwtToken = result.Content.ReadAsStringAsync().Result;
+            try
+            {
+                result = await _loginRequests.LoginUser(userRequest);
+                if (result == null)
+                {
+                    throw new Exception("Server return null");
+                }
+                JwtToken = result.Content.ReadAsStringAsync().Result;
+            }
+            catch(Exception error)
+            {
+                await DisplayAlert("ERROR",$"{error.Message}", "OK");
+            }
+            //var result = await _loginRequests.LoginUser(userRequest);
+            //JwtToken = result.Content.ReadAsStringAsync().Result;
         }
 
         private async void OnRegistrationClicked (object? sender, EventArgs e)
         {
-            await Navigation.PushAsync(_registrationsPage);
+            try
+            {
+                await Navigation.PushAsync(_registrationsPage);
+            }
+            catch (Exception error)
+            {
+                DisplayAlert("ERROR", $"{error.Message}", "OK");
+            }
+
+            //await Navigation.PushAsync(_registrationsPage);
 
             //var registration = new Registration();
             //DialogResult result = registration.ShowDialog();

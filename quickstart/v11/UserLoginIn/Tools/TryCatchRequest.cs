@@ -19,13 +19,13 @@ namespace UserLoginIn.Tools
         }
 
         private HttpResponseMessage response;
-        public async Task<HttpResponseMessage> TryCatch(string url, object user)
+        public async Task<HttpResponseMessage> TryCatch(string url, object user, string ContentType = "application/json")
         {
             using (HttpClient httpClient = new HttpClient())
             {
                 try
                 {
-                    response = await httpClient.PostAsync(url, _jsonconver.Jsonconver(user));
+                    response = await httpClient.PostAsync(url, _jsonconver.Jsonconver(user, ContentType));
                     return response;
                 }
                 catch (Exception e)

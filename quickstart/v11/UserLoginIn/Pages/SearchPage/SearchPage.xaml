@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="UserLoginIn.SearchPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="IndexTF">
+
+    <!-- Стили -->
+    <ContentPage.Resources>
+        <Style TargetType="Button">
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="18,12"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+        </Style>
+
+        <Style TargetType="Border">
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="18"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="StrokeThickness" Value="0"/>
+            <Setter Property="Background" Value="{DynamicResource SecondaryColor}"/>
+            <Setter Property="Shadow">
+                <Setter.Value>
+                    <Shadow Brush="#55000000" Opacity="0.4" Radius="10" Offset="0,4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Color x:Key="SecondaryColor">#F5F5F7</Color>
+        <Color x:Key="HeaderBg">#EEF0F3</Color>
+        <Color x:Key="Accent">#D7263D</Color>
+    </ContentPage.Resources>
+
+    <!-- Макет -->
+    <Grid RowDefinitions="Auto,Auto,*,Auto"
+          Padding="16"
+          BackgroundColor="#FAFAFC">
+
+        <!-- Верхняя панель -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="8,10">
+            <Label Text="IndexTF"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"/>
+
+            <Border Grid.Column="1" Background="{StaticResource SecondaryColor}" Padding="12,8">
+                <HorizontalStackLayout Spacing="8">
+                    <Image Source="person.png" HeightRequest="20" WidthRequest="20"/>
+                    <Label Text="User Name" FontSize="14" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Border>
+        </Grid>
+
+        <!-- Поисковая строка -->
+        <Border Grid.Row="1" Background="White" Padding="12">
+            <Entry x:Name="SearchEmpty"
+                   Placeholder="Type to search…"
+                   ReturnType="Search"
+                   TextChanged="SearchEntry_TextChanged"/>
+        </Border>
+
+        <!-- Список результатов (со скроллом) -->
+        <Border Grid.Row="2" Background="White" Padding="0">
+            <CollectionView x:Name="ResultInfo"
+                            SelectionMode="Single"
+                            VerticalOptions="FillAndExpand"
+                            VerticalScrollBarVisibility="Always"
+                            ItemsLayout="VerticalList">
+                <CollectionView.EmptyView>
+                    <Grid Padding="24">
+                        <Label Text="No results"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               Opacity="0.6"/>
+                    </Grid>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="2*,3*,2*" Padding="12" RowSpacing="4">
+                            <Label Text="{Binding FileName}" LineBreakMode="TailTruncation"/>
+                            <Label Grid.Column="1"
+                                   Text="{Binding FileText}"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="1"
+                                   Opacity="0.8"/>
+                            <Label Grid.Column="2"
+                                   Text="{Binding FilePath}"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="1"
+                                   Opacity="0.8"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Border>
+
+        <!-- Нижние кнопки -->
+        <Grid Grid.Row="3" ColumnDefinitions="Auto,*,Auto" Padding="0,8,0,0">
+            <Button Text="Index Files"
+                    BackgroundColor="{StaticResource Accent}"
+                    TextColor="White"/>
+            <Button Grid.Column="2"
+                    Text="Exit"
+                    BackgroundColor="{StaticResource Accent}"
+                    TextColor="White"/>
+        </Grid>
+
+    </Grid>
+</ContentPage>

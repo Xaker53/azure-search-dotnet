@@ -31,7 +31,11 @@ namespace UserLoginIn
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-            using var stream = FileSystem.OpenAppPackageFileAsync("appsettings.json").Result;
+            //using var stream = FileSystem.OpenAppPackageFileAsync("appsettings.json").Result;
+
+            var asm = Assembly.GetExecutingAssembly();
+            using var stream = asm.GetManifestResourceStream("UserLoginIn.appsettings.json")
+                              ?? throw new FileNotFoundException("appsettings.json not found");
             builder.Configuration.AddJsonStream(stream);
 
             builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection(nameof(ApiSettings)));
@@ -45,6 +49,8 @@ namespace UserLoginIn
 
             builder.Services.AddScoped<IRegistrationRequests, RegistrationRequests>();
             builder.Services.AddTransient<RegistrationsPage>();
+
+            builder.Services.AddSingleton<ISearchRequests, SearchRequests>();
 
 #if DEBUG
             builder.Logging.AddDebug();
@@ -68,7 +74,7 @@ namespace UserLoginIn
             if (appWindow.Presenter is OverlappedPresenter presenter)
             {
                 presenter.IsResizable = false;
-                presenter.IsMaximizable = false;
+                presenter.IsMaximizable = true;
                 presenter.IsMinimizable = true;
             }
 
