@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "Test Algorithm\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "DataBase\DataBase.csproj", "{9DBE51BD-E8BB-4E41-83B3-5C81E0D341B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserLoginIn", "UserLoginIn\UserLoginIn.csproj", "{699047DB-DF9E-4EEE-82ED-1981444ABA2A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserUI", "UserLoginIn\UserUI.csproj", "{699047DB-DF9E-4EEE-82ED-1981444ABA2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

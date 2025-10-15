@@ -13,17 +13,18 @@ namespace Persistence.Interactions
 {
     public class UserCreate : ICreate
     {
+        private readonly UserdbContext dbContext;
+        public UserCreate(UserdbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
         public async Task Add(User user)
         {
-            using (var dbContext = new UserdbContext())
-            {
-                var role = await dbContext.Roles.SingleOrDefaultAsync(r => r.Id == (int)Role.User) ?? throw new InvalidOperationException();
-                user.Roles = [role];
+            var role = await dbContext.Roles.SingleOrDefaultAsync(r => r.Id == (int)Role.User) ?? throw new InvalidOperationException();
+            user.Roles = [role];
 
-                await dbContext.AddAsync(user);
-                await dbContext.SaveChangesAsync();
-            }
-
+            await dbContext.AddAsync(user);
+            await dbContext.SaveChangesAsync();
         }
     }
 }

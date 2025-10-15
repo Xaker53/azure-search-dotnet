@@ -11,17 +11,20 @@ namespace Persistence.Interactions
 {
     public class UserDelete : IDelete
     {
+        private readonly UserdbContext DbContex;
+        public UserDelete(UserdbContext dbContext)
+        {
+            this.DbContex = dbContext;
+        }
+
         public async Task<bool> DeleteUser(string email)
         {
-            var EmailUser = new UserGetByGmail().GetByGmail(email);
+            var EmailUser = new UserGetByGmail(DbContex).GetByGmail(email);
             if (EmailUser.Result != null)
             {
-                using (var DbContex = new UserdbContext())
-                {
-                    DbContex.users.Remove(EmailUser.Result);
-                    await DbContex.SaveChangesAsync();
-                    return true;
-                }
+                DbContex.users.Remove(EmailUser.Result);
+                await DbContex.SaveChangesAsync();
+                return true;
             }
             return false;
         }

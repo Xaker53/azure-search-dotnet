@@ -11,13 +11,16 @@ namespace Persistence.Interactions
 {
     public class UserGetByGmail : IRead
     {
+        private readonly UserdbContext dbContext;
+        public UserGetByGmail(UserdbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
         public async Task<User> GetByGmail(string email)
         {
-            using (var dbContext = new UserdbContext())
-            {
-                var userEmail = dbContext.users.FirstOrDefault(x => x.UserGmail == email);
-                return userEmail;
-            }
+            var userEmail = dbContext.users.FirstOrDefault(x => x.UserGmail == email);
+            return userEmail;
         }
     }
 }

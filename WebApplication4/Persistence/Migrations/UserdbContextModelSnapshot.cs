@@ -36,7 +36,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PermissionEntity");
+                    b.ToTable("PermissionEntity", (string)null);
 
                     b.HasData(
                         new
@@ -75,7 +75,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
 
                     b.HasData(
                         new
@@ -97,7 +97,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("PermissionId");
 
-                    b.ToTable("RolePermissionEntity");
+                    b.ToTable("RolePermissionEntity", (string)null);
 
                     b.HasData(
                         new
@@ -134,7 +134,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRoleEntity");
+                    b.ToTable("UserRoleEntity", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.History", b =>
@@ -154,7 +154,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("histories");
+                    b.ToTable("histories", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.User", b =>
@@ -188,7 +188,7 @@ namespace Persistence.Migrations
                     b.HasIndex("UserGmail")
                         .IsUnique();
 
-                    b.ToTable("users");
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.RolePermissionEntity", b =>

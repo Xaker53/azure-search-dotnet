@@ -45,13 +45,13 @@ builder.Services.AddApiAuthentication(
     builder.Services.BuildServiceProvider().GetRequiredService<IOptions<JwtOptions>>()
 );
 
-builder.Services.AddDbContext<UserdbContext>((sp, options) =>
-{
-    var cfg = sp.GetRequiredService<IConfiguration>();
-    var cs = cfg.GetConnectionString("DefaultConnection");
+//builder.Services.AddDbContext<UserdbContext>((sp, options) =>
+//{
+//    var cfg = sp.GetRequiredService<IConfiguration>();
+//    var cs = cfg.GetConnectionString("DefaultConnection");
 
-    options.UseSqlServer(cs);
-});
+//    options.UseSqlServer(cs);
+//});
 
 builder.Services.AddAuthorization(options =>
 {

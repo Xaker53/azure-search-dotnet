@@ -14,27 +14,32 @@ namespace Persistence.Interactions
 {
     public class UserUpdate : IUpdate
     {
+
+        private readonly UserdbContext DbContext;
+        public UserUpdate(UserdbContext dbContext)
+        {
+            this.DbContext = dbContext;
+        }
         public async Task<User> UpdateUser(string email, PropertyInfo NewChanges, string NewSomething)
         {
-            using (var DbContext = new UserdbContext())
-            {
-                 var emailUser = new UserGetByGmail().GetByGmail(email);
 
-                if (emailUser.Result != null)
+            var emailUser = new UserGetByGmail(DbContext).GetByGmail(email);
+
+            if (emailUser.Result != null)
+            {
+                foreach (var Change in typeof(User).GetProperties())
                 {
-                    foreach (var Change in typeof(User).GetProperties())
+                    if (Change.Name == NewChanges.Name || NewChanges.Name == nameof(UserDTO.OtherEmail) && Change.Name == nameof(User.UserGmail))
                     {
-                        if (Change.Name == NewChanges.Name || NewChanges.Name == nameof(UserDTO.OtherEmail) && Change.Name == nameof(User.UserGmail))
-                        {
-                            Change.SetValue(emailUser.Result, NewSomething);
-                            break;
-                        }
+                        Change.SetValue(emailUser.Result, NewSomething);
+                        break;
                     }
-                    DbContext.Update(emailUser.Result);
-                    await DbContext.SaveChangesAsync();
                 }
-                return emailUser.Result;
+                DbContext.Update(emailUser.Result);
+                await DbContext.SaveChangesAsync();
             }
+            return emailUser.Result;
+
         }
     }
 }
