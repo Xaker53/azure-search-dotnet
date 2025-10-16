@@ -1,5 +1,7 @@
 ﻿
+using Azure;
 using AzureSearch.Quickstart;
+using Core.Entities.MappingProfiles;
 using DocumentFormat.OpenXml.Office2016.Drawing.Charts;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -15,12 +17,26 @@ public partial class SearchPage : ContentPage
 
     private readonly ISearchRequests _searchRequests;
     private readonly IDecompression _decompression;
+    private readonly IGetUserRequests _getUserRequests;
+    private UserRequest _userRequest;
+    private string JwtToken;
+    private string _Email;
 
-    public SearchPage(ISearchRequests searchRequests, IDecompression decompression)
+    public void InTokenEmail ( string Token, string Email)
+    {
+        JwtToken = Token ?? string.Empty;
+        _Email = Email ?? string.Empty;
+        EnterNameUser();
+    }
+
+    public SearchPage(ISearchRequests searchRequests, IDecompression decompression, IGetUserRequests getUserRequests)
     {
         InitializeComponent();
         _searchRequests = searchRequests;
         _decompression = decompression;
+        _getUserRequests = getUserRequests;
+
+        EnterNameUser();
     }
 
     //private async void SearchEntry_TextChanged(object sender, EventArgs e)
@@ -48,6 +64,25 @@ public partial class SearchPage : ContentPage
     //    }, token);
     //}
 
+    private async void EnterNameUser()
+    {
+        var response = await _getUserRequests.FetchToServer(_Email, JwtToken);
+        try
+        {
+            if (response != null)
+            {
+                _userRequest = JsonConvert.DeserializeObject<UserRequest>(response.Content.ReadAsStringAsync().Result);
+                UserNikname.Text = _userRequest.Name;
+            }
+            
+        }
+        catch (HttpRequestException ex)
+        {
+            DisplayAlert("Server:", ex.Message, "OK");
+        }
+        
+    }
+
     private async void SearchEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
         _debounceCts?.Cancel();
@@ -61,7 +96,7 @@ public partial class SearchPage : ContentPage
             var query = e.NewTextValue; 
             if (query.Length != 0)
             {
-                var json = await _searchRequests.FetchToServer(query);
+                var json = await _searchRequests.FetchToServer(query, JwtToken);
                 var items = JsonConvert.DeserializeObject<List<Files>>(json) ?? new();
 
                 ResultInfo.ItemsSource = items;
@@ -105,6 +140,11 @@ public partial class SearchPage : ContentPage
         }
     }
 
+    private void OnExitClick (object sender, EventArgs e)
+    {
+        Navigation.RemovePage(this);
+       
+    }
 
 
     private async Task OpenPathAsync(string path)

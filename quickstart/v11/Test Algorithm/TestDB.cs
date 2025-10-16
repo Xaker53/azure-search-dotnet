@@ -24,9 +24,9 @@ namespace Test_Algorithm
 
         private UserRequest _User = new UserRequest()
         {
-            Name = "Test2forGit",
-            Gmail = "Gi2t4@gmail.com",
-            Password = "3cmXeyi"
+            Name = "test",
+            Gmail = "test@test.com",
+            Password = "test"
         };
 
        //private UserRequest _User = new FakerUser().Request();
@@ -107,7 +107,8 @@ namespace Test_Algorithm
             var NewUpdate = new UserRequest()
             {
                 Gmail = this._User.Gmail,
-                Password = "UnitTest@gmail.com"
+                Password = "0228",
+                Name = "TestNAme"
             };
             _User.Password = NewUpdate.Password;
             using var httpClient = new HttpClient();

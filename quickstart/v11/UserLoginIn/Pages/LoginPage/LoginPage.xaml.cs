@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Core.Entities.MappingProfiles;
 using Newtonsoft.Json.Linq;
+using System.Net;
 using UserLoginIn.Interface;
 using UserLoginIn.Requests;
 
@@ -10,14 +11,16 @@ namespace UserLoginIn
     {
         private readonly ILoginRequests _loginRequests;
         private readonly RegistrationsPage _registrationsPage;
+        private readonly IServiceProvider _searchPage;
         private HttpResponseMessage result;
         private string JwtToken;
 
-        public MainPage(ILoginRequests loginRequests, RegistrationsPage registrationsPage)
+        public MainPage(ILoginRequests loginRequests, RegistrationsPage registrationsPage, IServiceProvider searchPage)
         {
             InitializeComponent();
             _loginRequests = loginRequests;
             _registrationsPage = registrationsPage;
+            _searchPage = searchPage;
         }
 
         private async void OnLoginClicked(object? sender, EventArgs e)
@@ -28,24 +31,32 @@ namespace UserLoginIn
                 Password = PasswordEntry.Text
             };
 
+
+            result = await _loginRequests.LoginUser(userRequest);
+
+            if (result == null)
+                throw new Exception("Server returned null");
+
             try
             {
-                result = await _loginRequests.LoginUser(userRequest);
-                if (result == null)
-                {
-                    throw new Exception("Server return null");
-                }
-                JwtToken = result.Content.ReadAsStringAsync().Result;
+                result.EnsureSuccessStatusCode();
+                var page = _searchPage.GetRequiredService<SearchPage>();
+                JwtToken = await result.Content.ReadAsStringAsync();
+                page.InTokenEmail(JwtToken, userRequest.UserGmail);
+                await Navigation.PushAsync(page);
             }
-            catch(Exception error)
+            catch (HttpRequestException)
             {
-                await DisplayAlert("ERROR",$"{error.Message}", "OK");
+                var error = await result.Content.ReadAsStringAsync();
+                await DisplayAlert("ERROR", error, "OK");
             }
+        }
+            
             //var result = await _loginRequests.LoginUser(userRequest);
             //JwtToken = result.Content.ReadAsStringAsync().Result;
-        }
+        
 
-        private async void OnRegistrationClicked (object? sender, EventArgs e)
+        private async void OnRegistrationClicked(object? sender, EventArgs e)
         {
             try
             {

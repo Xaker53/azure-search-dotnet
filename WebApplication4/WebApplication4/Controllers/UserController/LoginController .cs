@@ -33,7 +33,7 @@ namespace WebApplication4.Controllers.UserController
             }
             catch (Exception e)
             {
-                return BadRequest(e.InnerException);
+                return BadRequest(e.Message);
             }
         }
     }

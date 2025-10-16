@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace UserLoginIn.Interface
 {
-    public interface ISearchRequests
+    public interface IGetUserRequests
     {
-        public Task<string> FetchToServer(string TextInput, string JwtToken = "");
+        public Task<HttpResponseMessage> FetchToServer(string UserGmail, string JwtToken = "");
     }
 }

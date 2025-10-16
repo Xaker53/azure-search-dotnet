@@ -52,6 +52,8 @@ namespace UserLoginIn
 
             builder.Services.AddSingleton<ISearchRequests, SearchRequests>();
             builder.Services.AddSingleton<IDecompression, Decompression>();
+            builder.Services.AddSingleton<IGetUserRequests,GetUserRequests>();
+            builder.Services.AddTransient<SearchPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

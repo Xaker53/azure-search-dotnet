@@ -8,6 +8,6 @@ namespace UserLoginIn.Interface
 {
     internal interface ITryCatchRequest
     {
-        public Task<HttpResponseMessage> TryCatch(string url, object user, string ContentType = "application/json");
+        public Task<HttpResponseMessage> TryCatch(string url, object user, string ContentType = "application/json", string JwtToken = "");
     }
 }

@@ -19,12 +19,13 @@ namespace UserLoginIn.Tools
         }
 
         private HttpResponseMessage response;
-        public async Task<HttpResponseMessage> TryCatch(string url, object user, string ContentType = "application/json")
+        public async Task<HttpResponseMessage> TryCatch(string url, object user, string ContentType = "application/json", string JwtToken = "")
         {
             using (HttpClient httpClient = new HttpClient())
             {
                 try
                 {
+                    httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", $"{JwtToken}");
                     response = await httpClient.PostAsync(url, _jsonconver.Jsonconver(user, ContentType));
                     return response;
                 }

@@ -47,7 +47,7 @@
             <Border Grid.Column="1" Background="{StaticResource SecondaryColor}" Padding="12,8">
                 <HorizontalStackLayout Spacing="8">
                     <Image Source="person.png" HeightRequest="20" WidthRequest="20"/>
-                    <Label Text="User Name" FontSize="14" VerticalOptions="Center"/>
+                    <Label x:Name="UserNikname" Text="User Name" FontSize="14" VerticalOptions="Center"/>
                 </HorizontalStackLayout>
             </Border>
         </Grid>
@@ -116,7 +116,8 @@
             <Button Grid.Column="2"
                     Text="Exit"
                     BackgroundColor="{StaticResource Accent}"
-                    TextColor="White"/>
+                    TextColor="White"
+                    Clicked="OnExitClick"/>
         </Grid>
 
     </Grid>

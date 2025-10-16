@@ -6,7 +6,7 @@ namespace Core.Entities.MappingProfiles
     [Index(nameof(Gmail), IsUnique = true)]
     public class UserRequest
     {
-        
+        public Guid UserId { get; set; } = Guid.NewGuid();
         public string? Name { get; set; } = null;
 
         [Required(ErrorMessage = "Incorrect Email")]

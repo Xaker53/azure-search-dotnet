@@ -22,9 +22,9 @@ namespace UserLoginIn.Requests
             this._tryCatchRequest = tryCatch;
         }
 
-        public async Task<string> FetchToServer(string TextInput)
+        public async Task<string> FetchToServer(string TextInput, string JwtToken = "")
         {
-            var resultRequest =  await _tryCatchRequest.TryCatch(_url, TextInput);
+            var resultRequest =  await _tryCatchRequest.TryCatch(_url, TextInput, JwtToken:JwtToken);
             return await resultRequest.Content.ReadAsStringAsync();
 
         }

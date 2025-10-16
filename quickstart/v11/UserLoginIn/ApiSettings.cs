@@ -3,4 +3,6 @@
     public string CreateUserUrl { get; set; }
     public string LoginUserUrl { get; set; }
     public string AzureSearchUlr { get; set; }
+
+    public string AzureGetUser {  get; set; }
 }

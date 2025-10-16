@@ -1,10 +1,12 @@
 ﻿using AzureSearch.Quickstart;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication4.Controllers.AzureController
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Policy = "ReadPolicy")]
     public class AzureController (ConnectAzure connect) : ControllerBase
     {
         //private ConnectAzure connect = new();
