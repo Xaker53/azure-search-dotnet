@@ -77,18 +77,31 @@
                 </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid ColumnDefinitions="2*,3*,2*" Padding="12" RowSpacing="4">
-                            <Label Text="{Binding FileName}" LineBreakMode="TailTruncation"/>
-                            <Label Grid.Column="1"
-                                   Text="{Binding FileText}"
-                                   LineBreakMode="TailTruncation"
-                                   MaxLines="1"
-                                   Opacity="0.8"/>
-                            <Label Grid.Column="2"
-                                   Text="{Binding FilePath}"
-                                   LineBreakMode="TailTruncation"
-                                   MaxLines="1"
-                                   Opacity="0.8"/>
+                        <Grid ColumnDefinitions="2*,3*,2*,2*" Padding="12" RowSpacing="4">
+                            
+                            <!-- FileName -->
+                            <Label Text="{Binding FileName}" LineBreakMode="TailTruncation" Opacity="1.0">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnFileNameTapped" CommandParameter="{Binding FilePath}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+
+                            <!-- FileText -->
+                            <Label Grid.Column="1" Text="{Binding FileText}" LineBreakMode="TailTruncation" MaxLines="1" Opacity="0.8">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPathTapped" CommandParameter="{Binding FilePath}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+
+                            <!-- FilePath -->
+                            <Label Grid.Column="2" Text="{Binding FilePath}" LineBreakMode="TailTruncation" MaxLines="1" Opacity="0.8">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPathTapped" CommandParameter="{Binding FilePath}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+
+                            <!-- IndexerName -->
+                            <Label Grid.Column="3" Text="{Binding IndexerName}" LineBreakMode="TailTruncation" MaxLines="1" Opacity="0.8"/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

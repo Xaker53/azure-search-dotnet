@@ -39,7 +39,7 @@ namespace WebApplication4
             ingesterClient = adminClient.GetSearchClient(indexName);
         }
 
-        public List<Files> ConnectSearchFiles(string request)
+        public List<Files> ConnectSearchFiles(string request="")
         {
             options = new SearchOptions()
             {
