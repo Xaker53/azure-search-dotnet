@@ -7,15 +7,16 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using Azure.Search.Documents.Models;
 using AzureSearch.Quickstart;
+using Infrastructure;
 
 
 namespace WebApplication4
 {
     public class ConnectAzure
     {
-        private string serviceName = "search53";
-        private string apiKey = "j7F5AnRIc8XTDGNfdgZ4DIiuSZCb9rbP9IMaUtfJRBAzSeBnW1QG";
-        private string indexName = "hquickstart";
+        private readonly string serviceName;
+        private readonly string apiKey;
+        private readonly string indexName;
         private Uri serviceEndpoint;
         private AzureKeyCredential credential;
         private SearchIndexClient adminClient;
@@ -25,8 +26,12 @@ namespace WebApplication4
         
 
 
-        public ConnectAzure()
+        public ConnectAzure(IOptions<AzureOptions> ConnectOptions)
         {
+            serviceName = ConnectOptions.Value.serviceName;
+            apiKey = ConnectOptions.Value.apiKey;
+            indexName = ConnectOptions.Value.indexName;
+
             serviceEndpoint = new Uri($"https://{serviceName}.search.windows.net/");
             credential = new AzureKeyCredential(apiKey);
             adminClient = new SearchIndexClient(serviceEndpoint, credential);

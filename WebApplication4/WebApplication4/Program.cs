@@ -19,6 +19,7 @@ using Microsoft.OpenApi.Models;
 using Persistence;
 using Persistence.Interactions;
 using Persistence.Models;
+using WebApplication4;
 using WebApplication4.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +40,8 @@ builder.Services.AddMediatR(configuration =>
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
 builder.Services.Configure<Persistence.AuthorizationOptions>(builder.Configuration.GetSection(nameof(Persistence.AuthorizationOptions)));
+builder.Services.Configure<AzureOptions>(builder.Configuration.GetSection(nameof(AzureOptions)));
+
 
 builder.Services.AddApiAuthentication(
     builder.Configuration,
@@ -96,6 +99,8 @@ builder.Services.AddScoped<IPermissionService, PermissionsService>();
 builder.Services.AddSingleton<ISalt, CreateSalt>();
 
 builder.Services.AddScoped<IGenerateSaltAndHash, GenerateSaltAndHash>();
+
+builder.Services.AddSingleton<ConnectAzure>();
 
 
 
