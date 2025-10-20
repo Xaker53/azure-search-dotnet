@@ -42,12 +42,12 @@
             <Label Text="IndexTF"
                    FontSize="24"
                    FontAttributes="Bold"
-                   VerticalOptions="Center"/>
+                   VerticalOptions="Center" TextColor="Black" />
 
             <Border Grid.Column="1" Background="{StaticResource SecondaryColor}" Padding="12,8">
                 <HorizontalStackLayout Spacing="8">
                     <Image Source="person.png" HeightRequest="20" WidthRequest="20"/>
-                    <Label x:Name="UserNikname" Text="User Name" FontSize="14" VerticalOptions="Center"/>
+                    <Label x:Name="UserNikname" Text="User Name" FontSize="14" VerticalOptions="Center" TextColor="Black"/>
                 </HorizontalStackLayout>
             </Border>
         </Grid>
@@ -57,7 +57,8 @@
             <Entry x:Name="SearchEmpty"
                    Placeholder="Type to search…"
                    ReturnType="Search"
-                   TextChanged="SearchEntry_TextChanged"/>
+                   TextChanged="SearchEntry_TextChanged"
+                   TextColor="Black"/>
         </Border>
 
         <!-- Список результатов (со скроллом) -->
@@ -80,28 +81,28 @@
                         <Grid ColumnDefinitions="2*,3*,2*,2*" Padding="12" RowSpacing="4">
                             
                             <!-- FileName -->
-                            <Label Text="{Binding FileName}" LineBreakMode="TailTruncation" Opacity="1.0">
+                            <Label Text="{Binding FileName}" LineBreakMode="TailTruncation" Opacity="1.0" TextColor="Black" >
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnFileNameTapped" CommandParameter="{Binding FilePath}"/>
                                 </Label.GestureRecognizers>
                             </Label>
 
                             <!-- FileText -->
-                            <Label Grid.Column="1" Text="{Binding FileText}" LineBreakMode="TailTruncation" MaxLines="1" Opacity="0.8">
+                            <Label Grid.Column="1" Text="{Binding FileText}" LineBreakMode="TailTruncation" MaxLines="1" Opacity="0.8" TextColor="Black">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnPathTapped" CommandParameter="{Binding FilePath}"/>
                                 </Label.GestureRecognizers>
                             </Label>
 
                             <!-- FilePath -->
-                            <Label Grid.Column="2" Text="{Binding FilePath}" LineBreakMode="TailTruncation" MaxLines="1" Opacity="0.8">
+                            <Label Grid.Column="2" Text="{Binding FilePath}" LineBreakMode="TailTruncation" MaxLines="1" Opacity="0.8" TextColor="Black">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnPathTapped" CommandParameter="{Binding FilePath}"/>
                                 </Label.GestureRecognizers>
                             </Label>
 
                             <!-- IndexerName -->
-                            <Label Grid.Column="3" Text="{Binding IndexerName}" LineBreakMode="TailTruncation" MaxLines="1" Opacity="0.8"/>
+                            <Label Grid.Column="3" Text="{Binding IndexerName}" LineBreakMode="TailTruncation" MaxLines="1" Opacity="0.8" TextColor="Black"/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

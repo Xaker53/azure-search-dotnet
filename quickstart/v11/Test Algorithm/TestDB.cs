@@ -25,7 +25,7 @@ namespace Test_Algorithm
         private UserRequest _User = new UserRequest()
         {
             Name = "test",
-            Gmail = "test@test.com",
+            Gmail = "test1@test.com",
             Password = "test"
         };
 

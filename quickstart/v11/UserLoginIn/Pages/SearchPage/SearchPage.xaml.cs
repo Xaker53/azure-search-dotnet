@@ -128,12 +128,18 @@ public partial class SearchPage : ContentPage
     {
         if (sender is Label lbl && lbl.BindingContext is Files item)
         {
-            if (Environment.MachineName != item.IndexerName)
+            if (Environment.MachineName != item.IndexerName )
             {
                 await DisplayAlert("ERROR", $"is not you enviroment {item.IndexerName}. You name: {Environment.MachineName}", "ok");
                 var result = await _decompression.DecompressionFile(item.FileRecoveryText);
-                DisplayAlert("Decompression text", result, "OK");
-            }else if (Environment.MachineName == item.IndexerName)
+                await DisplayAlert("Decompression text", result, "OK");
+            }
+            else if (!File.Exists(item.FilePath))
+            {
+                await DisplayAlert("ERROR", $"File not found: {item.FilePath}.", "ok");
+                await DisplayAlert("Decompression text", await _decompression.DecompressionFile(item.FileRecoveryText), "OK");
+            }
+            else if (Environment.MachineName == item.IndexerName && File.Exists(item.FilePath))
             {
                 OpenPathAsync(item.FilePath);
             }
