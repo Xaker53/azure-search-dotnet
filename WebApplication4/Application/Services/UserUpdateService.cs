@@ -1,5 +1,6 @@
 ﻿using Application.Interface;
 using Application.Interface.Auth;
+using Application.Services.GeneratePasswordSalt;
 using Core.Interfaces;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,23 +13,27 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class UserUpdateService (IUpdate updateService, IGenerateSaltAndHash GenerateSaltAndHash) : IUpdateService
+    public class UserUpdateService (IUpdate updateService, IGenerateSaltAndHash _PasswordAndSalt, IUserDtoValidator dtoValidator) : IUpdateService
     {
         private User user;
         public async Task<User> UpdateUser(UserDTO? NewChanges)
         {
-            foreach (var prop in typeof(UserDTO).GetProperties())
+            if (dtoValidator.HasOtherFieldsFilled(NewChanges))
             {
-                if (prop.GetValue(NewChanges) != null && prop.Name != nameof(UserDTO.UserGmail))
+                foreach (var prop in typeof(UserDTO).GetProperties())
                 {
-                    if (prop.Name == nameof(UserDTO.Password))
+                    if (prop.GetValue(NewChanges) != null && prop.Name != nameof(UserDTO.UserGmail))
                     {
-                        GenerateSaltAndHash.Generate(prop.GetValue(NewChanges).ToString());
-                        NewChanges.Salt = GenerateSaltAndHash.ReturnSalt;
-                        NewChanges.Password = GenerateSaltAndHash.ReturnHash;
+                        if (prop.Name == nameof(UserDTO.Password))
+                        {
+                            _PasswordAndSalt.Generate(NewChanges.Password);
+                            NewChanges.Salt = _PasswordAndSalt.ReturnSalt;
+                            NewChanges.Password = _PasswordAndSalt.ReturnHash;
+                        }
+                        //user = await updateService.UpdateUser(NewChanges.UserGmail, prop, prop.GetValue(NewChanges).ToString());
                     }
-                    user = await updateService.UpdateUser(NewChanges.UserGmail, prop, prop.GetValue(NewChanges).ToString());
                 }
+                user = await updateService.UpdateUser(NewChanges.UserGmail, NewChanges);
             }
             return user;
         }
