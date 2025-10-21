@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using AutoMapper;
 using Core;
 using Core.Interfaces;
 using Core.Models;
@@ -16,29 +17,44 @@ namespace Persistence.Interactions
     {
 
         private readonly UserdbContext DbContext;
-        public UserUpdate(UserdbContext dbContext)
+        private readonly IMapper _mapper;
+        public UserUpdate(UserdbContext dbContext, IMapper mapper)
         {
             this.DbContext = dbContext;
+            _mapper = mapper;
         }
-        public async Task<User> UpdateUser(string email, PropertyInfo NewChanges, string NewSomething)
+        public async Task<User> UpdateUser(string email, UserDTO newChanges)
         {
 
-            var emailUser = new UserGetByGmail(DbContext).GetByGmail(email);
+            var emailUser = await new UserGetByGmail(DbContext).GetByGmail(email);
 
-            if (emailUser.Result != null)
+            if (emailUser != null)
             {
-                foreach (var Change in typeof(User).GetProperties())
-                {
-                    if (Change.Name == NewChanges.Name || NewChanges.Name == nameof(UserDTO.OtherEmail) && Change.Name == nameof(User.UserGmail))
-                    {
-                        Change.SetValue(emailUser.Result, NewSomething);
-                        break;
-                    }
-                }
-                DbContext.Update(emailUser.Result);
+                _mapper.Map(newChanges, emailUser);
+                //foreach (var propDto in typeof(UserDTO).GetProperties())
+                //{
+                //    var valueDto = propDto.GetValue(newChanges);
+                //    if (valueDto != null)
+                //    {
+                //        var propUser = typeof(User).GetProperty(propDto.Name);
+                //        if (propUser != null)
+                //        {
+                //            propUser.SetValue(emailUser, valueDto);
+                //        }
+                //        else if (propDto.Name == nameof(UserDTO.OtherEmail))
+                //        {
+                //            var targetProp = typeof(User).GetProperty(nameof(User.UserGmail));
+                //            if (targetProp !=null)
+                //            {
+                //                targetProp.SetValue(emailUser, valueDto);
+                //            }
+                //        }
+                //    }
+                //}
+                //DbContext.Update(emailUser);
                 await DbContext.SaveChangesAsync();
             }
-            return emailUser.Result;
+            return emailUser;
 
         }
     }
