@@ -8,6 +8,11 @@
 
 
     <ShellContent
+        Title="Profile"
+        ContentTemplate="{DataTemplate local:ProfilePage}"
+        Route="Profile" />
+
+    <ShellContent
         Title="SearchPage"
         ContentTemplate="{DataTemplate local:SearchPage}"
         Route="SearchPage" />

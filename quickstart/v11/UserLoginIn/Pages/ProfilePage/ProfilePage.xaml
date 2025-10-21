@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UserLoginIn.ProfilePage"
+             Title="ProfilePage"
+             BackgroundColor="#F8F9FA">
+
+    <ContentPage.Resources>
+        <!-- Colors -->
+        <Color x:Key="PrimaryColor">#6366F1</Color>
+        <Color x:Key="PrimaryDark">#4F46E5</Color>
+        <Color x:Key="SecondaryColor">#FFFFFF</Color>
+        <Color x:Key="AccentColor">#EC4899</Color>
+        <Color x:Key="DangerColor">#EF4444</Color>
+        <Color x:Key="SuccessColor">#10B981</Color>
+        <Color x:Key="TextPrimary">#1F2937</Color>
+        <Color x:Key="TextSecondary">#6B7280</Color>
+        <Color x:Key="BorderColor">#E5E7EB</Color>
+        <Color x:Key="BackgroundColor">#F8F9FA</Color>
+        <Color x:Key="CardBg">#FFFFFF</Color>
+
+        <!-- Button Styles -->
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20,14"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="Shadow">
+                <Setter.Value>
+                    <Shadow Brush="#4F46E5" Opacity="0.25" Radius="12" Offset="0,4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SuccessButton" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource SuccessColor}"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20,14"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="Shadow">
+                <Setter.Value>
+                    <Shadow Brush="#10B981" Opacity="0.25" Radius="12" Offset="0,4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DangerButton" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource DangerColor}"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20,14"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="OutlineButton" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="TextColor" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="BorderColor" Value="{StaticResource BorderColor}"/>
+            <Setter Property="BorderWidth" Value="2"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20,14"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+        </Style>
+
+        <!-- Card Style -->
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource CardBg}"/>
+            <Setter Property="StrokeThickness" Value="0"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="16"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Shadow">
+                <Setter.Value>
+                    <Shadow Brush="#000000" Opacity="0.08" Radius="20" Offset="0,2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Input Style -->
+        <Style x:Key="InputBorder" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource SecondaryColor}"/>
+            <Setter Property="Stroke" Value="{StaticResource BorderColor}"/>
+            <Setter Property="StrokeThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="14,12"/>
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="10"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <Setter.Value>
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="Stroke" Value="{StaticResource BorderColor}"/>
+                                    <Setter Property="Background" Value="{StaticResource SecondaryColor}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Entry">
+            <Setter Property="TextColor" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="PlaceholderColor" Value="{StaticResource TextSecondary}"/>
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <Setter.Value>
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="Transparent"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Focused">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="Transparent"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SectionLabel" TargetType="Label">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="TextColor" Value="{StaticResource TextSecondary}"/>
+            <Setter Property="Margin" Value="4,0,0,0"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*" BackgroundColor="{StaticResource BackgroundColor}">
+
+        <!-- Header -->
+        <Border Grid.Row="0" 
+                Background="{StaticResource CardBg}"
+                StrokeThickness="0"
+                Padding="20,16">
+            <Border.Shadow>
+                <Shadow Brush="#000000" Opacity="0.05" Radius="10" Offset="0,2"/>
+            </Border.Shadow>
+
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout VerticalOptions="Center" Spacing="2">
+                    <Label Text="Profile Settings" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           TextColor="{StaticResource TextPrimary}"/>
+                    <Label Text="Manage your account information" 
+                           FontSize="13" 
+                           TextColor="{StaticResource TextSecondary}"/>
+                </VerticalStackLayout>
+
+                <Border Grid.Column="1" 
+                        Background="{StaticResource PrimaryColor}"
+                        Padding="14,10"
+                        StrokeThickness="0"
+                        VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10"/>
+                    </Border.StrokeShape>
+                    <HorizontalStackLayout Spacing="10">
+                        <Image Source="person.png" 
+                               HeightRequest="22" 
+                               WidthRequest="22"/>
+                        <Label Text="{Binding DisplayName, FallbackValue='User'}" 
+                               FontSize="14" 
+                               FontAttributes="Bold"
+                               VerticalOptions="Center" 
+                               TextColor="White"/>
+                    </HorizontalStackLayout>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1" Padding="20,24">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- User Information Card -->
+                <Border Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="20">
+                        <Label Text="Account Information" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               TextColor="{StaticResource TextPrimary}"/>
+
+                        <!-- Email -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="EMAIL ADDRESS" Style="{StaticResource SectionLabel}"/>
+                            <Border Style="{StaticResource InputBorder}">
+                                <Entry x:Name="GmailEntry"
+                                       Placeholder="user@example.com"
+                                       Keyboard="Email"
+                                       Text="{Binding UserGmail}"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Name -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="FULL NAME" Style="{StaticResource SectionLabel}"/>
+                            <Border Style="{StaticResource InputBorder}">
+                                <Entry x:Name="NameEntry"
+                                       Placeholder="Enter your full name"
+                                       Text="{Binding UserName}"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Security Card -->
+                <Border Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="20">
+                        <Label Text="Security" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               TextColor="{StaticResource TextPrimary}"/>
+
+                        <!-- Password -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="PASSWORD" Style="{StaticResource SectionLabel}"/>
+                            <Border Style="{StaticResource InputBorder}">
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                    <Entry x:Name="PasswordEntry"
+                                           IsPassword="True"
+                                           Placeholder="Enter new password"
+                                           Text="{Binding Password}"/>
+                                    <Button Grid.Column="1"
+                                            x:Name="TogglePwdBtn"
+                                            Text="Show"
+                                            BackgroundColor="{StaticResource PrimaryColor}"
+                                            TextColor="White"
+                                            CornerRadius="8"
+                                            Padding="14,8"
+                                            FontSize="13"
+                                            FontAttributes="Bold"/>
+                                </Grid>
+                            </Border>
+                            <Label Text="Leave blank to keep current password" 
+                                   FontSize="12" 
+                                   TextColor="{StaticResource TextSecondary}"
+                                   Margin="4,0,0,0"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Actions -->
+                <VerticalStackLayout Spacing="12">
+                    <Button Text="Save Changes"
+                            Style="{StaticResource SuccessButton}"/>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <Button Text="Delete Account"
+                                Style="{StaticResource DangerButton}"/>
+                        <Button Grid.Column="1"
+                                Text="Cancel"
+                                Style="{StaticResource OutlineButton}"/>
+                    </Grid>
+                </VerticalStackLayout>
+
+                <!-- Spacer -->
+                <BoxView HeightRequest="20" Color="Transparent"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Loading Overlay -->
+        <!--<Grid Grid.RowSpan="2" 
+              IsVisible="{Binding IsBusy}" 
+              BackgroundColor="#80000000">
+            <Border Background="{StaticResource CardBg}"
+                    Padding="40"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    StrokeThickness="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="16"/>
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="16">
+                    <ActivityIndicator IsRunning="True" 
+                                     Color="{StaticResource PrimaryColor}"
+                                     HeightRequest="40"
+                                     WidthRequest="40"/>
+                    <Label Text="Processing..." 
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextSecondary}"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>-->
+    </Grid>
+</ContentPage>
