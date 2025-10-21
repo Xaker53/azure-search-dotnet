@@ -10,6 +10,6 @@ namespace Core.Interfaces
 {
     public interface IUpdate
     {
-        public Task<User> UpdateUser(string email, PropertyInfo NewChanges, string NewSomething);
+        public Task<User> UpdateUser(string email, UserDTO NewChanges);
     }
 }

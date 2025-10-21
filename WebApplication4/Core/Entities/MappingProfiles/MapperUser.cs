@@ -30,6 +30,12 @@ namespace Core.Entities.MappingProfiles
             .ForMember(dest => dest.Gmail, opt => opt.MapFrom(src => src.UserGmail))
             .ForMember(dest => dest.Password, opt => opt.MapFrom(src=> (string?)"Why do you need a password? Go on your way, stalker."))
             .ForMember(dest => dest.OtherGmail, opt => opt.Ignore());
+
+            CreateMap<UserDTO, User>()
+            .ForMember(dest => dest.UserGmail, opt => opt.MapFrom(src => src.OtherEmail))
+            .ForAllMembers(opt =>opt.Condition((src, dest, srcValue) =>srcValue != null && (!(srcValue is string s) || !string.IsNullOrWhiteSpace(s))
+        ));
+
         }
     }
 }
