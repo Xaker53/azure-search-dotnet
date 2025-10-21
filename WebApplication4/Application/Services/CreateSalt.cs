@@ -10,7 +10,7 @@ namespace Application.Services
 {
     public class CreateSalt : ISalt
     {
-        public string GetSalt()
+        public string Generate()
         {
             return Convert.ToBase64String(RandomNumberGenerator.GetBytes(128 / 8));
         }

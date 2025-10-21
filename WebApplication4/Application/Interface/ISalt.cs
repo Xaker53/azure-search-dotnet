@@ -1,7 +1,7 @@
 ﻿namespace Application.Interface
 {
-    public interface ISalt
+    public interface ISalt: IStrategyMarker
     {
-        public string GetSalt();
+        public string Generate();
     }
 }

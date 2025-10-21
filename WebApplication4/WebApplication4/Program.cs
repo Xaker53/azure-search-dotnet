@@ -1,3 +1,5 @@
+using System.Reflection;
+using Application;
 using Application.CQRS.DeleteUser;
 using Application.CQRS.UserCreate;
 using Application.Interface;
@@ -21,6 +23,11 @@ using Persistence.Interactions;
 using Persistence.Models;
 using WebApplication4;
 using WebApplication4.Extensions;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using System.Reflection;
+using Application.Services.GeneratePasswordSalt;
+using Application.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,7 +92,7 @@ builder.Services.AddScoped<IDelete, UserDelete>();
 //builder.Services.AddScoped<UserDeleteService>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
-builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IPasswordVerify, PasswordVerify>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 
@@ -96,14 +103,32 @@ builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHand
 builder.Services.AddScoped<IUserGetPermissionsRepository, GetUserIDPermissions>();
 builder.Services.AddScoped<IPermissionService, PermissionsService>();
 
-builder.Services.AddSingleton<ISalt, CreateSalt>();
+
+builder.Services.AddSingleton<IStrategyMarker, CreateSalt>();
+builder.Services.AddSingleton<IStrategyMarker, PasswordHasher>();
+//builder.Services.AddSingleton<ISalt, CreateSalt>();
 
 builder.Services.AddScoped<IGenerateSaltAndHash, GenerateSaltAndHash>();
 
 builder.Services.AddSingleton<ConnectAzure>();
+builder.Services.AddSingleton<IUserDtoValidator, UserDtoValidator>();
 
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+{
+    var assembly = Assembly.GetExecutingAssembly();
 
+    containerBuilder.RegisterAssemblyTypes(assembly)
+        .AssignableTo<IStrategyMarker>()
+        .AsImplementedInterfaces()
+        .SingleInstance();
 
+    containerBuilder.RegisterType<SaltAndHashFactory>()
+        .As<ISaltAndHashFactory>()
+        .SingleInstance();
+});
+
+//builder.Services.AddSingleton<ISaltAndHashFactory, SaltAndHashFactory>();
 builder.Services.AddHttpContextAccessor();
 
 //builder.Services.AddAuthorization(options=>
@@ -118,7 +143,6 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 
-    // ????????? ????? ???????????
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
@@ -129,7 +153,6 @@ builder.Services.AddSwaggerGen(c =>
         BearerFormat = "JWT"
     });
 
-    // ??????? ?? ?? ?????????
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {

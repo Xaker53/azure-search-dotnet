@@ -16,7 +16,7 @@ namespace Application.CQRS.UserCreate
         private readonly ICreate _create;
         private readonly IGenerateSaltAndHash _generateSaltAndHash;
 
-        public UserCreateHandler(ICreate create, IUserService userService, ISalt Salt, IGenerateSaltAndHash generateSaltAndHash)
+        public UserCreateHandler(ICreate create, IUserService userService, IGenerateSaltAndHash generateSaltAndHash)
         {
             _create = create;
             _generateSaltAndHash= generateSaltAndHash;

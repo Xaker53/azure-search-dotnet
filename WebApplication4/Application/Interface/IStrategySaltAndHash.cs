@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Interface.Auth
+namespace Application.Interface
 {
-    public interface IPasswordHasher: IStrategyMarker
+    public interface IStrategySaltAndHash
     {
         public string Generate(string password, string salt);
     }
