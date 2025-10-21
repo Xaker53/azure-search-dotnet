@@ -108,9 +108,11 @@ namespace Test_Algorithm
             {
                 Gmail = this._User.Gmail,
                 Password = "0228",
-                Name = "TestNAme"
+                Name = "AndrewTest",
+                OtherGmail = "TestWord@gmail.com"
             };
             _User.Password = NewUpdate.Password;
+            _User.Gmail = NewUpdate.OtherGmail;
             using var httpClient = new HttpClient();
             var response = await httpClient.PostAsync("https://localhost:7156/api/UpdateUser", Jsonconver(NewUpdate));
             TryCatch(response);
