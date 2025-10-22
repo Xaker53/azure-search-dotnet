@@ -179,11 +179,12 @@
                         <Image Source="person.png" 
                                HeightRequest="22" 
                                WidthRequest="22"/>
-                        <Label Text="{Binding DisplayName, FallbackValue='User'}" 
+                        <Label Text="User" 
                                FontSize="14" 
                                FontAttributes="Bold"
                                VerticalOptions="Center" 
-                               TextColor="White"/>
+                               TextColor="White"
+                               x:Name="EmptyUserName"/>
                     </HorizontalStackLayout>
                 </Border>
             </Grid>
@@ -249,7 +250,8 @@
                                             CornerRadius="8"
                                             Padding="14,8"
                                             FontSize="13"
-                                            FontAttributes="Bold"/>
+                                            FontAttributes="Bold"
+                                            Clicked="OnClickShowPassword"/>
                                 </Grid>
                             </Border>
                             <Label Text="Leave blank to keep current password" 
@@ -270,7 +272,8 @@
                                 Style="{StaticResource DangerButton}"/>
                         <Button Grid.Column="1"
                                 Text="Cancel"
-                                Style="{StaticResource OutlineButton}"/>
+                                Style="{StaticResource OutlineButton}"
+                                Clicked="OnClickCancel"/>
                     </Grid>
                 </VerticalStackLayout>
 
