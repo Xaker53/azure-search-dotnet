@@ -18,6 +18,7 @@ public partial class SearchPage : ContentPage
     private readonly ISearchRequests _searchRequests;
     private readonly IDecompression _decompression;
     private readonly IGetUserRequests _getUserRequests;
+    private readonly IServiceProvider _pages;
     private UserRequest _userRequest;
     private string JwtToken;
     private string _Email;
@@ -29,7 +30,7 @@ public partial class SearchPage : ContentPage
         EnterNameUser();
     }
 
-    public SearchPage(ISearchRequests searchRequests, IDecompression decompression, IGetUserRequests getUserRequests)
+    public SearchPage(ISearchRequests searchRequests, IDecompression decompression, IGetUserRequests getUserRequests, IServiceProvider Pages)
     {
         InitializeComponent();
         _searchRequests = searchRequests;
@@ -37,6 +38,7 @@ public partial class SearchPage : ContentPage
         _getUserRequests = getUserRequests;
 
         EnterNameUser();
+        _pages = Pages;
     }
 
     //private async void SearchEntry_TextChanged(object sender, EventArgs e)
@@ -71,7 +73,7 @@ public partial class SearchPage : ContentPage
         {
             if (response != null)
             {
-                _userRequest = JsonConvert.DeserializeObject<UserRequest>(response.Content.ReadAsStringAsync().Result);
+                _userRequest = JsonConvert.DeserializeObject<UserRequest>(await response.Content.ReadAsStringAsync());
                 UserNikname.Text = _userRequest.Name;
             }
             
@@ -144,6 +146,25 @@ public partial class SearchPage : ContentPage
                 OpenPathAsync(item.FilePath);
             }
         }
+    }
+
+
+    private async void OnTappedProfile (object sender, EventArgs e)
+    {
+        try
+        {
+            var page = _pages.GetRequiredService<ProfilePage>();
+            page.Setup(_userRequest.Gmail, _userRequest.Name, _userRequest.Password);
+            await Navigation.PushAsync(page);
+            EnterNameUser();
+
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("ERROR", $"null", "ok");
+        }
+        
+        
     }
 
     private void OnExitClick (object sender, EventArgs e)

@@ -136,6 +136,10 @@
 
             <!-- Профиль пользователя -->
             <Border Grid.Column="1" Style="{StaticResource ProfileBadge}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTappedProfile"> </TapGestureRecognizer>
+                </Border.GestureRecognizers>
+                
                 <HorizontalStackLayout Spacing="10">
                     <Border Background="{StaticResource HeaderGradient}"
                             WidthRequest="32"
