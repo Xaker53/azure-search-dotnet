@@ -1,4 +1,5 @@
 
+using System.Net;
 using Azure;
 using Core.Entities.MappingProfiles;
 using Newtonsoft.Json;
@@ -10,11 +11,13 @@ public partial class ProfilePage : ContentPage
 {
 	private string _JwtToken;
 	private readonly IUpdateUserRequests _updateUserRequests;
+    private readonly IDeleteUserRequests _deleteUserRequests;
 	private UserRequest _UpdateUser;
-    public ProfilePage(IUpdateUserRequests updateUser)
+    public ProfilePage(IUpdateUserRequests updateUser, IDeleteUserRequests deleteUser)
 	{
 		InitializeComponent();
 		_updateUserRequests = updateUser;
+        _deleteUserRequests = deleteUser;
 	}
 
 	public void Setup(UserRequest userRequest, string JwtToken)
@@ -64,6 +67,7 @@ public partial class ProfilePage : ContentPage
                     _UpdateUser.OtherGmail = null;
                 }
                 Setup(_UpdateUser, _JwtToken);
+                await Navigation.PopAsync();
             }
 
         }
@@ -75,5 +79,30 @@ public partial class ProfilePage : ContentPage
         {
             await DisplayAlert("Error:", ex.Message, "OK");
         }
+    }
+
+    private async void OnDelete (object? sender, EventArgs e)
+    {
+        try
+        {
+            var response = await _deleteUserRequests.FetchToServer(_UpdateUser.Gmail, _JwtToken);
+
+            response.EnsureSuccessStatusCode();
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                await DisplayAlert("Server:", "Success delete", "OK");
+                await Shell.Current.GoToAsync("//MainPage");
+
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            await DisplayAlert("Server:", ex.Message, "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error:", ex.Message, "OK");
+        }
+
     }
 }

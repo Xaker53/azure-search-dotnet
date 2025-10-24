@@ -268,7 +268,7 @@
 
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                         <Button Text="Delete Account"
-                                Style="{StaticResource DangerButton}"/>
+                                Style="{StaticResource DangerButton}" Clicked="OnDelete"/>
                         <Button Grid.Column="1"
                                 Text="Cancel"
                                 Style="{StaticResource OutlineButton}"
