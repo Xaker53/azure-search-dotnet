@@ -3,13 +3,14 @@ using Application.Services;
 using AutoMapper;
 using Core.Entities.MappingProfiles;
 using Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication4.Controllers.UserController
 {
     [ApiController]
     [Route("api/[controller]")]
-
+    [Authorize(Policy = "ReadPolicy")]
     public class UpdateUserController : Controller
     {
         private readonly UserUpdateService? _userUpdateService;
