@@ -8,6 +8,6 @@ namespace UserLoginIn.Interface
 {
     public interface IJsonconver
     {
-        public StringContent Jsonconver(object ob, string ContentType = "application/json");
+        public StringContent Jsonconver<T>(T ob, string ContentType = "application/json");
     }
 }

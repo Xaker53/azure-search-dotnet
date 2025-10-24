@@ -19,7 +19,7 @@ namespace UserLoginIn.Tools
         }
 
         private HttpResponseMessage response;
-        public async Task<HttpResponseMessage> TryCatch(string url, object user, string ContentType = "application/json", string JwtToken = "")
+        public async Task<HttpResponseMessage> TryCatch<T>(string url, T user, string ContentType = "application/json", string JwtToken = "")
         {
             using (HttpClient httpClient = new HttpClient())
             {
