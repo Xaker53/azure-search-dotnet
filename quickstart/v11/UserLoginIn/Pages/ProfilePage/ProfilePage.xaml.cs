@@ -9,9 +9,9 @@ public partial class ProfilePage : ContentPage
 
 	public void Setup(string Gmail, string name, string password)
 	{
-		GmailEntry.Text = Gmail;
-		NameEntry.Text = name;
-		PasswordEntry.Text = password;
+		GmailEntry.Placeholder = Gmail;
+		NameEntry.Placeholder = name;
+		PasswordEntry.Placeholder = password;
 
         EmptyUserName.Text = name;
 
