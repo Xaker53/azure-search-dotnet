@@ -154,7 +154,7 @@ public partial class SearchPage : ContentPage
         try
         {
             var page = _pages.GetRequiredService<ProfilePage>();
-            page.Setup(_userRequest.Gmail, _userRequest.Name, _userRequest.Password);
+            page.Setup(_userRequest, JwtToken);
             await Navigation.PushAsync(page);
             EnterNameUser();
 
