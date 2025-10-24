@@ -114,6 +114,8 @@ namespace Test_Algorithm
             _User.Password = NewUpdate.Password;
             _User.Gmail = NewUpdate.OtherGmail;
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", $"{_JWTToken}");
             var response = await httpClient.PostAsync("https://localhost:7156/api/UpdateUser", Jsonconver(NewUpdate));
             TryCatch(response);
 

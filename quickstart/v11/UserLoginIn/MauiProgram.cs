@@ -42,6 +42,8 @@ namespace UserLoginIn
             builder.Services.AddSingleton<IJsonconver, ConvertToJson>();
             builder.Services.AddScoped<ILoginRequests, LoginRequests>();
             builder.Services.AddSingleton<IUpdateUserRequests, UpdateUserRequests>();
+            builder.Services.AddSingleton<IDeleteRequest, DeleteRequest>();
+            builder.Services.AddSingleton<IDeleteUserRequests, DeleteUserRequests>();
 
             builder.Services.AddSingleton<ITryCatchRequest, TryCatchRequest>();
 
