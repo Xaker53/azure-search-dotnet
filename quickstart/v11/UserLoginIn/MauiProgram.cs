@@ -41,6 +41,7 @@ namespace UserLoginIn
             builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection(nameof(ApiSettings)));
             builder.Services.AddSingleton<IJsonconver, ConvertToJson>();
             builder.Services.AddScoped<ILoginRequests, LoginRequests>();
+            builder.Services.AddSingleton<IUpdateUserRequests, UpdateUserRequests>();
 
             builder.Services.AddSingleton<ITryCatchRequest, TryCatchRequest>();
 
