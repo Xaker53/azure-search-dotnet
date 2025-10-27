@@ -8,6 +8,11 @@
 
 
     <ShellContent
+        Title="IndexPage"
+        ContentTemplate="{DataTemplate local:IndexPage}"
+        Route="IndexPage" />
+
+    <ShellContent
         Title="Profile"
         ContentTemplate="{DataTemplate local:ProfilePage}"
         Route="Profile" />
@@ -16,7 +21,7 @@
         Title="SearchPage"
         ContentTemplate="{DataTemplate local:SearchPage}"
         Route="SearchPage" />
-    
+
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
