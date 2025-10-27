@@ -114,7 +114,8 @@
                         FontSize="15"
                         TextColor="{StaticResource TextPrimary}"
                         TitleColor="{StaticResource TextSecondary}"
-                        BackgroundColor="Transparent">
+                        BackgroundColor="Transparent"
+                        SelectedIndex="0">
                     <Picker.Items>
                         <x:String>Rake</x:String>
                         <x:String>Frequently occurring</x:String>

@@ -14,13 +14,14 @@ public partial class IndexPage : ContentPage
     public IndexPage()
 	{
 		InitializeComponent();
-	}
+        AlgorithmPicker.SelectedItem = algorithm;
+
+    }
 
     private void OnScanAllSystemChanged(object sender, CheckedChangedEventArgs e)
     {
         if (e.Value)
         {
-            
             FilePathEntry.Text = "";
             pathFile = "";
         }
@@ -43,6 +44,7 @@ public partial class IndexPage : ContentPage
         {
             pathFile = pick.Folder.Path;
             FilePathEntry.Text = pathFile;
+            ScanAllSystemCheckBox.IsChecked = false;
         }
     }
 }
