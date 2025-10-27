@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using UserLoginIn.Interface;
 using UserLoginIn.Requests;
 using UserLoginIn.Tools;
+using CommunityToolkit.Maui;
 #if WINDOWS
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
@@ -30,7 +31,8 @@ namespace UserLoginIn
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                })
+                .UseMauiCommunityToolkit(); ;
             //using var stream = FileSystem.OpenAppPackageFileAsync("appsettings.json").Result;
 
             var asm = Assembly.GetExecutingAssembly();
@@ -58,6 +60,8 @@ namespace UserLoginIn
             builder.Services.AddSingleton<IGetUserRequests,GetUserRequests>();
             builder.Services.AddTransient<SearchPage>();
             builder.Services.AddTransient<ProfilePage>();
+
+            
 
 #if DEBUG
             builder.Logging.AddDebug();
