@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UserLoginIn.IndexPage"
+             Title="IndexTF">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!-- Цветовая палитра -->
+            <Color x:Key="PrimaryBg">#FFFFFF</Color>
+            <Color x:Key="SecondaryBg">#F8F9FA</Color>
+            <Color x:Key="CardBg">#FFFFFF</Color>
+            <Color x:Key="AccentPrimary">#6366F1</Color>
+            <Color x:Key="AccentSecondary">#8B5CF6</Color>
+            <Color x:Key="TextPrimary">#1F2937</Color>
+            <Color x:Key="TextSecondary">#6B7280</Color>
+            <Color x:Key="TextTertiary">#9CA3AF</Color>
+            <Color x:Key="BorderColor">#E5E7EB</Color>
+            <Color x:Key="HoverBg">#F3F4F6</Color>
+            <Color x:Key="AccentGlow">#EEF2FF</Color>
+            <Color x:Key="ShadowColor">#1A202C</Color>
+            <Color x:Key="DangerColor">#EF4444</Color>
+
+            <!-- Градиент для заголовка -->
+            <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,0">
+                <GradientStop Color="#6366F1" Offset="0.0"/>
+                <GradientStop Color="#8B5CF6" Offset="1.0"/>
+            </LinearGradientBrush>
+
+            <!-- Неоморфные тени для карточек -->
+            <Shadow x:Key="CardShadow" 
+                    Brush="{StaticResource ShadowColor}" 
+                    Opacity="0.08" 
+                    Radius="16" 
+                    Offset="0,4"/>
+
+            <Shadow x:Key="GlowEffect" 
+                    Brush="{StaticResource AccentPrimary}" 
+                    Opacity="0.15" 
+                    Radius="12" 
+                    Offset="0,2"/>
+
+            <!-- Стиль кнопок -->
+            <Style TargetType="Button">
+                <Setter Property="CornerRadius" Value="12"/>
+                <Setter Property="Padding" Value="24,14"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="Shadow">
+                    <Setter.Value>
+                        <Shadow Brush="#40000000" Opacity="0.15" Radius="8" Offset="0,2"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Стиль основных Border -->
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="StrokeShape">
+                    <Setter.Value>
+                        <RoundRectangle CornerRadius="16"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Stroke" Value="{StaticResource BorderColor}"/>
+                <Setter Property="Background" Value="{StaticResource CardBg}"/>
+                <Setter Property="Shadow">
+                    <Setter.Value>
+                        <Shadow Brush="#30000000" Opacity="0.08" Radius="12" Offset="0,2"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <!-- Макет -->
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto"
+          Padding="20"
+          RowSpacing="20"
+          BackgroundColor="{StaticResource SecondaryBg}">
+
+        <!-- Верхняя панель с логотипом -->
+        <HorizontalStackLayout Grid.Row="0" Spacing="12" Padding="4">
+            <Border Background="{StaticResource HeaderGradient}"
+                    WidthRequest="44"
+                    HeightRequest="44"
+                    StrokeThickness="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12"/>
+                </Border.StrokeShape>
+                <Label Text="IT"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Border>
+            <Label Text="IndexTF"
+                   FontSize="26"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource TextPrimary}"
+                   VerticalOptions="Center"/>
+        </HorizontalStackLayout>
+
+        <!-- Выбор алгоритма -->
+        <Border Grid.Row="1" Style="{StaticResource CardStyle}" Padding="20">
+            <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
+                <Label Text="Algorithm"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource TextSecondary}"
+                       Margin="0,0,0,4"/>
+
+                <Picker Grid.Row="1"
+                        x:Name="AlgorithmPicker"
+                        FontSize="15"
+                        TextColor="{StaticResource TextPrimary}"
+                        TitleColor="{StaticResource TextSecondary}"
+                        BackgroundColor="Transparent">
+                    <Picker.Items>
+                        <x:String>Rake</x:String>
+                        <x:String>Frequently occurring</x:String>
+                        <x:String>Character indexing</x:String>
+                    </Picker.Items>
+                </Picker>
+            </Grid>
+        </Border>
+
+        <!-- Выбор пути к файлам -->
+        <Border Grid.Row="2" Style="{StaticResource CardStyle}" Padding="20">
+            <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
+                <Label Text="Files Path"
+               FontSize="14"
+               FontAttributes="Bold"
+               TextColor="{StaticResource TextSecondary}"
+               Margin="0,0,0,4"/>
+
+                <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <Entry x:Name="FilePathEntry"
+                   Placeholder="Select folder path..."
+                   IsReadOnly="True"
+                   FontSize="15"
+                   TextColor="{StaticResource TextPrimary}"
+                   PlaceholderColor="{StaticResource TextTertiary}"
+                   BackgroundColor="Transparent"
+                   VerticalOptions="Center"/>
+
+                    <Button Grid.Column="1"
+                    Text="..."
+                    WidthRequest="50"
+                    Padding="12,10"
+                    BackgroundColor="{StaticResource AccentPrimary}"
+                    TextColor="White"
+                    Clicked="OnSelectFolderClick"/>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Опции сканирования со скроллом -->
+        <Border Grid.Row="3" Style="{StaticResource CardStyle}" Padding="20">
+            <ScrollView>
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Scan Options"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource TextSecondary}"
+                   Margin="0,0,0,4"/>
+
+                    <!-- Scan all system -->
+                    <Border Background="{StaticResource SecondaryBg}"
+                    Padding="16,12"
+                    StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                            <Border Background="{StaticResource AccentGlow}"
+                            WidthRequest="36"
+                            HeightRequest="36"
+                            StrokeThickness="0"
+                            VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10"/>
+                                </Border.StrokeShape>
+                                <Label Text="🌐"
+                               FontSize="18"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                            </Border>
+                            <HorizontalStackLayout Grid.Column="1" Spacing="10" VerticalOptions="Center">
+                                <CheckBox x:Name="ScanAllSystemCheckBox"
+                                  CheckedChanged="OnScanAllSystemChanged"/>
+                                <Label Text="Scan all system"
+                               FontSize="14"
+                               TextColor="{StaticResource TextPrimary}"
+                               VerticalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnScanAllSystemLabelTapped"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <!-- Recoverable Text -->
+                    <Border Background="{StaticResource SecondaryBg}"
+                    Padding="16,12"
+                    StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                            <Border Background="{StaticResource AccentGlow}"
+                            WidthRequest="36"
+                            HeightRequest="36"
+                            StrokeThickness="0"
+                            VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10"/>
+                                </Border.StrokeShape>
+                                <Label Text="📄"
+                               FontSize="18"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                            </Border>
+                            <HorizontalStackLayout Grid.Column="1" Spacing="10" VerticalOptions="Center">
+                                <CheckBox x:Name="RecoverableTextCheckBox"
+                                  IsChecked="True"
+                                  CheckedChanged="OnRecoverableTextChanged"/>
+                                <Label Text="Recoverable Text"
+                               FontSize="14"
+                               TextColor="{StaticResource TextPrimary}"
+                               VerticalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <!--<TapGestureRecognizer Tapped="OnRecoverableTextLabelTapped"/>-->
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+        <!-- Нижние кнопки действий -->
+        <Grid Grid.Row="4" ColumnDefinitions="*,*,*" ColumnSpacing="12" Padding="0">
+            <Button Text="⏹ Stop"
+                    BackgroundColor="{StaticResource DangerColor}"
+                    TextColor="White"
+                    FontSize="15"
+                    />
+
+            <Button Grid.Column="1"
+                    Text="▶ Start Index"
+                    BackgroundColor="{StaticResource AccentPrimary}"
+                    TextColor="White"
+                    FontSize="15"
+                    />
+
+            <Button Grid.Column="2"
+                    Text="🗑 Delete all index"
+                    BackgroundColor="{StaticResource DangerColor}"
+                    TextColor="White"
+                    FontSize="15"
+                    />
+        </Grid>
+
+    </Grid>
+</ContentPage>
