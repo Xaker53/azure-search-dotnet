@@ -99,6 +99,8 @@ public partial class IndexPage : ContentPage
             program.CancelToken();
             tokenSource?.Cancel();
             await DisplayAlert("Succes", "Indexing is stop", "OK");
+            ButtonStartIndex.IsEnabled = true;
+            ButtonStartIndex.BackgroundColor = Color.Parse("#6366F1");
         }
     }
 }
