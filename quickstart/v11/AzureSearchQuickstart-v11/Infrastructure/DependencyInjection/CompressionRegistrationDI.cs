@@ -20,7 +20,7 @@ namespace AzureSearchQuickstart_v11.Infrastructure.DependencyInjection
         private CompressionRegistrationDI()
         {
             var services = new ServiceCollection();
-            services.AddKeyedTransient<IWordCompressionWithOutput, PopularWords>("PopularWords");
+            services.AddKeyedTransient<IWordCompressionWithOutput, PopularWords>("Frequently occurring");
 
             services.AddKeyedTransient<IWordCompressionWithOutput, Services.Compression.Rake>("Rake");
 
