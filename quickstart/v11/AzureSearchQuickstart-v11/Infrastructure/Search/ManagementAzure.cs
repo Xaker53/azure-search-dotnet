@@ -89,7 +89,7 @@ namespace AzureSearchQuickstart_v11.Infrastructure.Search
 
             definition.Suggesters.Add(suggester);
 
-            adminClient.CreateOrUpdateIndex(definition);
+            adminClient.CreateOrUpdateIndexAsync(definition);
         }
     }
 }
