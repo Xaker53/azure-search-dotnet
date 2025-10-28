@@ -114,7 +114,7 @@ namespace WinFormsApp1
 
         private void frequentlyEncounteredToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Algorithm = "PopularWords";
+            Algorithm = "Frequently occurring";
         }
 
         private void guna2Button3_Click(object sender, EventArgs e)
