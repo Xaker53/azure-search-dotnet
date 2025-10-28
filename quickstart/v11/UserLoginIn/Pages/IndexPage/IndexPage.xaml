@@ -247,22 +247,22 @@
                     BackgroundColor="{StaticResource DangerColor}"
                     TextColor="White"
                     FontSize="15"
-                    />
+                    Clicked="OnStop"/>
 
             <Button Grid.Column="1"
                     Text="▶ Start Index"
                     BackgroundColor="{StaticResource AccentPrimary}"
                     TextColor="White"
                     FontSize="15"
-                    />
+                    x:Name="ButtonStartIndex"
+                    Clicked="OnStartIndex"/>
 
             <Button Grid.Column="2"
                     Text="🗑 Delete all index"
                     BackgroundColor="{StaticResource DangerColor}"
                     TextColor="White"
                     FontSize="15"
-                    />
+                    Clicked="OnDelete"/>
         </Grid>
-
     </Grid>
 </ContentPage>
