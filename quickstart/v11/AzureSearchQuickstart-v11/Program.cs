@@ -44,7 +44,10 @@ namespace AzureSearch.Quickstart
 
         ~Program() 
         {
-            tokenSource.Cancel();
+            if (tokenSource != null)
+            {
+                tokenSource.Cancel();
+            }
         }
 
 
