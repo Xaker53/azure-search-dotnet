@@ -14,13 +14,15 @@ namespace UserLoginIn
         private readonly IServiceProvider _searchPage;
         private HttpResponseMessage result;
         private string JwtToken;
+        private GlobalState _userRequest;
 
-        public MainPage(ILoginRequests loginRequests, RegistrationsPage registrationsPage, IServiceProvider searchPage)
+        public MainPage(ILoginRequests loginRequests, RegistrationsPage registrationsPage, IServiceProvider searchPage, GlobalState userRequest)
         {
             InitializeComponent();
             _loginRequests = loginRequests;
             _registrationsPage = registrationsPage;
             _searchPage = searchPage;
+            _userRequest = userRequest;
         }
 
         private async void OnLoginClicked(object? sender, EventArgs e)
@@ -33,7 +35,6 @@ namespace UserLoginIn
                 Password = PasswordEntry.Text
             };
 
-
             result = await _loginRequests.LoginUser(userRequest);
 
             if (result == null)
@@ -43,8 +44,9 @@ namespace UserLoginIn
             {
                 if (result.StatusCode!= HttpStatusCode.OK) throw new HttpRequestException();
                 var page = _searchPage.GetRequiredService<SearchPage>();
-                JwtToken = await result.Content.ReadAsStringAsync();
-                page.InTokenEmail(JwtToken, userRequest.UserGmail);
+                _userRequest.JwtToken = await result.Content.ReadAsStringAsync();
+                //JwtToken = await result.Content.ReadAsStringAsync();
+                page.InTokenEmail(userRequest.UserGmail);
                 await Navigation.PushAsync(page);
             }
             catch (HttpRequestException)
