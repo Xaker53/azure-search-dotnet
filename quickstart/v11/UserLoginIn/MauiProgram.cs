@@ -60,6 +60,9 @@ namespace UserLoginIn
             builder.Services.AddSingleton<IGetUserRequests,GetUserRequests>();
             builder.Services.AddTransient<SearchPage>();
             builder.Services.AddTransient<ProfilePage>();
+            builder.Services.AddTransient<IndexPage>();
+
+            builder.Services.AddSingleton<GlobalState>();
 
             
 
