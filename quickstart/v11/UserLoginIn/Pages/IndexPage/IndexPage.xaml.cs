@@ -130,11 +130,9 @@ public partial class IndexPage : ContentPage
         {
             var page = _pages.GetRequiredService<ProfilePage>();
             //page.Setup(_userRequest, JwtToken);
+            page.Disappearing += OnProfilePageClosed;
             await Navigation.PushAsync(page);
             //EnterNameUser();
-            BindingContext = null;
-            BindingContext = _userRequest.CurrentUser;
-
         }
         catch (Exception ex)
         {
@@ -142,4 +140,15 @@ public partial class IndexPage : ContentPage
         }
     }
 
+    private void OnProfilePageClosed(object sender, EventArgs e)
+    {
+        var page = sender as ProfilePage;
+        if (page != null)
+        {
+            page.Disappearing -= OnProfilePageClosed;
+        }
+
+        BindingContext = null;
+        BindingContext = _userRequest.CurrentUser;
+    }
 }
