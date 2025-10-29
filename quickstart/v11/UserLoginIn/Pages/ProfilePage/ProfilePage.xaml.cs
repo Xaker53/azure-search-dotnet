@@ -9,28 +9,17 @@ namespace UserLoginIn;
 
 public partial class ProfilePage : ContentPage
 {
-	private string _JwtToken;
 	private readonly IUpdateUserRequests _updateUserRequests;
     private readonly IDeleteUserRequests _deleteUserRequests;
-	private UserRequest _UpdateUser;
-    public ProfilePage(IUpdateUserRequests updateUser, IDeleteUserRequests deleteUser)
+    private GlobalState _UpdateUser;
+    public ProfilePage(IUpdateUserRequests updateUser, IDeleteUserRequests deleteUser, GlobalState userInfo)
 	{
 		InitializeComponent();
 		_updateUserRequests = updateUser;
         _deleteUserRequests = deleteUser;
-	}
+        _UpdateUser = userInfo;
 
-	public void Setup(UserRequest userRequest, string JwtToken)
-	{
-        //GmailEntry.Placeholder = Gmail;
-        //NameEntry.Placeholder = name;
-        //PasswordEntry.Placeholder = password;
-
-        //      EmptyUserName.Text = name;
-        _UpdateUser = userRequest;
-        BindingContext = _UpdateUser;
-
-        _JwtToken = JwtToken;
+        BindingContext = _UpdateUser.CurrentUser;
 
     }
 
@@ -52,21 +41,21 @@ public partial class ProfilePage : ContentPage
         try
         {
 
-            _UpdateUser.OtherGmail = GmailEntry.Text != _UpdateUser.Gmail? GmailEntry.Text:null;
-            _UpdateUser.Password = PasswordEntry.Text == null? null : PasswordEntry.Text;
+            _UpdateUser.CurrentUser.OtherGmail = GmailEntry.Text != _UpdateUser.CurrentUser.Gmail? GmailEntry.Text:null;
+            _UpdateUser.CurrentUser.Password = PasswordEntry.Text == null? null : PasswordEntry.Text;
 
-            var response = await _updateUserRequests.FetchToServer(_UpdateUser, JwtTokenIn: _JwtToken);
+            var response = await _updateUserRequests.FetchToServer(_UpdateUser.CurrentUser, JwtTokenIn: _UpdateUser.JwtToken);
             response.EnsureSuccessStatusCode();
             if (response != null)
             {
                 await DisplayAlert("Server:", "Success", "OK");
 
-                if (!string.IsNullOrWhiteSpace(_UpdateUser.OtherGmail))
+                if (!string.IsNullOrWhiteSpace(_UpdateUser.CurrentUser.OtherGmail))
                 {
-                    _UpdateUser.Gmail = _UpdateUser.OtherGmail;
-                    _UpdateUser.OtherGmail = null;
+                    _UpdateUser.CurrentUser.Gmail = _UpdateUser.CurrentUser.OtherGmail;
+                    _UpdateUser.CurrentUser.OtherGmail = null;
                 }
-                Setup(_UpdateUser, _JwtToken);
+                //Setup(_UpdateUser, _JwtToken);
                 await Navigation.PopAsync();
             }
 
@@ -85,7 +74,7 @@ public partial class ProfilePage : ContentPage
     {
         try
         {
-            var response = await _deleteUserRequests.FetchToServer(_UpdateUser.Gmail, _JwtToken);
+            var response = await _deleteUserRequests.FetchToServer(_UpdateUser.CurrentUser.Gmail, _UpdateUser.JwtToken);
 
             response.EnsureSuccessStatusCode();
             if (response.StatusCode == HttpStatusCode.OK)
