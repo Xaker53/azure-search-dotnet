@@ -52,6 +52,21 @@
                 </Setter>
             </Style>
 
+            <Style x:Key="ProfileBadge" TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource CardBg}"/>
+                <Setter Property="StrokeThickness" Value="0"/>
+                <Setter Property="StrokeShape">
+                    <Setter.Value>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Shadow">
+                    <Setter.Value>
+                        <Shadow Opacity="0.08" Radius="10" Offset="0,2"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <!-- Стиль основных Border -->
             <Style x:Key="CardStyle" TargetType="Border">
                 <Setter Property="StrokeShape">
@@ -77,28 +92,70 @@
           RowSpacing="20"
           BackgroundColor="{StaticResource SecondaryBg}">
 
-        <!-- Верхняя панель с логотипом -->
-        <HorizontalStackLayout Grid.Row="0" Spacing="12" Padding="4">
-            <Border Background="{StaticResource HeaderGradient}"
-                    WidthRequest="44"
-                    HeightRequest="44"
-                    StrokeThickness="0">
+        <!-- Верхняя панель -->
+        <Grid Grid.Row="0"
+      ColumnDefinitions="Auto,*,Auto"
+      Padding="4"
+      VerticalOptions="Center">
+
+            <!-- Логотип -->
+            <Border Grid.Column="0"
+          Background="{StaticResource HeaderGradient}"
+          WidthRequest="44"
+          HeightRequest="44"
+          StrokeThickness="0">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="12"/>
                 </Border.StrokeShape>
                 <Label Text="IT"
-                       FontSize="18"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"/>
+           FontSize="18"
+           FontAttributes="Bold"
+           TextColor="White"
+           HorizontalOptions="Center"
+           VerticalOptions="Center"/>
             </Border>
-            <Label Text="IndexTF"
-                   FontSize="26"
-                   FontAttributes="Bold"
-                   TextColor="{StaticResource TextPrimary}"
-                   VerticalOptions="Center"/>
-        </HorizontalStackLayout>
+
+            <!-- Заголовок -->
+            <Label Grid.Column="1"
+         Text="IndexTF"
+         FontSize="26"
+         FontAttributes="Bold"
+         TextColor="{StaticResource TextPrimary}"
+         VerticalOptions="Center"
+         Margin="12,0"/>
+
+            <!-- Профиль справа -->
+            <Border Grid.Column="2"
+          Style="{StaticResource ProfileBadge}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTappedProfile"/>
+                </Border.GestureRecognizers>
+
+                <HorizontalStackLayout Spacing="10" Padding="8,6">
+                    <Border Background="{StaticResource HeaderGradient}"
+              WidthRequest="32"
+              HeightRequest="32"
+              StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <Ellipse/>
+                        </Border.StrokeShape>
+                        <Image Source="person.png"
+               HeightRequest="18"
+               WidthRequest="18"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"/>
+                    </Border>
+
+                    <Label x:Name="UserNikname"
+                           
+             Text="{Binding Name}" 
+             FontSize="15"
+             FontAttributes="Bold"
+             TextColor="{StaticResource TextPrimary}"
+             VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Border>
+        </Grid>
 
         <!-- Выбор алгоритма -->
         <Border Grid.Row="1" Style="{StaticResource CardStyle}" Padding="20">
