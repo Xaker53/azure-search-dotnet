@@ -154,8 +154,8 @@
                                HorizontalOptions="Center"
                                VerticalOptions="Center"/>
                     </Border>
-                    <Label x:Name="UserNikname" 
-                           Text="User Name" 
+                    <Label  
+                           Text="{Binding Name}"
                            FontSize="15"
                            FontAttributes="Bold"
                            TextColor="{StaticResource TextPrimary}"
@@ -348,7 +348,8 @@
             <Button Text="📁 Index Files"
                     BackgroundColor="{StaticResource AccentPrimary}"
                     TextColor="White"
-                    FontSize="15"/>
+                    FontSize="15"
+                    Clicked="OnIndex_Files"/>
             <Button Grid.Column="1"
                     Text="🚪 Exit"
                     BackgroundColor="{StaticResource TextSecondary}"

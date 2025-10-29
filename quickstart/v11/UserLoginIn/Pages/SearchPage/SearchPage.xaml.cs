@@ -1,17 +1,18 @@
 ﻿
+using System.ComponentModel;
+using System.Net.Http;
+using System.Text;
 using Azure;
 using AzureSearch.Quickstart;
 using Core.Entities.MappingProfiles;
 using DocumentFormat.OpenXml.Office2016.Drawing.Charts;
 using Newtonsoft.Json;
-using System.Net.Http;
-using System.Text;
 using UserLoginIn.Interface;
 using UserLoginIn.Requests;
 
 namespace UserLoginIn;
 
-public partial class SearchPage : ContentPage
+public partial class SearchPage : ContentPage, INotifyPropertyChanged
 {
     private CancellationTokenSource _debounceCts;
 
@@ -19,62 +20,36 @@ public partial class SearchPage : ContentPage
     private readonly IDecompression _decompression;
     private readonly IGetUserRequests _getUserRequests;
     private readonly IServiceProvider _pages;
-    private UserRequest _userRequest;
-    private string JwtToken;
+    private GlobalState _userRequest;
     private string _Email;
 
-    public void InTokenEmail ( string Token, string Email)
+
+    public void InTokenEmail (string Email)
     {
-        JwtToken = Token ?? string.Empty;
         _Email = Email ?? string.Empty;
         EnterNameUser();
     }
 
-    public SearchPage(ISearchRequests searchRequests, IDecompression decompression, IGetUserRequests getUserRequests, IServiceProvider Pages)
+    public SearchPage(ISearchRequests searchRequests, IDecompression decompression, IGetUserRequests getUserRequests, IServiceProvider Pages, GlobalState userInfo)
     {
         InitializeComponent();
         _searchRequests = searchRequests;
         _decompression = decompression;
         _getUserRequests = getUserRequests;
-
+        _userRequest = userInfo;
         EnterNameUser();
         _pages = Pages;
     }
 
-    //private async void SearchEntry_TextChanged(object sender, EventArgs e)
-    //{
-    //    _debounceCts?.Cancel();
-    //    _debounceCts = new CancellationTokenSource();
-    //    var token = _debounceCts.Token;
-
-    //    _ = Task.Run(async () =>
-    //    {
-    //        try
-    //        {
-    //            await Task.Delay(500, token);
-    //            if (!token.IsCancellationRequested)
-    //            {
-    //                await MainThread.InvokeOnMainThreadAsync(async () =>
-    //                {
-    //                    var test = await _searchRequests.FetchToServer(SearchEmpty.Text);
-    //                    var items = JsonConvert.DeserializeObject<List<Files>>(test) ?? new();
-    //                    ResultInfo.ItemsSource = items;
-    //                });
-    //            }
-    //        }
-    //        catch (TaskCanceledException) { }
-    //    }, token);
-    //}
-
     private async void EnterNameUser()
     {
-        var response = await _getUserRequests.FetchToServer(_Email, JwtToken);
+        var response = await _getUserRequests.FetchToServer(_Email, _userRequest.JwtToken);
         try
         {
-            if (response != null)
+            if (response != null && response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                _userRequest = JsonConvert.DeserializeObject<UserRequest>(await response.Content.ReadAsStringAsync());
-                UserNikname.Text = _userRequest.Name;
+                _userRequest.CurrentUser = JsonConvert.DeserializeObject<UserRequest>(await response.Content.ReadAsStringAsync());
+                BindingContext = _userRequest.CurrentUser;
             }
             
         }
@@ -98,7 +73,7 @@ public partial class SearchPage : ContentPage
             var query = e.NewTextValue; 
             if (query.Length != 0)
             {
-                var json = await _searchRequests.FetchToServer(query, JwtToken);
+                var json = await _searchRequests.FetchToServer(query, _userRequest.JwtToken);
                 var items = JsonConvert.DeserializeObject<List<Files>>(json) ?? new();
 
                 ResultInfo.ItemsSource = items;
@@ -154,9 +129,9 @@ public partial class SearchPage : ContentPage
         try
         {
             var page = _pages.GetRequiredService<ProfilePage>();
-            page.Setup(_userRequest, JwtToken);
+
+            page.Disappearing += OnProfilePageClosed;
             await Navigation.PushAsync(page);
-            EnterNameUser();
 
         }
         catch (Exception ex)
@@ -173,6 +148,24 @@ public partial class SearchPage : ContentPage
        
     }
 
+    private async void OnIndex_Files(object sender, EventArgs e)
+    {
+        var page = _pages.GetRequiredService<IndexPage>();
+        await Navigation.PushAsync(page);
+    }
+
+
+    private void OnProfilePageClosed(object sender, EventArgs e)
+    {
+        var page = sender as ProfilePage;
+        if (page != null)
+        {
+            page.Disappearing -= OnProfilePageClosed;
+        }
+
+        BindingContext = null;
+        BindingContext = _userRequest.CurrentUser;
+    }
 
     private async Task OpenPathAsync(string path)
     {
