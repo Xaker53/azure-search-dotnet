@@ -74,14 +74,18 @@ public partial class ProfilePage : ContentPage
     {
         try
         {
-            var response = await _deleteUserRequests.FetchToServer(_UpdateUser.CurrentUser.Gmail, _UpdateUser.JwtToken);
-
-            response.EnsureSuccessStatusCode();
-            if (response.StatusCode == HttpStatusCode.OK)
+            bool dialogResult = await DisplayAlert("Delete your account?", "Delete", "Yes", "No");
+            if (dialogResult)
             {
-                await DisplayAlert("Server:", "Success delete", "OK");
-                await Shell.Current.GoToAsync("//MainPage");
+                var response = await _deleteUserRequests.FetchToServer(_UpdateUser?.CurrentUser?.Gmail, _UpdateUser?.JwtToken);
 
+                response?.EnsureSuccessStatusCode();
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    await DisplayAlert("Server:", "Success delete", "OK");
+                    await Shell.Current.GoToAsync("//MainPage");
+
+                }
             }
         }
         catch (HttpRequestException ex)
