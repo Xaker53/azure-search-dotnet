@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace AzureSearch.Quickstart
+namespace Core.Entities.ModelAzure
 {
     public partial class Files
     {

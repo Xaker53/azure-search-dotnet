@@ -1,18 +1,19 @@
-﻿using Azure;
+﻿using System.IO;
+using System.Runtime.CompilerServices;
+using Azure;
 using Azure.Search.Documents;
 using Azure.Search.Documents.Indexes;
 using Azure.Search.Documents.Indexes.Models;
-using Microsoft.Extensions.Options;
-using System.IO;
-using System.Runtime.CompilerServices;
 using Azure.Search.Documents.Models;
-using AzureSearch.Quickstart;
-using Infrastructure;
+using Core.Entities.ModelAzure;
+using Core.Interface;
+using Infrastructure.AzureService;
+using Microsoft.Extensions.Options;
 
 
-namespace WebApplication4
+namespace Infrastructure.AzureService
 {
-    public class ConnectAzure
+    public class ConnectAzure: IConnectAzure
     {
         private readonly string serviceName;
         private readonly string apiKey;
