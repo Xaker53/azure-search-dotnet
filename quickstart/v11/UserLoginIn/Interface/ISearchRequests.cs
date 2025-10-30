@@ -8,6 +8,6 @@ namespace UserLoginIn.Interface
 {
     public interface ISearchRequests
     {
-        public Task<string> FetchToServer(string TextInput, string JwtToken = "");
+        public Task<string> FetchToServer<T>(T TextInput, string JwtToken = "");
     }
 }
