@@ -39,7 +39,7 @@ namespace WebApplication4
             ingesterClient = adminClient.GetSearchClient(indexName);
         }
 
-        public List<Files> ConnectSearchFiles(string request="")
+        public List<Files> ConnectSearchFiles(string request="", string userId = "")
         {
             options = new SearchOptions()
             {
@@ -52,6 +52,13 @@ namespace WebApplication4
             options.Select.Add("FilePath");
             options.Select.Add("IndexerName");
             options.Select.Add("FileRecoveryText");
+            options.Select.Add("UserId");
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                options.Filter = $"UserId eq '{(userId)}'";
+            }
+
             SearchResults<Files> test = srchclient.Search<Files>($"{request}~", options);
 
             List<Files> list = new();
@@ -62,6 +69,27 @@ namespace WebApplication4
             }
 
             return list;
+        }
+
+        public async Task DeleteAllByUserIdAsync (string userId)
+        {
+            var options = new SearchOptions
+            {
+                Filter = $"UserId eq '{userId}'",
+                Select = { "FileID" }
+            };
+
+            var result = srchclient.Search<Files>("*", options);
+
+            var keys = result.Value.GetResults()
+                      .Select(r => r.Document.FileID)
+                      .ToList();
+
+            if (keys.Count > 0)
+            {
+                var batch = IndexDocumentsBatch.Delete("FileID", keys);
+                await srchclient.IndexDocumentsAsync(batch);
+            }
         }
     }
 }
