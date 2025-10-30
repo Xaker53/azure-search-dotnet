@@ -1,5 +1,7 @@
-﻿using AzureSearch.Quickstart;
-using Core.Entities;
+﻿using Core.Entities;
+using Core.Entities.ModelAzure;
+using Core.Interface;
+using Infrastructure.AzureService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +10,7 @@ namespace WebApplication4.Controllers.AzureController
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Policy = "ReadPolicy")]
-    public class AzureController (ConnectAzure connect) : ControllerBase
+    public class AzureController (IConnectAzure connect) : ControllerBase
     {
         //private ConnectAzure connect = new();
         [HttpPost(Name = "GetAzure")]

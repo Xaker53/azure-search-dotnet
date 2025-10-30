@@ -102,7 +102,7 @@ public partial class IndexPage : ContentPage
         }
     }
 
-    private async void OnDelete (object sender, EventArgs e)
+    private async void OnDelete (object sender, EventArgs e) //delete all index!!!!!!!!!
     {
         bool dialogResult = await DisplayAlert("Delete all index?", "Delete", "Yes","No");
         if (dialogResult)

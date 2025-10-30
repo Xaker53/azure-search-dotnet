@@ -28,6 +28,7 @@ using Autofac.Extensions.DependencyInjection;
 using System.Reflection;
 using Application.Services.GeneratePasswordSalt;
 using Application.Validation;
+using Infrastructure.AzureService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -110,7 +111,7 @@ builder.Services.AddSingleton<IStrategyMarker, PasswordHasher>();
 
 builder.Services.AddScoped<IGenerateSaltAndHash, GenerateSaltAndHash>();
 
-builder.Services.AddSingleton<ConnectAzure>();
+builder.Services.AddSingleton<IConnectAzure, ConnectAzure>();
 builder.Services.AddSingleton<IUserDtoValidator, UserDtoValidator>();
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
