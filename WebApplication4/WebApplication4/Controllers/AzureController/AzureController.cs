@@ -1,4 +1,5 @@
 ﻿using AzureSearch.Quickstart;
+using Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,12 +12,12 @@ namespace WebApplication4.Controllers.AzureController
     {
         //private ConnectAzure connect = new();
         [HttpPost(Name = "GetAzure")]
-        public List<Files> Get([FromBody] string model)
+        public List<Files> Get([FromBody] AzureRequestDTO model)
         {
             List<Files> list = null;
             if (connect != null)
             {
-                list = connect.ConnectSearchFiles(model);
+                list = connect.ConnectSearchFiles(model.Request, model.UserId);
             }
             return list;
         }

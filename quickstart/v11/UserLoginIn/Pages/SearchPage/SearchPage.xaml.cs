@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using Azure;
 using AzureSearch.Quickstart;
+using Core.Entities;
 using Core.Entities.MappingProfiles;
 using DocumentFormat.OpenXml.Office2016.Drawing.Charts;
 using Newtonsoft.Json;
@@ -21,6 +22,7 @@ public partial class SearchPage : ContentPage, INotifyPropertyChanged
     private readonly IGetUserRequests _getUserRequests;
     private readonly IServiceProvider _pages;
     private GlobalState _userRequest;
+    private AzureRequestDTO _requestAzure;
     private string _Email;
 
 
@@ -73,7 +75,13 @@ public partial class SearchPage : ContentPage, INotifyPropertyChanged
             var query = e.NewTextValue; 
             if (query.Length != 0)
             {
-                var json = await _searchRequests.FetchToServer(query, _userRequest.JwtToken);
+                _requestAzure = new()
+                {
+                    Request = query,
+                    UserId = _userRequest?.CurrentUser?.UserId.ToString()
+                };
+
+                var json = await _searchRequests.FetchToServer(_requestAzure, _userRequest.JwtToken);
                 var items = JsonConvert.DeserializeObject<List<Files>>(json) ?? new();
 
                 ResultInfo.ItemsSource = items;
