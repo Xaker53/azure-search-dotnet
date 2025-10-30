@@ -19,6 +19,7 @@ namespace AzureSearchQuickstart_v11.Services.Text
         private int index;
         private string Method;
         private readonly bool RecoverableText;
+        private readonly Guid _guidUser;
         static CancellationTokenSource cts = new();
 
 
@@ -28,11 +29,12 @@ namespace AzureSearchQuickstart_v11.Services.Text
         {
         }
 
-        public ConcurrentDictionaryFiles(int Index, string Method, bool _RecoverableText)
+        public ConcurrentDictionaryFiles(int Index, Guid? GuidUser, string Method, bool _RecoverableText)
         {
             index = Index;
             this.Method = Method;
             this.RecoverableText = _RecoverableText;
+            _guidUser = GuidUser?? Guid.Empty;
             cts = new();
             options = new()
             {
@@ -102,7 +104,8 @@ namespace AzureSearchQuickstart_v11.Services.Text
                 FileText = $"{pageText}",
                 FilePath = $"{filePath}",
                 IndexerName = $"{Environment.MachineName}",
-                FileRecoveryText = $"{_RecoverableText}"
+                FileRecoveryText = $"{_RecoverableText}",
+                UserId = $"{_guidUser}"
             }));
 
         }

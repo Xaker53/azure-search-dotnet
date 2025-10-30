@@ -89,7 +89,7 @@ public partial class IndexPage : ContentPage
             await Task.Run(() =>
             {
                 tokenSource.Token.ThrowIfCancellationRequested();
-                program.UploadDocuments(_pathFile, _algorithm, RecoverableTextCheckBox.IsChecked);
+                program.UploadDocuments(_pathFile, _userRequest?.CurrentUser?.UserId, _algorithm, RecoverableTextCheckBox.IsChecked);
 
             }, tokenSource.Token);
             ButtonStartIndex.IsEnabled = true;

@@ -75,12 +75,12 @@ namespace AzureSearch.Quickstart
 
        
         // Upload documents in a single Upload request.
-        public async void UploadDocuments(string PathFileSearch, string Method = "Rake", bool RecoverableText = true)
+        public async void UploadDocuments(string PathFileSearch, Guid? GuidUser, string Method = "Rake", bool RecoverableText = true)
         {
             var searchClient = this.managementAzure.IngesterClient;
             var waitHandle = new AutoResetEvent(false);
             buffer = new ThreadServer(searchClient, waitHandle, 32000);
-            ParallelSearchFile = new ConcurrentDictionaryFiles((int)searchClient.GetDocumentCount().Value, Method, RecoverableText);
+            ParallelSearchFile = new ConcurrentDictionaryFiles((int)searchClient.GetDocumentCount().Value, GuidUser , Method, RecoverableText);
             tokenSource = new();
  
             var TaskServer = Task.Run(
