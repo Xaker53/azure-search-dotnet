@@ -26,5 +26,8 @@ namespace AzureSearch.Quickstart
         [SearchableField(IsFilterable = true)]
         public string FilePath { get; set; }
 
+        [SearchableField(IsFilterable = true)]
+        public string UserId { get; set; }
+
     }
 }

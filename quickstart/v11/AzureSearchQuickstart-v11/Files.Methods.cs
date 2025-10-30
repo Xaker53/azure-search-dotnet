@@ -42,6 +42,11 @@ namespace AzureSearch.Quickstart
                 builder.AppendFormat("Description: {0}\n", FilePath);
             }
 
+            if (!String.IsNullOrEmpty(UserId))
+            {
+                builder.AppendFormat("UserID: {0}\n", UserId);
+            }
+
             return builder.ToString();
         }
     }
