@@ -8,4 +8,6 @@
 
     public string UpdateUserUrl { get; set; }
     public string DeleteUserUrl { get; set; }
+
+    public string DeleeteUserIndexUrl { get; set; }
 }
