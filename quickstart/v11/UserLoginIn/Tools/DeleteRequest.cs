@@ -13,27 +13,16 @@ namespace UserLoginIn.Tools
     {
         private readonly string _url;
         private HttpResponseMessage response;
-        public DeleteRequest(IOptions<ApiSettings> apiSettings)
+        private readonly ITryDelete _tryDelete;
+        public DeleteRequest(IOptions<ApiSettings> apiSettings, ITryDelete tryDelete )
         {
             _url = apiSettings.Value.DeleteUserUrl;
+            _tryDelete = tryDelete;
         }
 
         public async Task<HttpResponseMessage> TryCatch(string UserEmail, string JwtToken = "")
         {
-            using (HttpClient httpClient = new HttpClient())
-            {
-                try
-                {
-                    httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", $"{JwtToken}");
-                    response = await httpClient.DeleteAsync($"{_url}{UserEmail}");
-                    return response;
-                }
-                catch (Exception e)
-                {
-                    //MessageBox.Show("Error.");
-                    return response;
-                }
-            }
+            return await _tryDelete.DeleteRequest(UserEmail, JwtToken, _url);
         }
     }
 }
