@@ -37,11 +37,13 @@ namespace UserLoginIn
 
             result = await _loginRequests.LoginUser(userRequest);
 
-            if (result == null)
-                throw new Exception("Server returned null");
+            //if (result == null)
+            //    throw new Exception("Server returned null");
 
             try
             {
+                if (result == null)
+                    throw new Exception("Server returned null");
                 if (result.StatusCode!= HttpStatusCode.OK) throw new HttpRequestException();
                 var page = _searchPage.GetRequiredService<SearchPage>();
                 _userRequest.JwtToken = await result.Content.ReadAsStringAsync();
