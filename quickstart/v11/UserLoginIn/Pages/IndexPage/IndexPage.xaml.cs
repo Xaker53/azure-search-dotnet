@@ -1,4 +1,5 @@
 
+using System.Net;
 using Aspose.Words.XAttr;
 using AzureSearch.Quickstart;
 using CommunityToolkit.Maui.Core.Primitives;
@@ -6,6 +7,7 @@ using CommunityToolkit.Maui.Storage;
 using Core.Entities.MappingProfiles;
 using ICSharpCode.SharpZipLib.Core;
 using Newtonsoft.Json.Linq;
+using UserLoginIn.Interface;
 
 
 
@@ -16,6 +18,7 @@ public partial class IndexPage : ContentPage
 
     private string _pathFile = "";
     private string _algorithm = "Rake";
+    private readonly IDeleteIndexRequest _DeleteIndex;
     private CancellationTokenSource tokenSource;
     private Program program;
 
@@ -26,10 +29,11 @@ public partial class IndexPage : ContentPage
     private GlobalState _userRequest;
 
 
-    public IndexPage(IServiceProvider Pages, GlobalState UserInfo)
+    public IndexPage(IServiceProvider Pages, GlobalState UserInfo, IDeleteIndexRequest deleteIndex)
 	{
 		InitializeComponent();
         AlgorithmPicker.SelectedItem = _algorithm;
+        _DeleteIndex = deleteIndex;
         program = new();
         _pages = Pages;
         _userRequest = UserInfo;
@@ -107,8 +111,17 @@ public partial class IndexPage : ContentPage
         bool dialogResult = await DisplayAlert("Delete all index?", "Delete", "Yes","No");
         if (dialogResult)
         {
-            program.RecreateIndex();
-            await DisplayAlert("Succes", "Indexing is delete", "OK");
+            var result =  await _DeleteIndex.TryCatch(_userRequest?.CurrentUser?.Gmail, JwtToken: _userRequest?.JwtToken);
+            //program.RecreateIndex();
+            if (result?.StatusCode == HttpStatusCode.OK)
+            {
+                await DisplayAlert("Succes", "Indexing is delete", "OK");
+            }
+            else
+            {
+                await DisplayAlert("ERROR", "Indexing is not delete", "OK");
+            }
+
         }
     }
 
