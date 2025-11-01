@@ -29,6 +29,7 @@ using System.Reflection;
 using Application.Services.GeneratePasswordSalt;
 using Application.Validation;
 using Infrastructure.AzureService;
+using Application.CQRS.UserDeleteIndex;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,7 @@ builder.Services.AddMediatR(configuration =>
 {
     configuration.RegisterServicesFromAssembly(typeof(UserDeleteCQRS).Assembly);
     configuration.RegisterServicesFromAssembly(typeof(UserCreateCQRS).Assembly);
+    configuration.RegisterServicesFromAssemblies(typeof(UserDeleteIndexCQRS).Assembly);
 });
 
 
