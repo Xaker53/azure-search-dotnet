@@ -45,6 +45,7 @@ namespace UserLoginIn
             builder.Services.AddScoped<ILoginRequests, LoginRequests>();
             builder.Services.AddSingleton<IUpdateUserRequests, UpdateUserRequests>();
             builder.Services.AddSingleton<IDeleteRequest, DeleteRequest>();
+            builder.Services.AddSingleton<IDeleteIndexRequest, DeleteIndexRequest>();
             builder.Services.AddSingleton<IDeleteUserRequests, DeleteUserRequests>();
 
             builder.Services.AddSingleton<ITryCatchRequest, TryCatchRequest>();
@@ -63,6 +64,8 @@ namespace UserLoginIn
             builder.Services.AddTransient<IndexPage>();
 
             builder.Services.AddSingleton<GlobalState>();
+
+            builder.Services.AddSingleton<ITryDelete,TryDelete>();
 
             
 
