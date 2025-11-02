@@ -1,12 +1,12 @@
-using Core.Entities.MappingProfiles;
 using System.Net;
+using Core.Entities.MappingProfiles;
 using UserLoginIn.Interface;
 
 namespace UserLoginIn;
 
 public partial class RegistrationsPage : ContentPage
 {
-    private UserRequest userRequest = new UserRequest();
+    private UserRequest userRequest;
     private readonly IRegistrationRequests _registrationRequests;
     public RegistrationsPage(IRegistrationRequests registrationRequests)
 	{
@@ -16,6 +16,7 @@ public partial class RegistrationsPage : ContentPage
 
 	private async void OnRegisterClicked(object? sender, EventArgs e)
 	{
+        userRequest = new();
         userRequest.Name = NicknameEntry.Text;
         userRequest.Gmail = GmailEntry.Text;
         userRequest.Password = PasswordEntry.Text;

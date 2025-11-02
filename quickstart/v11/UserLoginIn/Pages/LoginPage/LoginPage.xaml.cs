@@ -29,6 +29,7 @@ namespace UserLoginIn
         {
 
             //if (!string.IsNullOrEmpty(UseremailEntry.Text))
+            //_userRequest = new();
             var userRequest = new UserLogin()
             {
                 UserGmail = UseremailEntry.Text,

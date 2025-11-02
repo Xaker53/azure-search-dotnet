@@ -83,6 +83,7 @@ public partial class ProfilePage : ContentPage
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     await DisplayAlert("Server:", "Success delete", "OK");
+                    _UpdateUser = new();
                     await Shell.Current.GoToAsync("//MainPage");
 
                 }
