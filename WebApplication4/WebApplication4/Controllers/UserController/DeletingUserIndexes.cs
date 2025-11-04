@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApplication4.Controllers.UserController
 {
 
-    //[Authorize(Policy = "ReadPolicy")]
+    [Authorize(Policy = "ReadPolicy")]
 
     public class DeletingUserIndexesController (ISender _sender) : Controller
     {

@@ -1,12 +1,14 @@
 ﻿using Application.CQRS.DeleteUser;
 using Application.Services;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Interactions;
 
 namespace WebApplication4.Controllers.UserController
 {
     //[Route("api/[controller]")]
+    [Authorize(Policy = "ReadPolicy")]
     public class DeleteUserController(ISender sender) : Controller
     {
         private readonly ISender _sender;

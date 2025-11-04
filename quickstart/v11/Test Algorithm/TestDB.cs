@@ -25,7 +25,7 @@ namespace Test_Algorithm
         private UserRequest _User = new UserRequest()
         {
             Name = "test",
-            Gmail = "test1@test.com",
+            Gmail = "UnitTest1@test.com",
             Password = "test"
         };
 
@@ -129,6 +129,8 @@ namespace Test_Algorithm
         {
             // var EmailUser = "Un5itTest@gmail.com";
             using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", $"{_JWTToken}");
             var response = await httpClient.DeleteAsync($"https://localhost:7156/api/DeleteUser/{_User.Gmail}");
             TryCatch(response);
 
