@@ -176,7 +176,6 @@
                     <Picker.Items>
                         <x:String>Rake</x:String>
                         <x:String>Frequently occurring</x:String>
-                        <x:String>Character indexing</x:String>
                     </Picker.Items>
                 </Picker>
             </Grid>
