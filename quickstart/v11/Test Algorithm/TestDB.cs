@@ -25,13 +25,13 @@ namespace Test_Algorithm
         private UserRequest _User = new UserRequest()
         {
             Name = "test",
-            Gmail = "UnitTest1@test.com",
+            Gmail = "TestWord@gmail.com",
             Password = "test"
         };
 
        //private UserRequest _User = new FakerUser().Request();
 
-        private string _JWTToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkZTFhMWYxYi1lMTU0LTQ2ZTctYWRhMC1iNjRjZWZlNzgyZTciLCJleHAiOjE3NjE1MTcwNjN9.-QES4jkMOCMwIoGwvdsHxxui8UDrbiIt0QKd8LcaLVk";
+        private string _JWTToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhNmEzNjZhNi05MDY1LTQ5YTUtYmQ5Mi00NjI2OWNiNTc5NWQiLCJleHAiOjE3NjYyNDMyMTl9.t3HhxfpzlW2LNHB3LK_1eoAFLyO2z7xy_6wc3opYZS4";
 
         [Fact]
         public async Task TestAddDb()
