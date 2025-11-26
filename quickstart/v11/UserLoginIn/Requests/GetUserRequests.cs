@@ -28,7 +28,7 @@ namespace UserLoginIn.Requests
                 try
                 {
                     httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", $"{JwtToken}");
-                    var response = await httpClient.GetAsync($"https://localhost:7156/api/GetEmail/?email={UserGmail}");
+                    var response = await httpClient.GetAsync($"{_url}{UserGmail}");
 
                     return response;
                 }
