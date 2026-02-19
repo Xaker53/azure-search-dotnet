@@ -48,7 +48,7 @@ public partial class ProfilePage : ContentPage
             response.EnsureSuccessStatusCode();
             if (response != null)
             {
-                await DisplayAlert("Server:", "Success", "OK");
+                await DisplayAlertAsync("Server:", "Success", "OK");
 
                 if (!string.IsNullOrWhiteSpace(_UpdateUser.CurrentUser.OtherGmail))
                 {
@@ -62,11 +62,11 @@ public partial class ProfilePage : ContentPage
         }
         catch (HttpRequestException ex)
         {
-            await DisplayAlert("Server:", ex.Message, "OK");
+            await DisplayAlertAsync("Server:", ex.Message, "OK");
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error:", ex.Message, "OK");
+            await DisplayAlertAsync("Error:", ex.Message, "OK");
         }
     }
 
@@ -74,7 +74,7 @@ public partial class ProfilePage : ContentPage
     {
         try
         {
-            bool dialogResult = await DisplayAlert("Delete your account?", "Delete", "Yes", "No");
+            bool dialogResult = await DisplayAlertAsync("Delete your account?", "Delete", "Yes", "No");
             if (dialogResult)
             {
                 var response = await _deleteUserRequests.FetchToServer(_UpdateUser?.CurrentUser?.Gmail, _UpdateUser?.JwtToken);
@@ -82,7 +82,7 @@ public partial class ProfilePage : ContentPage
                 response?.EnsureSuccessStatusCode();
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    await DisplayAlert("Server:", "Success delete", "OK");
+                    await DisplayAlertAsync("Server:", "Success delete", "OK");
                     _UpdateUser = new();
                     await Shell.Current.GoToAsync("//MainPage");
 
@@ -91,11 +91,11 @@ public partial class ProfilePage : ContentPage
         }
         catch (HttpRequestException ex)
         {
-            await DisplayAlert("Server:", ex.Message, "OK");
+            await DisplayAlertAsync("Server:", ex.Message, "OK");
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error:", ex.Message, "OK");
+            await DisplayAlertAsync("Error:", ex.Message, "OK");
         }
 
     }

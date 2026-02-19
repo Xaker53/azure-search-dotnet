@@ -20,7 +20,7 @@ public partial class IndexPage : ContentPage
     private string _algorithm = "Rake";
     private readonly IDeleteIndexRequest _DeleteIndex;
     private CancellationTokenSource tokenSource;
-    private Program program;
+    private AzureSearch.Quickstart.Program program;
 
     private readonly IServiceProvider _pages;
     //private UserRequest _userRequest;
@@ -98,28 +98,28 @@ public partial class IndexPage : ContentPage
             }, tokenSource.Token);
             ButtonStartIndex.IsEnabled = true;
             ButtonStartIndex.BackgroundColor = Color.Parse("#6366F1");
-            await DisplayAlert("Succes", "Indexing is complete", "OK");
+            await DisplayAlertAsync("Succes", "Indexing is complete", "OK");
         }
         else
         {
-            await DisplayAlert("Notes", "You need to select a folder or scan the entire system", "OK");
+            await DisplayAlertAsync("Notes", "You need to select a folder or scan the entire system", "OK");
         }
     }
 
     private async void OnDelete (object sender, EventArgs e) //delete all index!!!!!!!!!
     {
-        bool dialogResult = await DisplayAlert("Delete all index?", "Delete", "Yes","No");
+        bool dialogResult = await DisplayAlertAsync("Delete all index?", "Delete", "Yes","No");
         if (dialogResult)
         {
             var result =  await _DeleteIndex.TryCatch(_userRequest?.CurrentUser?.Gmail, JwtToken: _userRequest?.JwtToken);
             //program.RecreateIndex();
             if (result?.StatusCode == HttpStatusCode.OK)
             {
-                await DisplayAlert("Succes", "Indexing is delete", "OK");
+                await DisplayAlertAsync("Succes", "Indexing is delete", "OK");
             }
             else
             {
-                await DisplayAlert("ERROR", "Indexing is not delete", "OK");
+                await DisplayAlertAsync("ERROR", "Indexing is not delete", "OK");
             }
 
         }
@@ -131,7 +131,7 @@ public partial class IndexPage : ContentPage
         {
             program.CancelToken();
             tokenSource?.Cancel();
-            await DisplayAlert("Succes", "Indexing is stop", "OK");
+            await DisplayAlertAsync("Succes", "Indexing is stop", "OK");
             ButtonStartIndex.IsEnabled = true;
             ButtonStartIndex.BackgroundColor = Color.Parse("#6366F1");
         }
@@ -149,7 +149,7 @@ public partial class IndexPage : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("ERROR", $"null", "ok");
+            await DisplayAlertAsync("ERROR", $"null", "ok");
         }
     }
 
